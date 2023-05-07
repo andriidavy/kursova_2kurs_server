@@ -13,14 +13,11 @@ public class Product {
     private int id;
     private String name;
     private String description;
-@Nonnull
-    private int count;
 
     public Product(){}
-    public Product(String name, String description, int count) {
+    public Product(String name, String description) {
         this.name = name;
         this.description = description;
-        this.count = count;
     }
 
     public int getId() {
@@ -47,21 +44,12 @@ public class Product {
         this.description = description;
     }
 
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
     @Override
     public String toString() {
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", count=" + count +
                 '}';
     }
 }
