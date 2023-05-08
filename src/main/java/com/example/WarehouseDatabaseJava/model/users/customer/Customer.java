@@ -16,16 +16,15 @@ public class Customer {
     private String password;
 
     //One-to-One relation with Cart
-    private int cartId;
     private Cart cart;
 
-    @OneToOne
-    @JoinColumn(name = "fk_cart_id", referencedColumnName = "cart_id")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "customer")
     public Cart getCart() {
         return this.cart;
     }
 
     public void setCart(Cart cart) {
+        cart.setCustomer(this);
         this.cart = cart;
     }
     //
@@ -42,7 +41,7 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", insertable = true, updatable = true)
+    @Column(name = "customer_id", nullable = false, insertable = true, updatable = true)
     public int getId() {
         return id;
     }
@@ -83,25 +82,16 @@ public class Customer {
         this.password = password;
     }
 
-    @Column(name="fk_cart_id", nullable = false, insertable = false, updatable = false)
-    public int getCartId() {
-        return cartId;
-    }
-
-    public void setCartId(int cartId) {
-        this.cartId = cartId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Customer customer)) return false;
-        return getId() == customer.getId() && cartId == customer.cartId && Objects.equals(getName(), customer.getName()) && Objects.equals(getSurname(), customer.getSurname()) && Objects.equals(getEmail(), customer.getEmail()) && Objects.equals(getPassword(), customer.getPassword()) && Objects.equals(getCart(), customer.getCart());
+        return getId() == customer.getId() && Objects.equals(getName(), customer.getName()) && Objects.equals(getSurname(), customer.getSurname()) && Objects.equals(getEmail(), customer.getEmail()) && Objects.equals(getPassword(), customer.getPassword()) && Objects.equals(getCart(), customer.getCart());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getSurname(), getEmail(), getPassword(), cartId, getCart());
+        return Objects.hash(getId(), getName(), getSurname(), getEmail(), getPassword(), getCart());
     }
 
     @Override
@@ -112,6 +102,7 @@ public class Customer {
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", cart=" + cart +
                 '}';
     }
 }
