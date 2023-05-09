@@ -1,10 +1,12 @@
 package com.example.WarehouseDatabaseJava.model.product;
 
+import com.example.WarehouseDatabaseJava.model.order.OrderProduct;
+import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProduct;
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -13,6 +15,15 @@ public class Product {
     private int id;
     private String name;
     private String description;
+
+    // One-to-Many relation with CartProduct
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    List<CartProduct> cartProductList = new ArrayList<>();
+
+    // One-to-Many relation with OrderProduct
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    List<OrderProduct> orderProductList = new ArrayList<>();
 
     public Product(){}
     public Product(String name, String description) {
@@ -44,12 +55,19 @@ public class Product {
         this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+    public List<CartProduct> getCartProductList() {
+        return cartProductList;
+    }
+
+    public void setCartProductList(List<CartProduct> cartProductList) {
+        this.cartProductList = cartProductList;
+    }
+
+    public List<OrderProduct> getOrderProductList() {
+        return orderProductList;
+    }
+
+    public void setOrderProductList(List<OrderProduct> orderProductList) {
+        this.orderProductList = orderProductList;
     }
 }

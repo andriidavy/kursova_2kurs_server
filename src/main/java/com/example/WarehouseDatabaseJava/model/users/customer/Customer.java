@@ -1,14 +1,19 @@
 package com.example.WarehouseDatabaseJava.model.users.customer;
 
+import com.example.WarehouseDatabaseJava.model.order.Order;
+import com.example.WarehouseDatabaseJava.model.order.OrderProduct;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.Cart;
 import jakarta.persistence.*;
 
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 public class Customer {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private String surname;
@@ -16,18 +21,12 @@ public class Customer {
     private String password;
 
     //One-to-One relation with Cart
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "customer")
     private Cart cart;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "customer")
-    public Cart getCart() {
-        return this.cart;
-    }
-
-    public void setCart(Cart cart) {
-        cart.setCustomer(this);
-        this.cart = cart;
-    }
-    //
+    //One-to-Many relation with Order
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+    private List<Order> orderList = new ArrayList<>();
 
     public Customer() {
     }
@@ -39,9 +38,7 @@ public class Customer {
         this.password = password;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "customer_id", nullable = false, insertable = true, updatable = true)
+
     public int getId() {
         return id;
     }
@@ -82,27 +79,19 @@ public class Customer {
         this.password = password;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Customer customer)) return false;
-        return getId() == customer.getId() && Objects.equals(getName(), customer.getName()) && Objects.equals(getSurname(), customer.getSurname()) && Objects.equals(getEmail(), customer.getEmail()) && Objects.equals(getPassword(), customer.getPassword()) && Objects.equals(getCart(), customer.getCart());
+    public Cart getCart() {
+        return cart;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getSurname(), getEmail(), getPassword(), getCart());
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", cart=" + cart +
-                '}';
+    public List<Order> getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(List<Order> orderList) {
+        this.orderList = orderList;
     }
 }

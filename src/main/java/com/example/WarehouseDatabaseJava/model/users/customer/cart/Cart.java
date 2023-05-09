@@ -3,19 +3,26 @@ package com.example.WarehouseDatabaseJava.model.users.customer.cart;
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 public class Cart {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     //One-to-One relation with Customer
-    private int customerId;
+    @OneToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToOne
-    @JoinColumn(name = "fk_customer_id", referencedColumnName = "customer_id")
+    //One-to-Many relation with CartProduct
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    private List<CartProduct> cartProductList = new ArrayList<>();
+
     public Customer getCustomer() {
         return this.customer;
     }
@@ -24,46 +31,20 @@ public class Cart {
         this.customer = customer;
     }
 
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_id", nullable = false, insertable = true, updatable = true)
-    public int getCartId() {
+    public int getId() {
         return id;
     }
 
-    public void setCartId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    @Column(name="fk_customer_id", nullable = false, insertable = false, updatable = false)
-    public int getCustomerId() {
-        return customerId;
+    public List<CartProduct> getCartProductList() {
+        return cartProductList;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Cart cart)) return false;
-        return id == cart.id && getCustomerId() == cart.getCustomerId() && Objects.equals(getCustomer(), cart.getCustomer());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, getCustomerId(), getCustomer());
-    }
-
-    @Override
-    public String toString() {
-        return "Cart{" +
-                "id=" + id +
-                ", customerId=" + customerId +
-                ", customer=" + customer +
-                '}';
+    public void setCartProductList(List<CartProduct> cartProductList) {
+        this.cartProductList = cartProductList;
     }
 }
 
