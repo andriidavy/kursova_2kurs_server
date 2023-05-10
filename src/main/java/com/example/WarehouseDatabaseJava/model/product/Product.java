@@ -1,12 +1,12 @@
 package com.example.WarehouseDatabaseJava.model.product;
 
-import com.example.WarehouseDatabaseJava.model.order.OrderProduct;
+import com.example.WarehouseDatabaseJava.model.order.CustomProduct;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProduct;
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Product {
@@ -20,10 +20,10 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     List<CartProduct> cartProductList = new ArrayList<>();
 
-    // One-to-Many relation with OrderProduct
+    // One-to-Many relation with CustomProduct
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    List<OrderProduct> orderProductList = new ArrayList<>();
+    List<CustomProduct> customProductList = new ArrayList<>();
 
     public Product(){}
     public Product(String name, String description) {
@@ -63,11 +63,11 @@ public class Product {
         this.cartProductList = cartProductList;
     }
 
-    public List<OrderProduct> getOrderProductList() {
-        return orderProductList;
+    public List<CustomProduct> getCustomProductList() {
+        return customProductList;
     }
 
-    public void setOrderProductList(List<OrderProduct> orderProductList) {
-        this.orderProductList = orderProductList;
+    public void setCustomProductList(List<CustomProduct> customProductList) {
+        this.customProductList = customProductList;
     }
 }

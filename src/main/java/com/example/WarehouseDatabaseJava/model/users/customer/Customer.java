@@ -1,13 +1,11 @@
 package com.example.WarehouseDatabaseJava.model.users.customer;
 
-import com.example.WarehouseDatabaseJava.model.order.Order;
-import com.example.WarehouseDatabaseJava.model.order.OrderProduct;
+import com.example.WarehouseDatabaseJava.model.order.Custom;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.Cart;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 public class Customer {
@@ -24,9 +22,9 @@ public class Customer {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "customer")
     private Cart cart;
 
-    //One-to-Many relation with Order
+    //One-to-Many relation with Custom
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
-    private List<Order> orderList = new ArrayList<>();
+    private List<Custom> customList = new ArrayList<>();
 
     public Customer() {
     }
@@ -87,11 +85,11 @@ public class Customer {
         this.cart = cart;
     }
 
-    public List<Order> getOrderList() {
-        return orderList;
+    public List<Custom> getOrderList() {
+        return customList;
     }
 
-    public void setOrderList(List<Order> orderList) {
-        this.orderList = orderList;
+    public void setOrderList(List<Custom> customList) {
+        this.customList = customList;
     }
 }

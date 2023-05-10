@@ -1,19 +1,19 @@
 package com.example.WarehouseDatabaseJava.model.order;
 
 import com.example.WarehouseDatabaseJava.model.product.Product;
-import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import jakarta.persistence.*;
 
 @Entity
-public class OrderProduct {
+public class CustomProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    // Many-to-One relation with Order
+    private int quantity;
+    // Many-to-One relation with Custom
     @ManyToOne
-    @JoinColumn(name = "order_id")
-    Order order;
+    @JoinColumn(name = "custom_id")
+    Custom custom;
 
     // Many-to-One relation with Product
     @ManyToOne
@@ -28,12 +28,20 @@ public class OrderProduct {
         this.id = id;
     }
 
-    public Order getOrder() {
-        return order;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public Custom getOrder() {
+        return custom;
+    }
+
+    public void setOrder(Custom custom) {
+        this.custom = custom;
     }
 
     public Product getProduct() {
@@ -43,4 +51,5 @@ public class OrderProduct {
     public void setProduct(Product product) {
         this.product = product;
     }
+
 }

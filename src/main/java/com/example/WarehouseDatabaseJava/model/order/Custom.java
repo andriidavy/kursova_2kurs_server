@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Order {
+public class Custom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -17,9 +17,9 @@ public class Order {
     @JoinColumn(name = "customer_id")
     Customer customer;
 
-    // One-to-Many relation with OrderProduct
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
-    List<OrderProduct> orderProductList = new ArrayList<>();
+    // One-to-Many relation with CustomProduct
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "custom")
+    List<CustomProduct> customProductList = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -37,11 +37,11 @@ public class Order {
         this.customer = customer;
     }
 
-    public List<OrderProduct> getOrderProductList() {
-        return orderProductList;
+    public List<CustomProduct> getCustomProductList() {
+        return customProductList;
     }
 
-    public void setOrderProductList(List<OrderProduct> orderProductList) {
-        this.orderProductList = orderProductList;
+    public void setCustomProductList(List<CustomProduct> customProductList) {
+        this.customProductList = customProductList;
     }
 }
