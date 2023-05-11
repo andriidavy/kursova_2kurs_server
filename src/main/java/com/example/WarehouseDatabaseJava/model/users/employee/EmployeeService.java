@@ -16,8 +16,6 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
     public List<Employee> getAllEmployees() {
-        List<Employee> employees = new ArrayList<>();
-        Streamable.of(employeeRepository.findAll()).forEach(employees::add);
-        return employees;
+        return employeeRepository.findAll();
     }
 }

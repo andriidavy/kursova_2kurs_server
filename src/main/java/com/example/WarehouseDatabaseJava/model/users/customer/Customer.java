@@ -24,7 +24,7 @@ public class Customer {
 
     //One-to-Many relation with Custom
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
-    private List<Custom> customList = new ArrayList<>();
+    private List<CustomerCustom> customerCustomList = new ArrayList<>();
 
     public Customer() {
     }
@@ -85,11 +85,12 @@ public class Customer {
         this.cart = cart;
     }
 
-    public List<Custom> getOrderList() {
-        return customList;
+
+    public List<CustomerCustom> getCustomerCustomList() {
+        return customerCustomList;
     }
 
-    public void setOrderList(List<Custom> customList) {
-        this.customList = customList;
+    public void setCustomerCustomList(List<CustomerCustom> customerCustomList) {
+        this.customerCustomList = customerCustomList;
     }
 }

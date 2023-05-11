@@ -27,8 +27,6 @@ public class ProductService {
     }
 
     public List<Product> getAllProducts() {
-        List<Product> products = new ArrayList<>();
-        Streamable.of(productRepository.findAll()).forEach(products::add);
-        return products;
+        return productRepository.findAll();
     }
 }

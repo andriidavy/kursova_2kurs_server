@@ -1,9 +1,9 @@
 package com.example.WarehouseDatabaseJava.model.users.employee;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Employee {
@@ -14,6 +14,10 @@ public class Employee {
     private String surname;
     private String email;
     private String password;
+
+    //One-to-Many relation with EmployeeCustom
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
+    private List<EmployeeCustom> employeeCustomList = new ArrayList<>();
 
     public Employee() {
     }
@@ -74,5 +78,13 @@ public class Employee {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    public List<EmployeeCustom> getEmployeeCustomList() {
+        return employeeCustomList;
+    }
+
+    public void setEmployeeCustomList(List<EmployeeCustom> employeeCustomList) {
+        this.employeeCustomList = employeeCustomList;
     }
 }

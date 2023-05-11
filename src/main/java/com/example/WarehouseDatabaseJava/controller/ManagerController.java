@@ -1,5 +1,7 @@
 package com.example.WarehouseDatabaseJava.controller;
 
+import com.example.WarehouseDatabaseJava.model.order.Custom;
+import com.example.WarehouseDatabaseJava.model.order.CustomService;
 import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeService;
 import com.example.WarehouseDatabaseJava.model.users.manager.Manager;
@@ -18,13 +20,21 @@ public class ManagerController {
     @Autowired
     private ManagerService managerService;
 
+    @Autowired
+    private CustomService customService;
+
     @PostMapping("/manager/save")
-    public Manager save(@RequestBody Manager manager){
+    public Manager save(@RequestBody Manager manager) {
         return managerService.save(manager);
     }
 
     @GetMapping("/manager/get-all")
-    public List<Manager> getAllManagers(){
+    public List<Manager> getAllManagers() {
         return managerService.getAllManagers();
+    }
+
+    @GetMapping("/manager/custom/get-all")
+    public List<Custom> getAllCustoms() {
+        return customService.getAllCustoms();
     }
 }

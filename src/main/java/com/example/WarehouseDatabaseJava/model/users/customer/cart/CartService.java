@@ -19,6 +19,7 @@ public class CartService {
     @Autowired
     private CartProductRepository cartProductRepository;
 
+    //додавання продукту в кошик покупцем
     public void addProductToCart(int customerId, int productId, int quantity) {
         Customer customer = customerRepository.getReferenceById(customerId);
         Product product = productRepository.getReferenceById(productId);
@@ -37,15 +38,17 @@ public class CartService {
         }
     }
 
+    //пошук співпадінь між продуктами які є в кошику і продуктом який хочемо додати в кошик
     private CartProduct findCartProductByProduct(Cart cart, Product product) {
         for (CartProduct cartProduct : cart.getCartProductList()) {
-            if (cartProduct.getProduct().getId()==product.getId()) {
+            if (cartProduct.getProduct().getId() == product.getId()) {
                 return cartProduct;
             }
         }
         return null;
     }
 
+    // видалення продукту з кошика покупцем
     public void removeProductFromCart(int customerId, int cartProductId) {
         Customer customer = customerRepository.getReferenceById(customerId);
         CartProduct cartProduct = cartProductRepository.getReferenceById(cartProductId);
@@ -55,6 +58,7 @@ public class CartService {
         }
     }
 
+    // очищення кошика покупцем
     public void clearCart(int customerId) {
         Customer customer = customerRepository.getReferenceById(customerId);
         if (customer.getCart() != null) {

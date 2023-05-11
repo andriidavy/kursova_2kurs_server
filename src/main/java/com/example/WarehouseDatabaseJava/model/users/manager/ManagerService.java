@@ -17,8 +17,6 @@ public class ManagerService {
         return managerRepository.save(manager);
     }
     public List<Manager> getAllManagers() {
-        List<Manager> managers = new ArrayList<>();
-        Streamable.of(managerRepository.findAll()).forEach(managers::add);
-        return managers;
+        return managerRepository.findAll();
     }
 }

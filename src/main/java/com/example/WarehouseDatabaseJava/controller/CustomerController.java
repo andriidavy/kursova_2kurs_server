@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.controller;
 
+import com.example.WarehouseDatabaseJava.model.order.Custom;
 import com.example.WarehouseDatabaseJava.model.order.CustomService;
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerService;
@@ -49,6 +50,11 @@ public class CustomerController {
     @PostMapping("/customer/{customerId}/create-custom")
     public void createCustom(@PathVariable int customerId) {
         customService.createCustom(customerId);
+    }
+
+    @GetMapping("/customer/{customerId}/get-customs")
+    public List<Custom> getCustomsForCustomer(@PathVariable int customerId){
+        return customService.getCustomsForCustomer(customerId);
     }
 
 

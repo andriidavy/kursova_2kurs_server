@@ -36,11 +36,11 @@ public class CustomProduct {
         this.quantity = quantity;
     }
 
-    public Custom getOrder() {
+    public Custom getCustom() {
         return custom;
     }
 
-    public void setOrder(Custom custom) {
+    public void setCustom(Custom custom) {
         this.custom = custom;
     }
 
