@@ -16,13 +16,5 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @PostMapping("/employee/save")
-    public Employee save(@RequestBody Employee employee){
-        return employeeService.save(employee);
-    }
 
-    @GetMapping("/employee/get-all")
-    public List<Employee> getAllCustomers() {
-        return employeeService.getAllEmployees();
-    }
 }

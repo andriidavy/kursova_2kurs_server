@@ -41,7 +41,7 @@ public class CustomerController {
         cartService.removeProductFromCart(customerId, cartProductId);
     }
 
-    @PostMapping("/{customerId}/cart/clear")
+    @PostMapping("/customer/{customerId}/cart/clear")
     public void clearCart(@PathVariable int customerId) {
         cartService.clearCart(customerId);
     }
