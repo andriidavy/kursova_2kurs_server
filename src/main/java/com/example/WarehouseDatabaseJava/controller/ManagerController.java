@@ -2,6 +2,8 @@ package com.example.WarehouseDatabaseJava.controller;
 
 import com.example.WarehouseDatabaseJava.model.order.Custom;
 import com.example.WarehouseDatabaseJava.model.order.CustomService;
+import com.example.WarehouseDatabaseJava.model.order.report.Report;
+import com.example.WarehouseDatabaseJava.model.order.report.ReportService;
 import com.example.WarehouseDatabaseJava.model.product.Product;
 import com.example.WarehouseDatabaseJava.model.product.ProductService;
 import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
@@ -15,18 +17,16 @@ import java.util.List;
 
 @RestController
 public class ManagerController {
-
     @Autowired
     private ManagerService managerService;
-
     @Autowired
     private CustomService customService;
-
     @Autowired
     EmployeeService employeeService;
-
     @Autowired
     ProductService productService;
+    @Autowired
+    ReportService reportService;
 
     //зберегти нового менеджера
     @PostMapping("/manager/save")
@@ -40,10 +40,16 @@ public class ManagerController {
         return managerService.getAllManagers();
     }
 
-    //отримати список всіх замовлень
-    @GetMapping("/manager/custom/get-all")
-    public List<Custom> getAllCustoms() {
-        return customService.getAllCustoms();
+//    //отримати список всіх замовлень
+//    @GetMapping("/manager/custom/get-all")
+//    public List<Custom> getAllCustoms() {
+//        return customService.getAllCustoms();
+//    }
+
+    //отримати список всіх замовлень зі статусом CREATED
+    @GetMapping("/manager/custom/get-created")
+    public List<Custom> getAllCreatedCustoms(){
+        return customService.getAllCreatedCustoms();
     }
 
     //призначити конкретного робітника на виконання конкретного замовлення
@@ -65,7 +71,7 @@ public class ManagerController {
     }
 
     //видалення робітника по id
-    @DeleteMapping("/employees/{employeeId}")
+    @DeleteMapping("/manager/employee/{employeeId}")
     public void deleteEmployeeById(@PathVariable int employeeId) {
         employeeService.deleteId(employeeId);
     }
@@ -80,5 +86,23 @@ public class ManagerController {
     @PostMapping("/manager/product/save")
     public Product save(@RequestBody Product product){
         return productService.save(product);
+    }
+
+    //отримати список усіх звітів, які чекають на відповідь менеджера
+    @GetMapping("/manager/custom/get-waiting")
+    public List<Report> getAllWaiting(){
+        return reportService.getAllWaitingReports();
+    }
+
+    //прийняти звіт
+    @PostMapping("/manager/custom/report/{reportId}/accept")
+    public void setReportAccepted(@PathVariable int reportId) {
+        reportService.setReportAccepted(reportId);
+    }
+
+    //відхилити звіт
+    @PostMapping("/manager/custom/report{reportId}/reject")
+    public void setReportRejected(@PathVariable int reportId) {
+        reportService.setReportRejected(reportId);
     }
 }
