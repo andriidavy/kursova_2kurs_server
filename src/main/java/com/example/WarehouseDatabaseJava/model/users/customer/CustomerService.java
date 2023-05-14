@@ -1,5 +1,7 @@
 package com.example.WarehouseDatabaseJava.model.users.customer;
 
+import com.example.WarehouseDatabaseJava.model.users.customer.cart.Cart;
+import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
@@ -11,9 +13,17 @@ import java.util.List;
 public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private CartRepository cartRepository;
 
     public Customer save(Customer customer) {
-        return customerRepository.save(customer);
+        customerRepository.save(customer);
+
+        Cart cart = new Cart();
+        cart.setCustomer(customer);
+        cartRepository.save(cart);
+
+        return customer;
     }
 
     public void delete(Customer customer) {

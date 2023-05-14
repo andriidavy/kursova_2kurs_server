@@ -7,6 +7,8 @@ import com.example.WarehouseDatabaseJava.model.users.customer.CustomerCustom;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerCustomRepository;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerRepository;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProduct;
+import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProductRepository;
+import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartRepository;
 import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeCustom;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeRepository;
@@ -33,8 +35,13 @@ public class CustomService {
     private EmployeeRepository employeeRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CartProductRepository cartProductRepository;
+    @Autowired
+    private CartRepository cartRepository;
 
     //Створення замовлення покупцем
+    @Transactional
     public void createCustom(int customerId) {
         Customer customer = customerRepository.getReferenceById(customerId);
         if (customer.getCart() != null && !customer.getCart().getCartProductList().isEmpty()) {
@@ -60,17 +67,14 @@ public class CustomService {
                 int quantityInStock = product.getQuantity();
                 // Обновляем количество продукта в базе данных
                 product.setQuantity(quantityInStock - quantityInCart);
-                if (product.getQuantity() == 0) {
-                    productRepository.delete(product);
-                } else {
                     productRepository.save(product);
-                }
                 CustomProduct customProduct = new CustomProduct();
                 customProduct.setProduct(product);
                 customProduct.setQuantity(quantityInCart);
                 customProduct.setCustom(custom);
                 customProductRepository.save(customProduct);
             }
+            cartProductRepository.deleteAll(customer.getCart().getCartProductList());
             customer.getCart().getCartProductList().clear();
         }
     }

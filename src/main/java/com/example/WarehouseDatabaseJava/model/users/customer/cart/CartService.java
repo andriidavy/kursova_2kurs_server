@@ -15,7 +15,6 @@ public class CartService {
     private CustomerRepository customerRepository;
     @Autowired
     private ProductRepository productRepository;
-
     @Autowired
     private CartProductRepository cartProductRepository;
 
@@ -23,14 +22,15 @@ public class CartService {
     public void addProductToCart(int customerId, int productId, int quantity) {
         Customer customer = customerRepository.getReferenceById(customerId);
         Product product = productRepository.getReferenceById(productId);
+        Cart cart = customer.getCart();
+        if (cart == null) {
+            cart = new Cart();
+            cart.setCustomer(customer);
+            customer.setCart(cart);
+        }
         // Проверяем наличие достаточного количества продукта в базе данных
         if (product.getQuantity() < quantity) {
             throw new RuntimeException("Not enough stock for product: " + product.getName());
-        }
-        if (customer.getCart() == null) {
-            Cart cart = new Cart();
-            customer.setCart(cart);
-            cart.setCustomer(customer);
         }
         CartProduct cartProduct = findCartProductByProduct(customer.getCart(), product);
         if (cartProduct == null) {
@@ -38,12 +38,16 @@ public class CartService {
             cartProduct.setProduct(product);
             cartProduct.setQuantity(quantity);
             cartProduct.setCart(customer.getCart());
-            customer.getCart().getCartProductList().add(cartProduct);
+            cart.getCartProductList().add(cartProduct);
+            cartProductRepository.save(cartProduct);
+            cartRepository.save(cart);
         } else {
             if (product.getQuantity() < cartProduct.getQuantity() + quantity) {
                 throw new RuntimeException("Not enough stock for product: " + product.getName());
             }
             cartProduct.setQuantity(cartProduct.getQuantity() + quantity);
+            cartProductRepository.save(cartProduct);
+            cartRepository.save(cart);
         }
     }
 
