@@ -15,6 +15,7 @@ public class Product {
     private int id;
     private String name;
     private String description;
+    private int quantity;
 
     // One-to-Many relation with CartProduct
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
@@ -69,5 +70,13 @@ public class Product {
 
     public void setCustomProductList(List<CustomProduct> customProductList) {
         this.customProductList = customProductList;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

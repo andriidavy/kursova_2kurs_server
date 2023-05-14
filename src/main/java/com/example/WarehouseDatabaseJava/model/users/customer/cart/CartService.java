@@ -23,6 +23,10 @@ public class CartService {
     public void addProductToCart(int customerId, int productId, int quantity) {
         Customer customer = customerRepository.getReferenceById(customerId);
         Product product = productRepository.getReferenceById(productId);
+        // Проверяем наличие достаточного количества продукта в базе данных
+        if (product.getQuantity() < quantity) {
+            throw new RuntimeException("Not enough stock for product: " + product.getName());
+        }
         if (customer.getCart() == null) {
             Cart cart = new Cart();
             customer.setCart(cart);
@@ -35,6 +39,11 @@ public class CartService {
             cartProduct.setQuantity(quantity);
             cartProduct.setCart(customer.getCart());
             customer.getCart().getCartProductList().add(cartProduct);
+        } else {
+            if (product.getQuantity() < cartProduct.getQuantity() + quantity) {
+                throw new RuntimeException("Not enough stock for product: " + product.getName());
+            }
+            cartProduct.setQuantity(cartProduct.getQuantity() + quantity);
         }
     }
 

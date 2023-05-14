@@ -1,5 +1,7 @@
 package com.example.WarehouseDatabaseJava.model.order;
 
+import com.example.WarehouseDatabaseJava.model.product.Product;
+import com.example.WarehouseDatabaseJava.model.product.ProductRepository;
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerCustom;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerCustomRepository;
@@ -27,14 +29,24 @@ public class CustomService {
     private CustomerCustomRepository customerCustomRepository;
     @Autowired
     private CustomProductRepository customProductRepository;
-
     @Autowired
     private EmployeeRepository employeeRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     //Створення замовлення покупцем
     public void createCustom(int customerId) {
         Customer customer = customerRepository.getReferenceById(customerId);
         if (customer.getCart() != null && !customer.getCart().getCartProductList().isEmpty()) {
+            // Проверяем наличие достаточного количества продукта в базе данных
+            for (CartProduct cartProduct : customer.getCart().getCartProductList()) {
+                Product product = cartProduct.getProduct();
+                int quantityInCart = cartProduct.getQuantity();
+                int quantityInStock = product.getQuantity();
+                if (quantityInStock < quantityInCart) {
+                    throw new RuntimeException("Not enough stock for product: " + product.getName());
+                }
+            }
             Custom custom = new Custom();
             customRepository.save(custom);
             custom.setStatus(Custom.Status.CREATED);
@@ -42,15 +54,23 @@ public class CustomService {
             customerCustom.setCustomer(customer);
             customerCustom.setCustom(custom);
             customerCustomRepository.save(customerCustom);
-
             for (CartProduct cartProduct : customer.getCart().getCartProductList()) {
+                Product product = cartProduct.getProduct();
+                int quantityInCart = cartProduct.getQuantity();
+                int quantityInStock = product.getQuantity();
+                // Обновляем количество продукта в базе данных
+                product.setQuantity(quantityInStock - quantityInCart);
+                if (product.getQuantity() == 0) {
+                    productRepository.delete(product);
+                } else {
+                    productRepository.save(product);
+                }
                 CustomProduct customProduct = new CustomProduct();
-                customProduct.setProduct(cartProduct.getProduct());
-                customProduct.setQuantity(cartProduct.getQuantity());
+                customProduct.setProduct(product);
+                customProduct.setQuantity(quantityInCart);
                 customProduct.setCustom(custom);
                 customProductRepository.save(customProduct);
             }
-
             customer.getCart().getCartProductList().clear();
         }
     }
@@ -161,3 +181,29 @@ public class CustomService {
         customRepository.save(custom);
     }
 }
+
+
+
+//ПОПЕРЕДНЯ РЕАЛІЗАЦІЯ МЕТОДУ CREATECUSTOM ЯКА НЕ ВРАХОВУЄ КІЛЬКІСТЬ ТОВАРУ
+//    {
+//        Customer customer = customerRepository.getReferenceById(customerId);
+//        if (customer.getCart() != null && !customer.getCart().getCartProductList().isEmpty()) {
+//            Custom custom = new Custom();
+//            customRepository.save(custom);
+//            custom.setStatus(Custom.Status.CREATED);
+//            CustomerCustom customerCustom = new CustomerCustom();
+//            customerCustom.setCustomer(customer);
+//            customerCustom.setCustom(custom);
+//            customerCustomRepository.save(customerCustom);
+//
+//            for (CartProduct cartProduct : customer.getCart().getCartProductList()) {
+//                CustomProduct customProduct = new CustomProduct();
+//                customProduct.setProduct(cartProduct.getProduct());
+//                customProduct.setQuantity(cartProduct.getQuantity());
+//                customProduct.setCustom(custom);
+//                customProductRepository.save(customProduct);
+//            }
+//
+//            customer.getCart().getCartProductList().clear();
+//        }
+//    }
