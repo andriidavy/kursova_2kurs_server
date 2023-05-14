@@ -154,8 +154,8 @@ public class CustomService {
             employeeCustomList.add(employeeCustom);
 
             custom.setEmployeeCustomList(employeeCustomList);
-            customRepository.save(custom);
             custom.setStatus(Custom.Status.IN_PROCESSING);
+            customRepository.save(custom);
         }
     }
 // Встановлення для замовлення статусу PROCESSED(виконаний)

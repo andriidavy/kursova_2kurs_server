@@ -53,8 +53,8 @@ public class ManagerController {
     }
 
     //призначити конкретного робітника на виконання конкретного замовлення
-    @PostMapping("/manager/custom/{customId}/assign-employee/{employeeId}")
-    public void assignEmployeeToCustom(@PathVariable int customId, @PathVariable int employeeId) {
+    @PostMapping("/manager/custom/assign-employee/")
+    public void assignEmployeeToCustom(@RequestParam int customId, @RequestParam int employeeId) {
         customService.assignEmployeeToCustom(customId, employeeId);
     }
 
