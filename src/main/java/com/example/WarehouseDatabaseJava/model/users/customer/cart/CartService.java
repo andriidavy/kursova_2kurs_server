@@ -4,6 +4,7 @@ import com.example.WarehouseDatabaseJava.model.product.Product;
 import com.example.WarehouseDatabaseJava.model.product.ProductRepository;
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,10 +77,16 @@ public class CartService {
                 });
     }
 
-//    // очищення кошика покупцем
-//    public void clearCart(int customerId) {
-//        Customer customer = customerRepository.getReferenceById(customerId);
-//            cartProductRepository.deleteAll(customer.getCart().getCartProductList());
-//            customer.getCart().getCartProductList().clear();
-//    }
+    // очищення кошика покупцем
+    @Transactional
+    public void clearCart(int customerId) {
+        Customer customer = customerRepository.getReferenceById(customerId);
+        if (customer != null) {
+            Cart cart = customer.getCart();
+            if (cart != null) {
+                cart.getCartProductList().clear();
+                cartRepository.deleteAllCartProductsByCart(cart);
+            }
+        }
+    }
 }

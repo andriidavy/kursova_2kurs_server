@@ -46,12 +46,12 @@ public class CustomerController {
     public void removeProductFromCart(@RequestParam int customerId, @RequestParam int productId) {
         cartService.removeProductFromCart(customerId, productId);
     }
-//
-//    //очистити корзину для конкретного покупця
-//    @DeleteMapping("/customer/cart/clear")
-//    public void clearCart(@RequestParam int customerId) {
-//        cartService.clearCart(customerId);
-//    }
+
+    //очистити корзину для конкретного покупця
+    @PostMapping("/customer/cart/clear")
+    public void clearCart(@RequestParam int customerId) {
+        cartService.clearCart(customerId);
+    }
 
     //створення замовлення конкретним покупцем TESTED
     @PostMapping("/customer/create-custom")
