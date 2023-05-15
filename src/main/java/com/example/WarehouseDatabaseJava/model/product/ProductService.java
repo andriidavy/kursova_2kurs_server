@@ -8,7 +8,7 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    //метод save зберігає новий запис якщо продукту з таким name ще немає і якщо є то додає до кількості цього продукту
+    //метод save зберігає новий запис якщо продукту з таким name ще немає і якщо є то додає до кількості цього продукту TESTED
     public Product save(Product product) {
         Product existingProduct = productRepository.findByName(product.getName());
         if (existingProduct != null) {

@@ -10,6 +10,7 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    //TESTED
     public Employee save (Employee employee){
         return employeeRepository.save(employee);
     }

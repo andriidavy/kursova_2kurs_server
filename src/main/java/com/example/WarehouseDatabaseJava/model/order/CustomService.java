@@ -40,7 +40,7 @@ public class CustomService {
     @Autowired
     private CartRepository cartRepository;
 
-    //Створення замовлення покупцем
+    //Створення замовлення покупцем TESTED
     @Transactional
     public void createCustom(int customerId) {
         Customer customer = customerRepository.getReferenceById(customerId);
@@ -79,7 +79,7 @@ public class CustomService {
         }
     }
 
-    // Отримання списку замовлень для конкретного покупця(по його id)
+    // Отримання списку замовлень для конкретного покупця(по його id) TESTED
     public List<Custom> getCustomsForCustomer(int customerId) {
         Customer customer = customerRepository.getReferenceById(customerId);
         List<Custom> customs = new ArrayList<>();
@@ -99,7 +99,7 @@ public class CustomService {
 //        return customs;
 //    }
 
-// Отримання списку актуальних призначених замовлень зі статусом IN_PROCESSING для конкретного робітника(по його id)
+// Отримання списку актуальних призначених замовлень зі статусом IN_PROCESSING для конкретного робітника(по його id) TESTED
     public List<Custom> getProcessingCustomsForEmployee(int employeeId) {
         Employee employee = employeeRepository.getReferenceById(employeeId);
         List<Custom> customs = new ArrayList<>();
@@ -112,7 +112,7 @@ public class CustomService {
         return customs;
     }
 
-    // Отримання списку виконаних призначених замовлень зі статусом PROCESSED для конкретного робітника(по його id)
+    // Отримання списку виконаних призначених замовлень зі статусом PROCESSED для конкретного робітника(по його id) TESTED
     public List<Custom> getProcessedCustomsForEmployee(int employeeId) {
         Employee employee = employeeRepository.getReferenceById(employeeId);
         List<Custom> customs = new ArrayList<>();
@@ -130,7 +130,7 @@ public class CustomService {
 //        return customRepository.findAll();
 //    }
 
-    // Отримання всіх створених замовлень зі статусом CREATED (Для Manager`a)
+    // Отримання всіх створених замовлень зі статусом CREATED (Для Manager`a) TESTED
     public List<Custom> getAllCreatedCustoms() {
         List<Custom> allCreatedCustoms = customRepository.findAll();
         return allCreatedCustoms.stream()
@@ -139,7 +139,7 @@ public class CustomService {
     }
 
 
-    // Призначення замовлення на виконання конкретному робітнику (Для Manager`a)
+    // Призначення замовлення на виконання конкретному робітнику (Для Manager`a) TESTED
     public void assignEmployeeToCustom(int customId, int employeeId) {
         Custom custom = customRepository.getReferenceById(customId);
         Employee employee = employeeRepository.getReferenceById(employeeId);
@@ -158,7 +158,7 @@ public class CustomService {
             customRepository.save(custom);
         }
     }
-// Встановлення для замовлення статусу PROCESSED(виконаний)
+// Встановлення для замовлення статусу PROCESSED(виконаний) TESTED
     @Transactional
     public void setCustomProcessed(int customId) {
         Custom custom = customRepository.getReferenceById(customId);
@@ -172,7 +172,7 @@ public class CustomService {
         customRepository.save(custom);
     }
 
-    // Встановлення для готового замовлення статусу SENT(відправлений)
+    // Встановлення для готового замовлення статусу SENT(відправлений) TESTED
     public void setCustomSent(int customId) {
         Custom custom = customRepository.getReferenceById(customId);
         if (custom == null) {

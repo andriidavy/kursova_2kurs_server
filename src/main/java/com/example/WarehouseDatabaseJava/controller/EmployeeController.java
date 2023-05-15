@@ -22,32 +22,42 @@ public class EmployeeController {
     private ReportService reportService;
 
 
-    // отримання списку всіх замовлень в процесі для конкретного робітника
-    @GetMapping("/employee/{employeeId}/custom/get-in-processing")
-    public List<Custom> getProcessingCustomsForEmployee(@PathVariable int employeeId){
+    // отримання списку всіх замовлень в процесі для конкретного робітника TESTED
+    @GetMapping("/employee/custom/get-in-processing")
+    public List<Custom> getProcessingCustomsForEmployee(@RequestParam int employeeId){
         return customService.getProcessingCustomsForEmployee(employeeId);
     }
 
-    // отримання списку всіх виконаних замовлень для конкретного робітника
-    @GetMapping("/employee/{employeeId}/custom/get-processed")
-    public List<Custom> getProcessedCustomsForEmployee(@PathVariable int employeeId){
+    // отримання списку всіх виконаних замовлень для конкретного робітника TESTED
+    @GetMapping("/employee/custom/get-processed")
+    public List<Custom> getProcessedCustomsForEmployee(@RequestParam int employeeId){
         return customService.getProcessedCustomsForEmployee(employeeId);
     }
 
-    //створення звіту для замовлення
-    @PostMapping("/employee/{employeeId}/custom/{customId}/create-report")
-    public void createReport(int employeeId, int customId, String reportText) {
+    //створення звіту для замовлення TESTED
+    @PostMapping("/employee/custom/create-report")
+    public void createReport(@RequestParam int employeeId, @RequestParam int customId, @RequestParam String reportText) {
         reportService.createReport(employeeId,customId,reportText);
     }
-    //отримати звіти зі статусом WAITING або REJECTED для конкретного робітника
-    @GetMapping("/employee/{employeeId}/custom/get-waiting-or-rejected")
-    public List<Report> getAllWaitingOrRejectedReports(int employeeId){
-        return reportService.getAllWaitingOrRejectedReportsForEmployee(employeeId);
+    //отримати звіти зі статусом WAITING для конкретного робітника TESTED
+    @GetMapping("/employee/custom/get-waiting")
+    public List<Report> getAllWaitingReports(@RequestParam int employeeId){
+        return reportService.getAllWaitingReportsForEmployee(employeeId);
+    }
+    //отримати звіти зі статусом ACCEPTED для конкретного робітника TESTED
+    @GetMapping("/employee/custom/get-accepted")
+    public List<Report> getAllAcceptedReports(@RequestParam int employeeId){
+        return reportService.getAllAcceptedReportsForEmployee(employeeId);
+    }
+    //отримати звіти зі статусом REJECTED для конкретного робітника TESTED
+    @GetMapping("/employee/custom/get-rejected")
+    public List<Report> getAllRejectedReports(@RequestParam int employeeId){
+        return reportService.getAllRejectedReportsForEmployee(employeeId);
     }
 
-    //встановити статус SENT для конкретного замовлення
-    @PostMapping("/employee/custom/{customId}/set-sent-status")
-    public void setCustomSent(@PathVariable int customId){
+    //встановити статус SENT для конкретного замовлення TESTED
+    @PostMapping("/employee/custom/set-sent-status")
+    public void setCustomSent(@RequestParam int customId){
         customService.setCustomSent(customId);
     }
 

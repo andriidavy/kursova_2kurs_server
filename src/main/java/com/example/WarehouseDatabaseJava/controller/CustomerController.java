@@ -23,49 +23,49 @@ public class CustomerController {
     @Autowired
     ProductService productService;
 
-    //отримати список всіх покупців
+    //отримати список всіх покупців TESTED
     @GetMapping("/customer/get-all")
     public List<Customer> getAllCustomers() {
         return customerService.getAllCustomers();
     }
 
-    //зберегти покупця
+    //зберегти покупця TESTED
     @PostMapping("/customer/save")
     public Customer saveCustomer(@RequestBody Customer customer){
         return customerService.save(customer);
     }
 
-    // додати продукт до корзини конкретним покупцем
+    // додати продукт до корзини конкретним покупцем TESTED
     @PostMapping("/customer/cart/add-product-to-cart")
     public void addProductToCart(@RequestParam int customerId, @RequestParam int productId, @RequestParam int quantity){
         cartService.addProductToCart(customerId, productId, quantity);
     }
 
-    //видалити продукт з корзини для конкретного покупця
-    @DeleteMapping("/customer/{customerId}/cart/product/{cartProductId}")
-    public void removeProductFromCart(@PathVariable int customerId, @PathVariable int cartProductId) {
-        cartService.removeProductFromCart(customerId, cartProductId);
+    //видалити продукт з корзини для конкретного покупця TESTED
+    @DeleteMapping("/customer/cart/remove-product-by-id")
+    public void removeProductFromCart(@RequestParam int customerId, @RequestParam int productId) {
+        cartService.removeProductFromCart(customerId, productId);
     }
+//
+//    //очистити корзину для конкретного покупця
+//    @DeleteMapping("/customer/cart/clear")
+//    public void clearCart(@RequestParam int customerId) {
+//        cartService.clearCart(customerId);
+//    }
 
-    //очистити корзину для конкретного покупця
-    @PostMapping("/customer/{customerId}/cart/clear")
-    public void clearCart(@PathVariable int customerId) {
-        cartService.clearCart(customerId);
-    }
-
-    //створення замовлення конкретним покупцем
+    //створення замовлення конкретним покупцем TESTED
     @PostMapping("/customer/create-custom")
     public void createCustom(@RequestParam int customerId) {
         customService.createCustom(customerId);
     }
 
-    //отримати список всіх замовлень для конкретного покупця
-    @GetMapping("/customer/{customerId}/get-customs")
-    public List<Custom> getCustomsForCustomer(@PathVariable int customerId){
+    //отримати список всіх замовлень для конкретного покупця TESTED
+    @GetMapping("/customer/get-customs")
+    public List<Custom> getCustomsForCustomer(@RequestParam int customerId){
         return customService.getCustomsForCustomer(customerId);
     }
 
-    //отримати список всіх продуктів
+    //отримати список всіх продуктів TESTED
     @GetMapping("/customer/product/get-all")
     public List<Product> getAllProducts(){
         return productService.getAllProducts();

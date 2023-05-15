@@ -2,6 +2,7 @@ package com.example.WarehouseDatabaseJava.model.product;
 
 import com.example.WarehouseDatabaseJava.model.order.CustomProduct;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProduct;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -19,14 +20,18 @@ public class Product {
 
     // One-to-Many relation with CartProduct
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnore
     List<CartProduct> cartProductList = new ArrayList<>();
 
     // One-to-Many relation with CustomProduct
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnore
     List<CustomProduct> customProductList = new ArrayList<>();
 
-    public Product(){}
+    public Product() {
+    }
+
     public Product(String name, String description) {
         this.name = name;
         this.description = description;

@@ -7,6 +7,8 @@ import com.example.WarehouseDatabaseJava.model.users.customer.CustomerRepository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CartService {
     @Autowired
@@ -18,7 +20,7 @@ public class CartService {
     @Autowired
     private CartProductRepository cartProductRepository;
 
-    //додавання продукту в кошик покупцем
+    //додавання продукту в кошик покупцем TESTED
     public void addProductToCart(int customerId, int productId, int quantity) {
         Customer customer = customerRepository.getReferenceById(customerId);
         Product product = productRepository.getReferenceById(productId);
@@ -51,7 +53,7 @@ public class CartService {
         }
     }
 
-    //пошук співпадінь між продуктами які є в кошику і продуктом який хочемо додати в кошик
+    //пошук співпадінь між продуктами які є в кошику і продуктом який хочемо додати в кошик TESTED
     private CartProduct findCartProductByProduct(Cart cart, Product product) {
         for (CartProduct cartProduct : cart.getCartProductList()) {
             if (cartProduct.getProduct().getId() == product.getId()) {
@@ -62,21 +64,22 @@ public class CartService {
     }
 
     // видалення продукту з кошика покупцем
-    public void removeProductFromCart(int customerId, int cartProductId) {
+    public void removeProductFromCart(int customerId, int productId) {
         Customer customer = customerRepository.getReferenceById(customerId);
-        CartProduct cartProduct = cartProductRepository.getReferenceById(cartProductId);
-        if (customer.getCart() != null && cartProduct != null && cartProduct.getCart().getId() == customer.getCart().getId()) {
-            customer.getCart().getCartProductList().remove(cartProduct);
-            cartProductRepository.delete(cartProduct);
-        }
+        List<CartProduct> cartProductList = customer.getCart().getCartProductList();
+        cartProductList.stream()
+                .filter(cartProduct -> cartProduct.getProduct().getId() == productId)
+                .findFirst()
+                .ifPresent(cartProduct -> {
+                    customer.getCart().getCartProductList().remove(cartProduct);
+                    cartProductRepository.delete(cartProduct);
+                });
     }
 
-    // очищення кошика покупцем
-    public void clearCart(int customerId) {
-        Customer customer = customerRepository.getReferenceById(customerId);
-        if (customer.getCart() != null) {
-            customer.getCart().getCartProductList().clear();
-            cartRepository.save(customer.getCart());
-        }
-    }
+//    // очищення кошика покупцем
+//    public void clearCart(int customerId) {
+//        Customer customer = customerRepository.getReferenceById(customerId);
+//            cartProductRepository.deleteAll(customer.getCart().getCartProductList());
+//            customer.getCart().getCartProductList().clear();
+//    }
 }

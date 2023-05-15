@@ -16,6 +16,7 @@ public class CustomerService {
     @Autowired
     private CartRepository cartRepository;
 
+//додавання нового покупця та його корзини TESTED
     public Customer save(Customer customer) {
         customerRepository.save(customer);
 
@@ -35,9 +36,7 @@ public class CustomerService {
     }
 
     public List<Customer> getAllCustomers() {
-        List<Customer> customers = new ArrayList<>();
-        Streamable.of(customerRepository.findAll()).forEach(customers::add);
-        return customers;
+        return customerRepository.findAll();
     }
 
 }

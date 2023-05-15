@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.model.users.employee;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class Employee {
 
     //One-to-Many relation with EmployeeCustom
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
+    @JsonIgnore
     private List<EmployeeCustom> employeeCustomList = new ArrayList<>();
 
     public Employee() {

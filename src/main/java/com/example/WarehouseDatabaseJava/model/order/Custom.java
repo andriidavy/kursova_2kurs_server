@@ -4,6 +4,7 @@ import com.example.WarehouseDatabaseJava.model.order.report.Report;
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerCustom;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeCustom;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -17,18 +18,22 @@ public class Custom {
 
     // One-to-Many relation with CustomerCustom
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "custom")
+    @JsonIgnore
     private List<CustomerCustom> customerCustomList = new ArrayList<>();
 
     // One-to-Many relation with CustomProduct
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "custom")
+    @JsonIgnore
     List<CustomProduct> customProductList = new ArrayList<>();
 
     //One-to-Many relation with EmployeeCustom
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "custom")
+    @JsonIgnore
     List<EmployeeCustom> employeeCustomList = new ArrayList<>();
 
     //One-to-One relation with Report
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "custom")
+    @JsonIgnore
     Report report;
 
     public enum Status{

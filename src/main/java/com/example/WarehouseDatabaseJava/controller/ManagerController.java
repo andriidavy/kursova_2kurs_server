@@ -28,13 +28,13 @@ public class ManagerController {
     @Autowired
     ReportService reportService;
 
-    //зберегти нового менеджера
+    //зберегти нового менеджера TESTED
     @PostMapping("/manager/save")
     public Manager save(@RequestBody Manager manager) {
         return managerService.save(manager);
     }
 
-    //отримати список всіх менеджерів
+    //отримати список всіх менеджерів TESTED
     @GetMapping("/manager/get-all")
     public List<Manager> getAllManagers() {
         return managerService.getAllManagers();
@@ -46,63 +46,63 @@ public class ManagerController {
 //        return customService.getAllCustoms();
 //    }
 
-    //отримати список всіх замовлень зі статусом CREATED
+    //отримати список всіх замовлень зі статусом CREATED TESTED
     @GetMapping("/manager/custom/get-created")
     public List<Custom> getAllCreatedCustoms(){
         return customService.getAllCreatedCustoms();
     }
 
-    //призначити конкретного робітника на виконання конкретного замовлення
+    //призначити конкретного робітника на виконання конкретного замовлення TESTED
     @PostMapping("/manager/custom/assign-employee/")
     public void assignEmployeeToCustom(@RequestParam int customId, @RequestParam int employeeId) {
         customService.assignEmployeeToCustom(customId, employeeId);
     }
 
-    //отримати список всіх робітників
+    //отримати список всіх робітників TESTED
     @GetMapping("/manager/employee/get-all")
     public List<Employee> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
-    //додати нового робітника
+    //додати нового робітника TESTED
     @PostMapping("/manager/employee/save")
     public void saveEmployee(@RequestBody Employee employee) {
         employeeService.save(employee);
     }
 
-    //видалення робітника по id
-    @DeleteMapping("/manager/employee/{employeeId}")
-    public void deleteEmployeeById(@PathVariable int employeeId) {
+    //видалення робітника по id TESTED
+    @DeleteMapping("/manager/employee/delete-employee-by-id")
+    public void deleteEmployeeById(@RequestParam int employeeId) {
         employeeService.deleteId(employeeId);
     }
 
-    //отримати список всіх продуктів
+    //отримати список всіх продуктів TESTED
     @GetMapping("/manager/product/get-all")
     public List<Product> getAllProducts(){
         return productService.getAllProducts();
     }
 
-    //додати новий продукт
+    //додати новий продукт TESTED
     @PostMapping("/manager/product/save")
     public Product save(@RequestBody Product product){
         return productService.save(product);
     }
 
-    //отримати список усіх звітів, які чекають на відповідь менеджера
+    //отримати список усіх звітів, які чекають на відповідь менеджера TESTED
     @GetMapping("/manager/custom/get-waiting")
     public List<Report> getAllWaiting(){
         return reportService.getAllWaitingReports();
     }
 
-    //прийняти звіт
-    @PostMapping("/manager/custom/report/{reportId}/accept")
-    public void setReportAccepted(@PathVariable int reportId) {
+    //прийняти звіт TESTED
+    @PostMapping("/manager/custom/report/accept")
+    public void setReportAccepted(@RequestParam int reportId) {
         reportService.setReportAccepted(reportId);
     }
 
-    //відхилити звіт
-    @PostMapping("/manager/custom/report{reportId}/reject")
-    public void setReportRejected(@PathVariable int reportId) {
+    //відхилити звіт TESTED
+    @PostMapping("/manager/custom/report/reject")
+    public void setReportRejected(@RequestParam int reportId) {
         reportService.setReportRejected(reportId);
     }
 }
