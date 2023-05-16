@@ -1,11 +1,12 @@
 package com.example.WarehouseDatabaseJava.controller;
 
-import com.example.WarehouseDatabaseJava.model.order.Custom;
+import com.example.WarehouseDatabaseJava.model.order.CustomProductDTO;
 import com.example.WarehouseDatabaseJava.model.order.CustomService;
 import com.example.WarehouseDatabaseJava.model.product.Product;
 import com.example.WarehouseDatabaseJava.model.product.ProductService;
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerService;
+import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProductDTO;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,13 +32,13 @@ public class CustomerController {
 
     //зберегти покупця TESTED
     @PostMapping("/customer/save")
-    public Customer saveCustomer(@RequestBody Customer customer){
+    public Customer saveCustomer(@RequestBody Customer customer) {
         return customerService.save(customer);
     }
 
     // додати продукт до корзини конкретним покупцем TESTED
     @PostMapping("/customer/cart/add-product-to-cart")
-    public void addProductToCart(@RequestParam int customerId, @RequestParam int productId, @RequestParam int quantity){
+    public void addProductToCart(@RequestParam int customerId, @RequestParam int productId, @RequestParam int quantity) {
         cartService.addProductToCart(customerId, productId, quantity);
     }
 
@@ -61,13 +62,19 @@ public class CustomerController {
 
     //отримати список всіх замовлень для конкретного покупця TESTED
     @GetMapping("/customer/get-customs")
-    public List<Custom> getCustomsForCustomer(@RequestParam int customerId){
+    public List<CustomProductDTO> getCustomsForCustomer(@RequestParam int customerId) {
         return customService.getCustomsForCustomer(customerId);
+    }
+
+    //отримати список товарів в корзині для конкретного покупця
+    @GetMapping("customer/get-cart")
+    public List<CartProductDTO> getCartProductsByCustomerId(@RequestParam int customerId) {
+        return cartService.getCartProductsByCustomerId(customerId);
     }
 
     //отримати список всіх продуктів TESTED
     @GetMapping("/customer/product/get-all")
-    public List<Product> getAllProducts(){
+    public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 }

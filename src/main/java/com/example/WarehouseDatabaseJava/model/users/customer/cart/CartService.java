@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -88,5 +89,28 @@ public class CartService {
                 cartRepository.deleteAllCartProductsByCart(cart);
             }
         }
+    }
+
+    // отримати список товарів у корзині для певного покупця
+    // (повертає список об'єктів класу що містить назву, кількість і id продукту що є в корзині) TESTED
+    public List<CartProductDTO> getCartProductsByCustomerId(int customerId) {
+        Customer customer = customerRepository.getReferenceById(customerId);
+
+        Cart cart = customer.getCart();
+        List<CartProductDTO> cartProductDTOS = new ArrayList<>();
+
+        for (CartProduct cartProduct : cart.getCartProductList()) {
+            Product product = cartProduct.getProduct();
+            int quantity = cartProduct.getQuantity();
+
+            CartProductDTO cartProductDTO = new CartProductDTO();
+            cartProductDTO.setProductId(product.getId());
+            cartProductDTO.setProductName(product.getName());
+            cartProductDTO.setQuantity(quantity);
+
+            cartProductDTOS.add(cartProductDTO);
+        }
+
+        return cartProductDTOS;
     }
 }
