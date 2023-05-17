@@ -1,9 +1,6 @@
 package com.example.WarehouseDatabaseJava.model.order;
 
 public class CustomProductDTO {
-
-    private int customId;
-    Custom.Status status;
     private int productId;
     private String productName;
     private int quantity;
@@ -32,19 +29,4 @@ public class CustomProductDTO {
         this.quantity = quantity;
     }
 
-    public int getCustomId() {
-        return customId;
-    }
-
-    public void setCustomId(int id) {
-        this.customId = id;
-    }
-
-    public Custom.Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Custom.Status status) {
-        this.status = status;
-    }
 }

@@ -1,0 +1,60 @@
+package com.example.WarehouseDatabaseJava.model.order;
+
+import java.util.List;
+
+public class CustomDTO {
+    private int customId;
+    private int customerId;
+    private String customerName;
+    private String customerSurname;
+    private Custom.Status status;
+    private List<CustomProductDTO> customProductDTOList;
+
+    public int getCustomId() {
+        return customId;
+    }
+
+    public void setCustomId(int customId) {
+        this.customId = customId;
+    }
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerSurname() {
+        return customerSurname;
+    }
+
+    public void setCustomerSurname(String customerSurname) {
+        this.customerSurname = customerSurname;
+    }
+
+    public List<CustomProductDTO> getCustomProductDTOList() {
+        return customProductDTOList;
+    }
+
+    public void setCustomProductDTOList(List<CustomProductDTO> customProductDTOList) {
+        this.customProductDTOList = customProductDTOList;
+    }
+
+    public Custom.Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Custom.Status status) {
+        this.status = status;
+    }
+}

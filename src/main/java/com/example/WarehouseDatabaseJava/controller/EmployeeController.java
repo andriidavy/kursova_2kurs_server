@@ -1,9 +1,6 @@
 package com.example.WarehouseDatabaseJava.controller;
 
-import com.example.WarehouseDatabaseJava.model.order.Custom;
-import com.example.WarehouseDatabaseJava.model.order.CustomProduct;
-import com.example.WarehouseDatabaseJava.model.order.CustomProductDTO;
-import com.example.WarehouseDatabaseJava.model.order.CustomService;
+import com.example.WarehouseDatabaseJava.model.order.*;
 import com.example.WarehouseDatabaseJava.model.order.report.Report;
 import com.example.WarehouseDatabaseJava.model.order.report.ReportService;
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
@@ -26,13 +23,13 @@ public class EmployeeController {
 
     // отримання списку всіх замовлень в процесі для конкретного робітника TESTED
     @GetMapping("/employee/custom/get-in-processing")
-    public List<CustomProductDTO> getProcessingCustomsForEmployee(@RequestParam int employeeId){
+    public List<CustomDTO> getProcessingCustomsForEmployee(@RequestParam int employeeId){
         return customService.getProcessingCustomsForEmployee(employeeId);
     }
 
-    // отримання списку всіх виконаних замовлень для конкретного робітника TESTED
+//    // отримання списку всіх виконаних замовлень для конкретного робітника TESTED
     @GetMapping("/employee/custom/get-processed")
-    public List<CustomProductDTO> getProcessedCustomsForEmployee(@RequestParam int employeeId){
+    public List<CustomDTO> getProcessedCustomsForEmployee(@RequestParam int employeeId){
         return customService.getProcessedCustomsForEmployee(employeeId);
     }
 

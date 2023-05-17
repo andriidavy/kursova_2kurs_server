@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.controller;
 
+import com.example.WarehouseDatabaseJava.model.order.CustomDTO;
 import com.example.WarehouseDatabaseJava.model.order.CustomProductDTO;
 import com.example.WarehouseDatabaseJava.model.order.CustomService;
 import com.example.WarehouseDatabaseJava.model.product.Product;
@@ -62,7 +63,7 @@ public class CustomerController {
 
     //отримати список всіх замовлень для конкретного покупця TESTED
     @GetMapping("/customer/get-customs")
-    public List<CustomProductDTO> getCustomsForCustomer(@RequestParam int customerId) {
+    public List<CustomDTO> getCustomsForCustomer(@RequestParam int customerId) {
         return customService.getCustomsForCustomer(customerId);
     }
 

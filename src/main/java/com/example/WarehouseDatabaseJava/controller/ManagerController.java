@@ -1,6 +1,7 @@
 package com.example.WarehouseDatabaseJava.controller;
 
 import com.example.WarehouseDatabaseJava.model.order.Custom;
+import com.example.WarehouseDatabaseJava.model.order.CustomDTO;
 import com.example.WarehouseDatabaseJava.model.order.CustomProductDTO;
 import com.example.WarehouseDatabaseJava.model.order.CustomService;
 import com.example.WarehouseDatabaseJava.model.order.report.Report;
@@ -41,15 +42,9 @@ public class ManagerController {
         return managerService.getAllManagers();
     }
 
-//    //отримати список всіх замовлень
-//    @GetMapping("/manager/custom/get-all")
-//    public List<Custom> getAllCustoms() {
-//        return customService.getAllCustoms();
-//    }
-
     //отримати список всіх замовлень зі статусом CREATED TESTED
     @GetMapping("/manager/custom/get-created")
-    public List<CustomProductDTO> getAllCreatedCustoms(){
+    public List<CustomDTO> getAllCreatedCustoms(){
         return customService.getAllCreatedCustoms();
     }
 
