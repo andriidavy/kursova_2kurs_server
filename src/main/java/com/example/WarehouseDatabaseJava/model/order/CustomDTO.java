@@ -7,7 +7,7 @@ public class CustomDTO {
     private int customerId;
     private String customerName;
     private String customerSurname;
-    private Custom.Status status;
+    private String status;
     private List<CustomProductDTO> customProductDTOList;
 
     public int getCustomId() {
@@ -50,11 +50,11 @@ public class CustomDTO {
         this.customProductDTOList = customProductDTOList;
     }
 
-    public Custom.Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Custom.Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

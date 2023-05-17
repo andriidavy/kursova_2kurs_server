@@ -67,8 +67,8 @@ public class CustomerController {
         return customService.getCustomsForCustomer(customerId);
     }
 
-    //отримати список товарів в корзині для конкретного покупця
-    @GetMapping("customer/get-cart")
+    //отримати список товарів в корзині для конкретного покупця TESTED
+    @GetMapping("/customer/get-cart")
     public List<CartProductDTO> getCartProductsByCustomerId(@RequestParam int customerId) {
         return cartService.getCartProductsByCustomerId(customerId);
     }

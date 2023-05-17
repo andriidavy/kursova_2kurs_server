@@ -110,7 +110,7 @@ public List<CustomDTO> getCustomsForCustomer(int customerId) {
             customDTO.setCustomerId(customer.getId());
             customDTO.setCustomerName(customer.getName());
             customDTO.setCustomerSurname(customer.getSurname());
-            customDTO.setStatus(custom.getStatus());
+            customDTO.setStatus(custom.getStatus().toString());
             customDTO.setCustomProductDTOList(new ArrayList<>());
             customDTOs.add(customDTO);
         }
@@ -192,7 +192,7 @@ public List<CustomDTO> getCustomsForCustomer(int customerId) {
                 customDTO.setCustomerName(customer.getName());
                 customDTO.setCustomerSurname(customer.getSurname());
 
-                customDTO.setStatus(custom.getStatus());
+                customDTO.setStatus(custom.getStatus().toString());
 
                 List<CustomProductDTO> customProductDTOs = new ArrayList<>();
                 for (CustomProduct customProduct : custom.getCustomProductList()) {
@@ -269,7 +269,7 @@ public List<CustomDTO> getCustomsForCustomer(int customerId) {
                 customDTO.setCustomerName(customer.getName());
                 customDTO.setCustomerSurname(customer.getSurname());
 
-                customDTO.setStatus(custom.getStatus());
+                customDTO.setStatus(custom.getStatus().toString());
 
                 List<CustomProductDTO> customProductDTOs = new ArrayList<>();
                 for (CustomProduct customProduct : custom.getCustomProductList()) {
@@ -317,7 +317,7 @@ public List<CustomDTO> getCustomsForCustomer(int customerId) {
                 customDTO.setCustomerName(customer.getName());
                 customDTO.setCustomerSurname(customer.getSurname());
 
-                customDTO.setStatus(custom.getStatus());
+                customDTO.setStatus(custom.getStatus().toString());
 
                 List<CustomProductDTO> customProductDTOs = new ArrayList<>();
                 for (CustomProduct customProduct : custom.getCustomProductList()) {
