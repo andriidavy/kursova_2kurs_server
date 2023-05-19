@@ -16,7 +16,7 @@ public class CustomerService {
     @Autowired
     private CartRepository cartRepository;
 
-//додавання нового покупця та його корзини TESTED
+    //додавання нового покупця та його корзини TESTED
     public Customer save(Customer customer) {
         customerRepository.save(customer);
 
@@ -31,7 +31,7 @@ public class CustomerService {
         customerRepository.delete(customer);
     }
 
-    public void deleteById(Integer id){
+    public void deleteById(Integer id) {
         customerRepository.deleteById(id);
     }
 
@@ -39,4 +39,15 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
+    public CustomerProfileDTO getCustomerProfile(int customerId) {
+        Customer customer = customerRepository.getReferenceById(customerId);
+        if (customer == null) {
+            throw new RuntimeException("Customer not found with id: " + customerId);
+        }
+        String name = customer.getName();
+        String surname = customer.getSurname();
+        String email = customer.getEmail();
+
+        return new CustomerProfileDTO(name, surname, email);
+    }
 }

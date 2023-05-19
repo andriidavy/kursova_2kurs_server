@@ -6,6 +6,7 @@ import com.example.WarehouseDatabaseJava.model.order.CustomService;
 import com.example.WarehouseDatabaseJava.model.product.Product;
 import com.example.WarehouseDatabaseJava.model.product.ProductService;
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
+import com.example.WarehouseDatabaseJava.model.users.customer.CustomerProfileDTO;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerService;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProductDTO;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartService;
@@ -29,6 +30,12 @@ public class CustomerController {
     @GetMapping("/customer/get-all")
     public List<Customer> getAllCustomers() {
         return customerService.getAllCustomers();
+    }
+
+    //отримати покупця по його id
+    @GetMapping("/customer/get-customer-by-id")
+    public CustomerProfileDTO getCustomerProfile(@RequestParam int customerId){
+        return customerService.getCustomerProfile(customerId);
     }
 
     //зберегти покупця TESTED
