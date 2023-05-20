@@ -73,66 +73,154 @@ public class ReportService {
 //    }
 
     // метод для отримання всіх звітів, у яких статус WAITING (очікують відповіді менеджера) TESTED
-    public List<Report> getAllWaitingReports() {
-        List<Report> allWaitingReports = reportRepository.findAll();
-        return allWaitingReports.stream()
-                .filter(report -> report.getStatus() == Report.Status.WAITING)
-                .collect(Collectors.toList());
+
+    public List<ReportDTO> getAllWaitingReports() {
+        List<Report> allReports = reportRepository.findAll();
+
+        List<ReportDTO> reportsDTO = new ArrayList<>();
+        for (Report report : allReports) {
+            if (report.getStatus() == Report.Status.WAITING) {
+                ReportDTO reportDTO = new ReportDTO();
+                reportDTO.setReportId(report.getId());
+                reportDTO.setCustomId(report.getCustom().getId());
+                reportDTO.setReportText(report.getReportText());
+                reportDTO.setStatus(report.getStatus().toString());
+
+                reportsDTO.add(reportDTO);
+            }
+        }
+        return reportsDTO;
     }
+
+//    public List<Report> getAllWaitingReports() {
+//        List<Report> allWaitingReports = reportRepository.findAll();
+//        return allWaitingReports.stream()
+//                .filter(report -> report.getStatus() == Report.Status.WAITING)
+//                .collect(Collectors.toList());
+//    }
 
     //метод отримання всіх звітів зі статусом WAITING для конкретного робітника TESTED
-    public List<Report> getAllWaitingReportsForEmployee(int employeeId) {
+
+    public List<ReportDTO> getAllWaitingReportsForEmployee(int employeeId) {
         Employee employee = employeeRepository.getReferenceById(employeeId);
 
-        List<Custom> customs = employee.getEmployeeCustomList().stream()
-                .map(EmployeeCustom::getCustom)
-                .toList();
+        List<ReportDTO> reportsDTO = new ArrayList<>();
 
-        List<Report> reports = new ArrayList<>();
-        for (Custom custom : customs) {
+        for(EmployeeCustom employeeCustom : employee.getEmployeeCustomList()) {
+            Custom custom = employeeCustom.getCustom();
+
             Report report = custom.getReport();
-            if (report != null && (report.getStatus() == Report.Status.WAITING)) {
-                reports.add(report);
+            if (report != null && report.getStatus() == Report.Status.WAITING) {
+                ReportDTO reportDTO = new ReportDTO();
+                reportDTO.setReportId(report.getId());
+                reportDTO.setCustomId(custom.getId());
+                reportDTO.setReportText(report.getReportText());
+                reportDTO.setStatus(report.getStatus().toString());
+
+                reportsDTO.add(reportDTO);
             }
         }
-        return reports;
+        return reportsDTO;
     }
+
+//    public List<Report> getAllWaitingReportsForEmployee(int employeeId) {
+//        Employee employee = employeeRepository.getReferenceById(employeeId);
+//
+//        List<Custom> customs = employee.getEmployeeCustomList().stream()
+//                .map(EmployeeCustom::getCustom)
+//                .toList();
+//
+//        List<Report> reports = new ArrayList<>();
+//        for (Custom custom : customs) {
+//            Report report = custom.getReport();
+//            if (report != null && (report.getStatus() == Report.Status.WAITING)) {
+//                reports.add(report);
+//            }
+//        }
+//        return reports;
+//    }
 
     //метод отримання всіх звітів зі статусом ACCEPTED для конкретного робітника TESTED
-    public List<Report> getAllAcceptedReportsForEmployee(int employeeId) {
+
+    public List<ReportDTO> getAllAcceptedReportsForEmployee(int employeeId) {
         Employee employee = employeeRepository.getReferenceById(employeeId);
 
-        List<Custom> customs = employee.getEmployeeCustomList().stream()
-                .map(EmployeeCustom::getCustom)
-                .toList();
+        List<ReportDTO> reportsDTO = new ArrayList<>();
 
-        List<Report> reports = new ArrayList<>();
-        for (Custom custom : customs) {
+        for(EmployeeCustom employeeCustom : employee.getEmployeeCustomList()) {
+            Custom custom = employeeCustom.getCustom();
+
             Report report = custom.getReport();
-            if (report != null && (report.getStatus() == Report.Status.ACCEPTED)) {
-                reports.add(report);
+            if (report != null && report.getStatus() == Report.Status.ACCEPTED) {
+                ReportDTO reportDTO = new ReportDTO();
+                reportDTO.setReportId(report.getId());
+                reportDTO.setCustomId(custom.getId());
+                reportDTO.setReportText(report.getReportText());
+                reportDTO.setStatus(report.getStatus().toString());
+
+                reportsDTO.add(reportDTO);
             }
         }
-        return reports;
+        return reportsDTO;
     }
+
+//    public List<Report> getAllAcceptedReportsForEmployee(int employeeId) {
+//        Employee employee = employeeRepository.getReferenceById(employeeId);
+//
+//        List<Custom> customs = employee.getEmployeeCustomList().stream()
+//                .map(EmployeeCustom::getCustom)
+//                .toList();
+//
+//        List<Report> reports = new ArrayList<>();
+//        for (Custom custom : customs) {
+//            Report report = custom.getReport();
+//            if (report != null && (report.getStatus() == Report.Status.ACCEPTED)) {
+//                reports.add(report);
+//            }
+//        }
+//        return reports;
+//    }
 
     //метод отримання всіх звітів зі статусом REJECTED для конкретного робітника TESTED
-    public List<Report> getAllRejectedReportsForEmployee(int employeeId) {
+
+    public List<ReportDTO> getAllRejectedReportsForEmployee(int employeeId) {
         Employee employee = employeeRepository.getReferenceById(employeeId);
 
-        List<Custom> customs = employee.getEmployeeCustomList().stream()
-                .map(EmployeeCustom::getCustom)
-                .toList();
+        List<ReportDTO> reportsDTO = new ArrayList<>();
 
-        List<Report> reports = new ArrayList<>();
-        for (Custom custom : customs) {
+        for(EmployeeCustom employeeCustom : employee.getEmployeeCustomList()) {
+            Custom custom = employeeCustom.getCustom();
+
             Report report = custom.getReport();
-            if (report != null && (report.getStatus() == Report.Status.REJECTED)) {
-                reports.add(report);
+            if (report != null && report.getStatus() == Report.Status.REJECTED) {
+                ReportDTO reportDTO = new ReportDTO();
+                reportDTO.setReportId(report.getId());
+                reportDTO.setCustomId(custom.getId());
+                reportDTO.setReportText(report.getReportText());
+                reportDTO.setStatus(report.getStatus().toString());
+
+                reportsDTO.add(reportDTO);
             }
         }
-        return reports;
+        return reportsDTO;
     }
+
+//    public List<Report> getAllRejectedReportsForEmployee(int employeeId) {
+//        Employee employee = employeeRepository.getReferenceById(employeeId);
+//
+//        List<Custom> customs = employee.getEmployeeCustomList().stream()
+//                .map(EmployeeCustom::getCustom)
+//                .toList();
+//
+//        List<Report> reports = new ArrayList<>();
+//        for (Custom custom : customs) {
+//            Report report = custom.getReport();
+//            if (report != null && (report.getStatus() == Report.Status.REJECTED)) {
+//                reports.add(report);
+//            }
+//        }
+//        return reports;
+//    }
 
     // метод для встановлення конкретному звіту статусу ACCEPTED TESTED
     @Transactional

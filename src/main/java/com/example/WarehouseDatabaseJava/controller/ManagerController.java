@@ -5,6 +5,7 @@ import com.example.WarehouseDatabaseJava.model.order.CustomDTO;
 import com.example.WarehouseDatabaseJava.model.order.CustomProductDTO;
 import com.example.WarehouseDatabaseJava.model.order.CustomService;
 import com.example.WarehouseDatabaseJava.model.order.report.Report;
+import com.example.WarehouseDatabaseJava.model.order.report.ReportDTO;
 import com.example.WarehouseDatabaseJava.model.order.report.ReportService;
 import com.example.WarehouseDatabaseJava.model.product.Product;
 import com.example.WarehouseDatabaseJava.model.product.ProductService;
@@ -88,7 +89,7 @@ public class ManagerController {
 
     //отримати список усіх звітів, які чекають на відповідь менеджера TESTED
     @GetMapping("/manager/custom/get-waiting")
-    public List<Report> getAllWaiting(){
+    public List<ReportDTO> getAllWaiting(){
         return reportService.getAllWaitingReports();
     }
 

@@ -2,6 +2,7 @@ package com.example.WarehouseDatabaseJava.controller;
 
 import com.example.WarehouseDatabaseJava.model.order.*;
 import com.example.WarehouseDatabaseJava.model.order.report.Report;
+import com.example.WarehouseDatabaseJava.model.order.report.ReportDTO;
 import com.example.WarehouseDatabaseJava.model.order.report.ReportService;
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
@@ -44,17 +45,17 @@ public class EmployeeController {
     }
     //отримати звіти зі статусом WAITING для конкретного робітника TESTED
     @GetMapping("/employee/custom/get-waiting")
-    public List<Report> getAllWaitingReports(@RequestParam int employeeId){
+    public List<ReportDTO> getAllWaitingReports(@RequestParam int employeeId){
         return reportService.getAllWaitingReportsForEmployee(employeeId);
     }
     //отримати звіти зі статусом ACCEPTED для конкретного робітника TESTED
     @GetMapping("/employee/custom/get-accepted")
-    public List<Report> getAllAcceptedReports(@RequestParam int employeeId){
+    public List<ReportDTO> getAllAcceptedReports(@RequestParam int employeeId){
         return reportService.getAllAcceptedReportsForEmployee(employeeId);
     }
     //отримати звіти зі статусом REJECTED для конкретного робітника TESTED
     @GetMapping("/employee/custom/get-rejected")
-    public List<Report> getAllRejectedReports(@RequestParam int employeeId){
+    public List<ReportDTO> getAllRejectedReports(@RequestParam int employeeId){
         return reportService.getAllRejectedReportsForEmployee(employeeId);
     }
 
