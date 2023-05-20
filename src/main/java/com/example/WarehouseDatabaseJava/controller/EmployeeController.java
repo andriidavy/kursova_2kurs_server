@@ -20,6 +20,10 @@ public class EmployeeController {
     @Autowired
     private ReportService reportService;
 
+    @GetMapping("/employee/get-all")
+    public List<Employee> getAllEmployees() {
+        return employeeService.getAllEmployees();
+    }
 
     // отримання списку всіх замовлень в процесі для конкретного робітника TESTED
     @GetMapping("/employee/custom/get-in-processing")

@@ -9,6 +9,7 @@ import com.example.WarehouseDatabaseJava.model.order.report.ReportService;
 import com.example.WarehouseDatabaseJava.model.product.Product;
 import com.example.WarehouseDatabaseJava.model.product.ProductService;
 import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
+import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeProfileDTO;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeService;
 import com.example.WarehouseDatabaseJava.model.users.manager.Manager;
 import com.example.WarehouseDatabaseJava.model.users.manager.ManagerService;
@@ -54,10 +55,11 @@ public class ManagerController {
         customService.assignEmployeeToCustom(customId, employeeId);
     }
 
-    //отримати список всіх робітників TESTED
-    @GetMapping("/manager/employee/get-all")
-    public List<Employee> getAllEmployees() {
-        return employeeService.getAllEmployees();
+    //отримати список всіх профілів робітників TESTED
+
+    @GetMapping("/manager/employee/profile/get-all")
+    public List<EmployeeProfileDTO> getAllEmployeesProfile(){
+        return employeeService.getAllEmployeesProfile();
     }
 
     //додати нового робітника TESTED
