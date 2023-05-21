@@ -183,7 +183,7 @@ public List<CustomDTO> getCustomsForCustomer(int customerId) {
         for (EmployeeCustom employeeCustom : employee.getEmployeeCustomList()) {
             Custom custom = employeeCustom.getCustom();
 
-            if (custom.getStatus() == Custom.Status.IN_PROCESSING) {
+            if (custom.getStatus() == Custom.Status.IN_PROCESSING || custom.getStatus()==Custom.Status.WAITING_RESPONSE) {
                 CustomDTO customDTO = new CustomDTO();
                 customDTO.setCustomId(custom.getId());
 
@@ -390,10 +390,37 @@ public List<CustomDTO> getCustomsForCustomer(int customerId) {
         if (custom == null) {
             throw new EntityNotFoundException("Custom with id " + customId + " not found");
         }
-        if (custom.getStatus() != Custom.Status.IN_PROCESSING) {
-            throw new IllegalStateException("Custom with id " + customId + " cannot be set to PROCESSED status because it is not in IN_PROCESSING status");
+        if (custom.getStatus() != Custom.Status.WAITING_RESPONSE) {
+            throw new IllegalStateException("Custom with id " + customId + " cannot be set to WAITING_RESPONSE status because it is not in IN_PROCESSING status");
         }
         custom.setStatus(Custom.Status.PROCESSED);
+        customRepository.save(custom);
+    }
+
+    //Встановлення для замовлення статусу WAITING_RESPONSE(очікує відповіді менеджера)
+    @Transactional
+    public void setCustomWaitingResponse(int customId) {
+        Custom custom = customRepository.getReferenceById(customId);
+        if (custom == null) {
+            throw new EntityNotFoundException("Custom with id " + customId + " not found");
+        }
+        if (custom.getStatus() != Custom.Status.IN_PROCESSING) {
+            throw new IllegalStateException("Custom with id " + customId + " cannot be set to WAITING_RESPONSE status because it is not in IN_PROCESSING status");
+        }
+        custom.setStatus(Custom.Status.WAITING_RESPONSE);
+        customRepository.save(custom);
+    }
+
+    @Transactional
+    public void setCustomInProcessing(int customId) {
+        Custom custom = customRepository.getReferenceById(customId);
+        if (custom == null) {
+            throw new EntityNotFoundException("Custom with id " + customId + " not found");
+        }
+        if (custom.getStatus() != Custom.Status.WAITING_RESPONSE) {
+            throw new IllegalStateException("Custom with id " + customId + " cannot be set to IN_PROCESSING status because it is not in WAITING_RESPONSE status");
+        }
+        custom.setStatus(Custom.Status.IN_PROCESSING);
         customRepository.save(custom);
     }
 

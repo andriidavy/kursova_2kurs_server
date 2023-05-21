@@ -39,8 +39,9 @@ public class Custom {
     public enum Status{
         CREATED(1),
         IN_PROCESSING(2),
-        PROCESSED(3),
-        SENT(4);
+        WAITING_RESPONSE(3),
+        PROCESSED(4),
+        SENT(5);
         private final int value;
         Status(int value){
             this.value=value;

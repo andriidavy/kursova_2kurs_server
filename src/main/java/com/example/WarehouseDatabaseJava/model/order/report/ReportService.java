@@ -27,6 +27,7 @@ public class ReportService {
     CustomService customService;
 
     // метод створення звіту робітником для конкретного замовлення TESTED
+    @Transactional
     public void createReport(int employeeId, int customId, String reportText) {
         Employee employee = employeeRepository.getReferenceById(employeeId);
         Custom custom = customRepository.getReferenceById(customId);
@@ -52,6 +53,7 @@ public class ReportService {
                 if (existingReport.getStatus() == Report.Status.REJECTED) {
                     existingReport.setReportText(reportText);
                     existingReport.setStatus(Report.Status.WAITING);
+                    customService.setCustomWaitingResponse(customId);
                     reportRepository.save(existingReport);
                 } else {
                     throw new IllegalArgumentException("Report for this Custom already exists and cannot be updated or created");
@@ -60,6 +62,7 @@ public class ReportService {
                 Report report = new Report();
                 report.setReportText(reportText);
                 report.setStatus(Report.Status.WAITING);
+                customService.setCustomWaitingResponse(customId);
                 report.setCustom(custom);
 
                 reportRepository.save(report);
@@ -243,6 +246,7 @@ public class ReportService {
         if (report != null) {
             report.setStatus(Report.Status.REJECTED);
             reportRepository.save(report);
+            customService.setCustomInProcessing(report.getCustom().getId());
         }
     }
 
