@@ -44,9 +44,14 @@ public class ManagerController {
         return managerService.getAllManagers();
     }
 
+    @GetMapping("/manager/custom/get-all")
+    public List<CustomDTO> getAllCustoms() {
+        return customService.getAllCustoms();
+    }
+
     //отримати список всіх замовлень зі статусом CREATED TESTED
     @GetMapping("/manager/custom/get-created")
-    public List<CustomDTO> getAllCreatedCustoms(){
+    public List<CustomDTO> getAllCreatedCustoms() {
         return customService.getAllCreatedCustoms();
     }
 
@@ -59,7 +64,7 @@ public class ManagerController {
     //отримати список всіх профілів робітників TESTED
 
     @GetMapping("/manager/employee/profile/get-all")
-    public List<EmployeeProfileDTO> getAllEmployeesProfile(){
+    public List<EmployeeProfileDTO> getAllEmployeesProfile() {
         return employeeService.getAllEmployeesProfile();
     }
 
@@ -77,19 +82,19 @@ public class ManagerController {
 
     //отримати список всіх продуктів TESTED
     @GetMapping("/manager/product/get-all")
-    public List<Product> getAllProducts(){
+    public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 
     //додати новий продукт TESTED
     @PostMapping("/manager/product/save")
-    public Product save(@RequestBody Product product){
+    public Product save(@RequestBody Product product) {
         return productService.save(product);
     }
 
     //отримати список усіх звітів, які чекають на відповідь менеджера TESTED
     @GetMapping("/manager/custom/get-waiting")
-    public List<ReportDTO> getAllWaiting(){
+    public List<ReportDTO> getAllWaiting() {
         return reportService.getAllWaitingReports();
     }
 
