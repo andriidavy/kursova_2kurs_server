@@ -37,6 +37,12 @@ public class Product {
         this.description = description;
     }
 
+    public Product(int id, String name, int quantity) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public int getId() {
         return id;
     }

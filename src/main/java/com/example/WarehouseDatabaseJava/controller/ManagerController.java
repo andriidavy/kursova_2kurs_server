@@ -88,7 +88,7 @@ public class ManagerController {
 
     //додати новий продукт TESTED
     @PostMapping("/manager/product/save")
-    public Product save(@RequestBody Product product) {
+    public Product saveProduct(@RequestBody Product product) {
         return productService.save(product);
     }
 
