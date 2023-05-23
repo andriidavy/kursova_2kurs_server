@@ -6,7 +6,9 @@ import com.example.WarehouseDatabaseJava.model.order.report.ReportDTO;
 import com.example.WarehouseDatabaseJava.model.order.report.ReportService;
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
+import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeProfileDTO;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeService;
+import com.example.WarehouseDatabaseJava.model.users.manager.ManagerProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,11 @@ public class EmployeeController {
     @GetMapping("/employee/get-all")
     public List<Employee> getAllEmployees() {
         return employeeService.getAllEmployees();
+    }
+
+    @GetMapping("/employee/get-employee-by-id")
+    public EmployeeProfileDTO getEmployeeProfile(@RequestParam int employeeId) {
+        return employeeService.getEmployeeProfile(employeeId);
     }
 
     // отримання списку всіх замовлень в процесі для конкретного робітника TESTED

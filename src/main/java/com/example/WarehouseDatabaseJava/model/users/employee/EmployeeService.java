@@ -2,6 +2,8 @@ package com.example.WarehouseDatabaseJava.model.users.employee;
 
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerProfileDTO;
+import com.example.WarehouseDatabaseJava.model.users.manager.Manager;
+import com.example.WarehouseDatabaseJava.model.users.manager.ManagerProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +43,17 @@ public class EmployeeService {
         }
 
         return employeeProfiles;
+    }
+
+    public EmployeeProfileDTO getEmployeeProfile(int employeeId) {
+        Employee employee = employeeRepository.getReferenceById(employeeId);
+        if (employee == null) {
+            throw new RuntimeException("Manager not found with id: " + employeeId);
+        }
+        String name = employee.getName();
+        String surname = employee.getSurname();
+        String email = employee.getEmail();
+
+        return new EmployeeProfileDTO(name, surname, email);
     }
 }

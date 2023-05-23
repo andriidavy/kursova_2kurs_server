@@ -1,30 +1,14 @@
-package com.example.WarehouseDatabaseJava.model.users.employee;
+package com.example.WarehouseDatabaseJava.model.users.manager;
 
-public class EmployeeProfileDTO {
-    private int id;
+public class ManagerProfileDTO {
     private String name;
     private String surname;
     private String email;
 
-    public EmployeeProfileDTO(int id, String name, String surname, String email) {
-        this.id = id;
+    public ManagerProfileDTO(String name, String surname, String email) {
         this.name = name;
         this.surname = surname;
         this.email = email;
-    }
-
-    public EmployeeProfileDTO(String name, String surname, String email) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {

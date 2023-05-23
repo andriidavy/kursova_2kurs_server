@@ -13,6 +13,7 @@ import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeProfileDTO;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeService;
 import com.example.WarehouseDatabaseJava.model.users.manager.Manager;
+import com.example.WarehouseDatabaseJava.model.users.manager.ManagerProfileDTO;
 import com.example.WarehouseDatabaseJava.model.users.manager.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +45,13 @@ public class ManagerController {
         return managerService.getAllManagers();
     }
 
+    //отримати профіль менеджера по його id
+    @GetMapping("/manager/get-manager-by-id")
+    public ManagerProfileDTO getManagerProfile(int managerId) {
+        return managerService.getManagerProfile(managerId);
+    }
+
+    //отримати список всіх замовлень TESTED
     @GetMapping("/manager/custom/get-all")
     public List<CustomDTO> getAllCustoms() {
         return customService.getAllCustoms();
