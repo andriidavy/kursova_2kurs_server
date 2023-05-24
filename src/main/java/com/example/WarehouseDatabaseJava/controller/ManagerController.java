@@ -56,6 +56,12 @@ public class ManagerController {
         return managerService.getAllManagers();
     }
 
+    //отримати список профілів всіх менеджерів TESTED
+    @GetMapping("/manager/profile/get-all")
+    public List<ManagerProfileDTO> getAllManagersProfileDTO(){
+        return managerService.getAllManagersProfileDTO();
+    }
+
     //отримати профіль менеджера по його id TESTED
     @GetMapping("/manager/get-manager-by-id")
     public ManagerProfileDTO getManagerProfile(int managerId) {

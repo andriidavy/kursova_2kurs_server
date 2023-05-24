@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ManagerService {
@@ -21,8 +22,17 @@ public class ManagerService {
         return managerRepository.save(manager);
     }
 
+    //отримати список менеджерів
     public List<Manager> getAllManagers() {
         return managerRepository.findAll();
+    }
+
+    //отримати список всіх профілів менеджерів
+    public List<ManagerProfileDTO> getAllManagersProfileDTO() {
+        List<Manager> managers = managerRepository.findAll();
+        return managers.stream()
+                .map(manager -> new ManagerProfileDTO(manager.getId(), manager.getName(), manager.getSurname(), manager.getEmail()))
+                .collect(Collectors.toList());
     }
 
     //видалення певного менеджера по його id
