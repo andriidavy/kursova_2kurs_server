@@ -1,9 +1,10 @@
 package com.example.WarehouseDatabaseJava.model.users.manager;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.Department;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Manager {
@@ -14,6 +15,12 @@ public class Manager {
     private String surname;
     private String email;
     private String password;
+
+    //зв'зок багато до багатьох з етапом
+    @ManyToMany (cascade = CascadeType.ALL, mappedBy = "managerList")
+    @JsonIgnore
+    private List<Department> departmentList;
+
     public Manager() {
     }
 
@@ -62,6 +69,14 @@ public class Manager {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Department> getDepartmentList() {
+        return departmentList;
+    }
+
+    public void setDepartmentList(List<Department> departmentList) {
+        this.departmentList = departmentList;
     }
 
     @Override

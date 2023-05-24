@@ -15,6 +15,9 @@ import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeService;
 import com.example.WarehouseDatabaseJava.model.users.manager.Manager;
 import com.example.WarehouseDatabaseJava.model.users.manager.ManagerProfileDTO;
 import com.example.WarehouseDatabaseJava.model.users.manager.ManagerService;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.Department;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentDTO;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,11 +35,19 @@ public class ManagerController {
     ProductService productService;
     @Autowired
     ReportService reportService;
+    @Autowired
+    DepartmentService departmentService;
 
     //зберегти нового менеджера TESTED
     @PostMapping("/manager/save")
     public Manager save(@RequestBody Manager manager) {
         return managerService.save(manager);
+    }
+
+    //видалення певного менеджера по його id TESTED
+    @DeleteMapping("/manager/delete-manager-by-id")
+    public void deleteManagerById(int managerId) {
+        managerService.deleteManagerById(managerId);
     }
 
     //отримати список всіх менеджерів TESTED
@@ -45,7 +56,7 @@ public class ManagerController {
         return managerService.getAllManagers();
     }
 
-    //отримати профіль менеджера по його id
+    //отримати профіль менеджера по його id TESTED
     @GetMapping("/manager/get-manager-by-id")
     public ManagerProfileDTO getManagerProfile(int managerId) {
         return managerService.getManagerProfile(managerId);
@@ -116,5 +127,47 @@ public class ManagerController {
     @PostMapping("/manager/custom/report/reject")
     public void setReportRejected(@RequestParam int reportId) {
         reportService.setReportRejected(reportId);
+    }
+
+    //зберегти відділ TESTED
+    @PostMapping("/manager/department/save")
+    public Department save(@RequestBody Department department) {
+        return departmentService.save(department);
+    }
+
+    //видалити відділ по id TESTED
+    @DeleteMapping("/manager/department/delete-by-id")
+    public void removeDepartmentById(@RequestParam int departmentId) {
+        departmentService.removeDepartmentById(departmentId);
+    }
+
+    //отримати список всіх відділів TESTED
+    @GetMapping("/manager/department/get-all")
+    public List<DepartmentDTO> getAllDepartments() {
+        return departmentService.getAllDepartments();
+    }
+
+    //призначити відділ на менеджера TESTED
+    @PostMapping("/manager/department/assign-department-to-manager")
+    public void assignDepartmentToManager(@RequestParam int managerId, @RequestParam int departmentId) {
+        managerService.assignDepartmentToManager(managerId, departmentId);
+    }
+
+    //прибрати призначений відділ у менеджера TESTED
+    @PostMapping("/manager/department/remove-department-from-manager")
+    public void removeDepartmentFromManager(@RequestParam int managerId, @RequestParam int departmentId) {
+        managerService.removeDepartmentFromManager(managerId, departmentId);
+    }
+
+    //метод отримання всіх етапів, на які призначений певний менеджер TESTED
+    @GetMapping("/manager/department/get-departments-for-manager")
+    public List<DepartmentDTO> getAllDepartmentsForManager(@RequestParam int managerId) {
+        return managerService.getAllDepartmentsForManager(managerId);
+    }
+
+    //метод отримання всіх менеджерів, призначених на певний етап TESTED
+    @GetMapping("/manager/department/get-managers-for-department")
+    public List<ManagerProfileDTO> getAllManagersForDepartment(@RequestParam int departmentId) {
+        return departmentService.getAllManagersForDepartment(departmentId);
     }
 }
