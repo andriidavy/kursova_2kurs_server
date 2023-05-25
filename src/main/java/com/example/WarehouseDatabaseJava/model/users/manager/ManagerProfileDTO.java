@@ -6,6 +6,16 @@ public class ManagerProfileDTO {
     private String surname;
     private String email;
 
+    private String departmentDTOstring;
+
+    public ManagerProfileDTO(String name, String surname, String email, String departmentDTOstring) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.departmentDTOstring = departmentDTOstring;
+    }
+
     public ManagerProfileDTO(int id, String name, String surname, String email) {
         this.id = id;
         this.name = name;
@@ -49,5 +59,13 @@ public class ManagerProfileDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getDepartmentDTOstring() {
+        return departmentDTOstring;
+    }
+
+    public void setDepartmentDTOstring(String departmentDTOstring) {
+        this.departmentDTOstring = departmentDTOstring;
     }
 }

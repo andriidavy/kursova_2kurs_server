@@ -41,17 +41,43 @@ public class ManagerService {
     }
 
     //отримати всіх список менеджерів (DTO!)
+
     public ManagerProfileDTO getManagerProfile(int managerId) {
         Manager manager = managerRepository.getReferenceById(managerId);
         if (manager == null) {
             throw new RuntimeException("Manager not found with id: " + managerId);
         }
+
         String name = manager.getName();
         String surname = manager.getSurname();
         String email = manager.getEmail();
 
-        return new ManagerProfileDTO(name, surname, email);
+        List<Department> departments = manager.getDepartmentList(); // Получаем список назначенных отделов для менеджера
+
+        StringBuilder departmentsString = new StringBuilder();
+        for (int i = 0; i < departments.size(); i++) {
+            Department department = departments.get(i);
+            departmentsString.append(department.getDepartmentName());
+            if (i < departments.size() - 1) {
+                departmentsString.append(", ");
+            }
+        }
+
+        return new ManagerProfileDTO(name, surname, email, departmentsString.toString());
     }
+
+//    public ManagerProfileDTO getManagerProfile(int managerId) {
+//        Manager manager = managerRepository.getReferenceById(managerId);
+//        if (manager == null) {
+//            throw new RuntimeException("Manager not found with id: " + managerId);
+//        }
+//        String name = manager.getName();
+//        String surname = manager.getSurname();
+//        String email = manager.getEmail();
+//        List<Department> departments = manager.getDepartmentList();
+//
+//        return new ManagerProfileDTO(name, surname, email);
+//    }
 
     //метод призначення певному менеджеру певний етап
     public void assignDepartmentToManager(int managerId, int departmentId) {
@@ -120,6 +146,24 @@ public class ManagerService {
         }
 
         return departmentDTOList;
+    }
+
+    //метод отримання всіх етапів, на які певний менеджер НЕ призначений
+    public List<DepartmentDTO> getDepartmentsWithoutManager(int managerId) {
+        Manager manager = managerRepository.getReferenceById(managerId);
+        List<Department> departments = departmentRepository.findAll();
+        List<DepartmentDTO> departmentDTOs = new ArrayList<>();
+
+        for (Department department : departments) {
+            if (!department.getManagerList().contains(manager)) {
+                DepartmentDTO departmentDTO = new DepartmentDTO();
+                departmentDTO.setId(department.getId());
+                departmentDTO.setDepartmentName(department.getDepartmentName());
+                departmentDTOs.add(departmentDTO);
+            }
+        }
+
+        return departmentDTOs;
     }
 }
 

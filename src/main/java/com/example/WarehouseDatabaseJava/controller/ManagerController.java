@@ -171,6 +171,12 @@ public class ManagerController {
         return managerService.getAllDepartmentsForManager(managerId);
     }
 
+    //метод отримання всіх етапів, на які певний менеджер НЕ призначений TESTED
+    @GetMapping("/manager/department/get-departments-non-for-manager")
+    public List<DepartmentDTO> getDepartmentsWithoutManager(@RequestParam int managerId){
+        return managerService.getDepartmentsWithoutManager(managerId);
+    }
+
     //метод отримання всіх менеджерів, призначених на певний етап TESTED
     @GetMapping("/manager/department/get-managers-for-department")
     public List<ManagerProfileDTO> getAllManagersForDepartment(@RequestParam int departmentId) {
