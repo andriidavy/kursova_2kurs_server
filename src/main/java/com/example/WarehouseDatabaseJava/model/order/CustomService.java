@@ -50,7 +50,7 @@ public class CustomService {
 
     //Створення замовлення покупцем TESTED
     @Transactional
-    public void createCustom(int customerId) {
+    public int createCustom(int customerId) {
         Customer customer = customerRepository.getReferenceById(customerId);
         if (customer.getCart() != null && !customer.getCart().getCartProductList().isEmpty()) {
             // Проверяем наличие достаточного количества продукта в базе данных
@@ -84,7 +84,9 @@ public class CustomService {
             }
             cartProductRepository.deleteAll(customer.getCart().getCartProductList());
             customer.getCart().getCartProductList().clear();
+            return custom.getId(); //повертаємо значення id новоствореного замовлення
         }
+        return -1;  // Возвращаем -1 в случае, если заказ не был создан
     }
 
     // Отримання списку замовлень для конкретного покупця(по його id) TESTED

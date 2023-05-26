@@ -10,6 +10,7 @@ import com.example.WarehouseDatabaseJava.model.users.customer.CustomerProfileDTO
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerService;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProductDTO;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartService;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentDTO;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -67,8 +68,8 @@ public class CustomerController {
 
     //створення замовлення конкретним покупцем TESTED
     @PostMapping("/customer/create-custom")
-    public void createCustom(@RequestParam int customerId) {
-        customService.createCustom(customerId);
+    public int createCustom(@RequestParam int customerId) {
+        return customService.createCustom(customerId);
     }
 
     //отримати список всіх замовлень для конкретного покупця TESTED
@@ -93,5 +94,11 @@ public class CustomerController {
     @PostMapping("/customer/custom/assign-department")
     public void assignDepartmentToCustom(@RequestParam int customId, @RequestParam int departmentId) {
         departmentService.assignDepartmentToCustom(customId, departmentId);
+    }
+
+    //отримати список всіх відділів TESTED
+    @GetMapping("/customer/department/get-all")
+    public List<DepartmentDTO> getAllDepartments() {
+        return departmentService.getAllDepartments();
     }
 }
