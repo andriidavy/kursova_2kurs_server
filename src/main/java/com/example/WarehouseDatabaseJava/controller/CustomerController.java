@@ -10,6 +10,7 @@ import com.example.WarehouseDatabaseJava.model.users.customer.CustomerProfileDTO
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerService;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProductDTO;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartService;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,8 @@ public class CustomerController {
     private CustomService customService;
     @Autowired
     ProductService productService;
+    @Autowired
+    DepartmentService departmentService;
 
     //отримати список всіх покупців TESTED
     @GetMapping("/customer/get-all")
@@ -34,7 +37,7 @@ public class CustomerController {
 
     //отримати покупця по його id
     @GetMapping("/customer/get-customer-by-id")
-    public CustomerProfileDTO getCustomerProfile(@RequestParam int customerId){
+    public CustomerProfileDTO getCustomerProfile(@RequestParam int customerId) {
         return customerService.getCustomerProfile(customerId);
     }
 
@@ -84,5 +87,11 @@ public class CustomerController {
     @GetMapping("/customer/product/get-all")
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
+    }
+
+    //призначити конкретний відділ для конкретного замовлення TESTED
+    @PostMapping("/customer/custom/assign-department")
+    public void assignDepartmentToCustom(@RequestParam int customId, @RequestParam int departmentId) {
+        departmentService.assignDepartmentToCustom(customId, departmentId);
     }
 }

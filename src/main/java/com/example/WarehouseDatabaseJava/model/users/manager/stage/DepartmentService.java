@@ -1,5 +1,7 @@
 package com.example.WarehouseDatabaseJava.model.users.manager.stage;
 
+import com.example.WarehouseDatabaseJava.model.order.Custom;
+import com.example.WarehouseDatabaseJava.model.order.CustomRepository;
 import com.example.WarehouseDatabaseJava.model.users.manager.Manager;
 import com.example.WarehouseDatabaseJava.model.users.manager.ManagerProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,9 @@ import java.util.List;
 public class DepartmentService {
     @Autowired
     DepartmentRepository departmentRepository;
+
+    @Autowired
+    CustomRepository customRepository;
 
     // збереження нового відділу
     public Department save(Department department) {
@@ -38,7 +43,7 @@ public class DepartmentService {
         return departmentDTOs;
     }
 
-    //метод отримання всіх менеджерів, призначених на певний етап NOT USING IN CLIENT!
+    //метод отримання всіх менеджерів, призначених на певний етап NOT USING IN CLIENT NOW!
     public List<ManagerProfileDTO> getAllManagersForDepartment(int departmentId) {
         Department department = departmentRepository.getReferenceById(departmentId);
         List<ManagerProfileDTO> managerProfiles = new ArrayList<>();
@@ -55,5 +60,26 @@ public class DepartmentService {
             }
         }
         return managerProfiles;
+    }
+
+    //метод призначення конкретному замовленню конкретного відділу доставки
+    public void assignDepartmentToCustom(int customId, int departmentId) {
+        Custom custom = customRepository.getReferenceById(customId);
+        if (custom == null) {
+            throw new RuntimeException("Custom not found with id: " + customId);
+        }
+
+        Department department = departmentRepository.getReferenceById(departmentId);
+        if (department == null) {
+            throw new RuntimeException("Department not found with id: " + departmentId);
+        }
+
+        DepartmentCustom departmentCustom = new DepartmentCustom();
+        departmentCustom.setDepartment(department);
+        departmentCustom.setCustom(custom);
+
+        custom.getDepartmentCustomList().add(departmentCustom);
+
+        customRepository.save(custom);
     }
 }

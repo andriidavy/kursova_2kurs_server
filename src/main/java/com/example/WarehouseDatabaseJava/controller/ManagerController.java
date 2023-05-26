@@ -76,8 +76,8 @@ public class ManagerController {
 
     //отримати список всіх замовлень зі статусом CREATED TESTED
     @GetMapping("/manager/custom/get-created")
-    public List<CustomDTO> getAllCreatedCustoms() {
-        return customService.getAllCreatedCustoms();
+    public List<CustomDTO> getAllCreatedCustoms(@RequestParam int managerId) {
+        return customService.getAllCreatedCustoms(managerId);
     }
 
     //призначити конкретного робітника на виконання конкретного замовлення TESTED

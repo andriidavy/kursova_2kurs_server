@@ -4,6 +4,8 @@ import com.example.WarehouseDatabaseJava.model.order.report.Report;
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerCustom;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeCustom;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.Department;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentCustom;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -35,6 +37,12 @@ public class Custom {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "custom")
     @JsonIgnore
     Report report;
+
+    //One-to-Many relation with DepartmentCustom
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "custom")
+    @JsonIgnore
+    private List<DepartmentCustom> departmentCustomList = new ArrayList<>();
+
 
     public enum Status{
         CREATED(1),
@@ -103,5 +111,13 @@ public class Custom {
 
     public void setReport(Report report) {
         this.report = report;
+    }
+
+    public List<DepartmentCustom> getDepartmentCustomList() {
+        return departmentCustomList;
+    }
+
+    public void setDepartmentCustomList(List<DepartmentCustom> departmentCustomList) {
+        this.departmentCustomList = departmentCustomList;
     }
 }
