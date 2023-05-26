@@ -38,7 +38,7 @@ public class DepartmentService {
         return departmentDTOs;
     }
 
-    //метод отримання всіх менеджерів, призначених на певний етап
+    //метод отримання всіх менеджерів, призначених на певний етап NOT USING IN CLIENT!
     public List<ManagerProfileDTO> getAllManagersForDepartment(int departmentId) {
         Department department = departmentRepository.getReferenceById(departmentId);
         List<ManagerProfileDTO> managerProfiles = new ArrayList<>();

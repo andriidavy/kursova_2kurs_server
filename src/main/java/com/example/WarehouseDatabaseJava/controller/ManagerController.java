@@ -46,7 +46,7 @@ public class ManagerController {
 
     //видалення певного менеджера по його id TESTED
     @DeleteMapping("/manager/delete-manager-by-id")
-    public void deleteManagerById(int managerId) {
+    public void deleteManagerById(@RequestParam int managerId) {
         managerService.deleteManagerById(managerId);
     }
 
@@ -64,7 +64,7 @@ public class ManagerController {
 
     //отримати профіль менеджера по його id TESTED
     @GetMapping("/manager/get-manager-by-id")
-    public ManagerProfileDTO getManagerProfile(int managerId) {
+    public ManagerProfileDTO getManagerProfile(@RequestParam int managerId) {
         return managerService.getManagerProfile(managerId);
     }
 
