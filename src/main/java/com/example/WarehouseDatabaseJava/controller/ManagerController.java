@@ -56,6 +56,12 @@ public class ManagerController {
         return managerService.getAllManagers();
     }
 
+    //метод для логіну
+    @PostMapping("/manager/login")
+    public Manager loginManager(String email, String password){
+        return managerService.loginManager(email, password);
+    }
+
     //отримати список профілів всіх менеджерів TESTED
     @GetMapping("/manager/profile/get-all")
     public List<ManagerProfileDTO> getAllManagersProfileDTO(){

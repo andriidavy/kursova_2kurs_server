@@ -28,6 +28,12 @@ public class EmployeeController {
         return employeeService.getAllEmployees();
     }
 
+    //метод для логіну
+    @PostMapping("/employee/login")
+    public Employee loginEmployee(String email, String password){
+        return employeeService.loginEmployee(email, password);
+    }
+
     @GetMapping("/employee/get-employee-by-id")
     public EmployeeProfileDTO getEmployeeProfile(@RequestParam int employeeId) {
         return employeeService.getEmployeeProfile(employeeId);

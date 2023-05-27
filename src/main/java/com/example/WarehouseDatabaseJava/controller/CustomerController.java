@@ -36,6 +36,12 @@ public class CustomerController {
         return customerService.getAllCustomers();
     }
 
+    //метод для логіну
+    @PostMapping("/customer/login")
+    public Customer loginCustomer(@RequestParam String email, @RequestParam String password){
+        return customerService.loginCustomer(email, password);
+    }
+
     //отримати покупця по його id
     @GetMapping("/customer/get-customer-by-id")
     public CustomerProfileDTO getCustomerProfile(@RequestParam int customerId) {

@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.model.users.manager;
 
+import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.Department;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentDTO;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentRepository;
@@ -26,6 +27,17 @@ public class ManagerService {
     public List<Manager> getAllManagers() {
         return managerRepository.findAll();
     }
+
+    public Manager loginManager(String email, String password) {
+        List<Manager> managers = managerRepository.findAll();
+        for (Manager manager : managers) {
+            if (manager.getEmail().equals(email) && manager.getPassword().equals(password)) {
+                return manager;
+            }
+        }
+        throw new RuntimeException("Invalid email or password");
+    }
+
 
     //отримати список всіх профілів менеджерів
     public List<ManagerProfileDTO> getAllManagersProfileDTO() {
@@ -65,19 +77,6 @@ public class ManagerService {
 
         return new ManagerProfileDTO(name, surname, email, departmentsString.toString());
     }
-
-//    public ManagerProfileDTO getManagerProfile(int managerId) {
-//        Manager manager = managerRepository.getReferenceById(managerId);
-//        if (manager == null) {
-//            throw new RuntimeException("Manager not found with id: " + managerId);
-//        }
-//        String name = manager.getName();
-//        String surname = manager.getSurname();
-//        String email = manager.getEmail();
-//        List<Department> departments = manager.getDepartmentList();
-//
-//        return new ManagerProfileDTO(name, surname, email);
-//    }
 
     //метод призначення певному менеджеру певний етап
     public void assignDepartmentToManager(int managerId, int departmentId) {

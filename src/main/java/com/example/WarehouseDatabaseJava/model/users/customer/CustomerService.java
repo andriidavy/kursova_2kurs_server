@@ -39,6 +39,16 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
+    public Customer loginCustomer(String email, String password) {
+        List<Customer> customers = customerRepository.findAll();
+        for (Customer customer : customers) {
+            if (customer.getEmail().equals(email) && customer.getPassword().equals(password)) {
+                return customer;
+            }
+        }
+        throw new RuntimeException("Invalid email or password");
+    }
+
     public CustomerProfileDTO getCustomerProfile(int customerId) {
         Customer customer = customerRepository.getReferenceById(customerId);
         if (customer == null) {

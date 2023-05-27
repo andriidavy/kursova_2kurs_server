@@ -28,6 +28,16 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
+    public Employee loginEmployee(String email, String password) {
+        List<Employee> employees = employeeRepository.findAll();
+        for (Employee employee : employees) {
+            if (employee.getEmail().equals(email) && employee.getPassword().equals(password)) {
+                return employee;
+            }
+        }
+        throw new RuntimeException("Invalid email or password");
+    }
+
     public List<EmployeeProfileDTO> getAllEmployeesProfile() {
         List<Employee> employees = employeeRepository.findAll();
         List<EmployeeProfileDTO> employeeProfiles = new ArrayList<>();
