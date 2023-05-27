@@ -38,7 +38,7 @@ public class CustomerController {
 
     //метод для логіну
     @PostMapping("/customer/login")
-    public Customer loginCustomer(@RequestParam String email, @RequestParam String password){
+    public Customer loginCustomer(@RequestParam String email, @RequestParam String password) {
         return customerService.loginCustomer(email, password);
     }
 
@@ -50,8 +50,8 @@ public class CustomerController {
 
     //зберегти покупця TESTED
     @PostMapping("/customer/save")
-    public Customer saveCustomer(@RequestBody Customer customer) {
-        return customerService.save(customer);
+    public Customer save(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
+        return customerService.save(name, surname, email, password);
     }
 
     // додати продукт до корзини конкретним покупцем TESTED

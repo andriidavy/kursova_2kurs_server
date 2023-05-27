@@ -17,7 +17,14 @@ public class CustomerService {
     private CartRepository cartRepository;
 
     //додавання нового покупця та його корзини TESTED
-    public Customer save(Customer customer) {
+
+    public Customer save(String name, String surname, String email, String password) {
+        Customer existingCustomer = customerRepository.findByEmail(email);
+        if (existingCustomer != null) {
+            throw new IllegalArgumentException("Customer with the same email already exists");
+        }
+
+        Customer customer = new Customer(name, surname, email, password);
         customerRepository.save(customer);
 
         Cart cart = new Cart();
@@ -26,7 +33,7 @@ public class CustomerService {
 
         return customer;
     }
-
+    
     public void delete(Customer customer) {
         customerRepository.delete(customer);
     }
