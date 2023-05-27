@@ -3,10 +3,8 @@ package com.example.WarehouseDatabaseJava.model.users.customer;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.Cart;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,7 +31,7 @@ public class CustomerService {
 
         return customer;
     }
-    
+
     public void delete(Customer customer) {
         customerRepository.delete(customer);
     }

@@ -9,6 +9,7 @@ import com.example.WarehouseDatabaseJava.model.order.report.ReportDTO;
 import com.example.WarehouseDatabaseJava.model.order.report.ReportService;
 import com.example.WarehouseDatabaseJava.model.product.Product;
 import com.example.WarehouseDatabaseJava.model.product.ProductService;
+import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeProfileDTO;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeService;
@@ -40,8 +41,8 @@ public class ManagerController {
 
     //зберегти нового менеджера TESTED
     @PostMapping("/manager/save")
-    public Manager save(@RequestBody Manager manager) {
-        return managerService.save(manager);
+    public Manager saveManager(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
+        return managerService.save(name, surname, email, password);
     }
 
     //видалення певного менеджера по його id TESTED
@@ -58,13 +59,13 @@ public class ManagerController {
 
     //метод для логіну
     @PostMapping("/manager/login")
-    public Manager loginManager(String email, String password){
+    public Manager loginManager(String email, String password) {
         return managerService.loginManager(email, password);
     }
 
     //отримати список профілів всіх менеджерів TESTED
     @GetMapping("/manager/profile/get-all")
-    public List<ManagerProfileDTO> getAllManagersProfileDTO(){
+    public List<ManagerProfileDTO> getAllManagersProfileDTO() {
         return managerService.getAllManagersProfileDTO();
     }
 
@@ -101,8 +102,8 @@ public class ManagerController {
 
     //додати нового робітника TESTED
     @PostMapping("/manager/employee/save")
-    public void saveEmployee(@RequestBody Employee employee) {
-        employeeService.save(employee);
+    public Employee saveEmployee(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
+        return employeeService.save(name, surname, email, password);
     }
 
     //видалення робітника по id TESTED
@@ -179,7 +180,7 @@ public class ManagerController {
 
     //метод отримання всіх етапів, на які певний менеджер НЕ призначений TESTED
     @GetMapping("/manager/department/get-departments-non-for-manager")
-    public List<DepartmentDTO> getDepartmentsWithoutManager(@RequestParam int managerId){
+    public List<DepartmentDTO> getDepartmentsWithoutManager(@RequestParam int managerId) {
         return managerService.getDepartmentsWithoutManager(managerId);
     }
 

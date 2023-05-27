@@ -19,8 +19,20 @@ public class ManagerService {
     DepartmentRepository departmentRepository;
 
     //збереження менеджера
-    public Manager save(Manager manager) {
-        return managerRepository.save(manager);
+//    public Manager save(Manager manager) {
+//        return managerRepository.save(manager);
+//    }
+
+    public Manager save(String name, String surname, String email, String password) {
+        Manager existingManager = managerRepository.findByEmail(email);
+        if (existingManager != null) {
+            throw new IllegalArgumentException("Manager with the same email already exists");
+        }
+
+        Manager manager = new Manager(name, surname, email, password);
+        managerRepository.save(manager);
+
+        return manager;
     }
 
     //отримати список менеджерів

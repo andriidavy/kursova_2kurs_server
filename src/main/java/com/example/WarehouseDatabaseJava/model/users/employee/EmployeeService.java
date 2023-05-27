@@ -2,6 +2,7 @@ package com.example.WarehouseDatabaseJava.model.users.employee;
 
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerProfileDTO;
+import com.example.WarehouseDatabaseJava.model.users.customer.cart.Cart;
 import com.example.WarehouseDatabaseJava.model.users.manager.Manager;
 import com.example.WarehouseDatabaseJava.model.users.manager.ManagerProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,16 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
 
     //TESTED
-    public Employee save(Employee employee) {
-        return employeeRepository.save(employee);
+    public Employee save(String name, String surname, String email, String password) {
+        Employee existingEmployee = employeeRepository.findByEmail(email);
+        if (existingEmployee != null) {
+            throw new IllegalArgumentException("Employee with the same email already exists");
+        }
+
+        Employee employee = new Employee(name, surname, email, password);
+        employeeRepository.save(employee);
+
+        return employee;
     }
 
     public void deleteId(int employeeId) {
