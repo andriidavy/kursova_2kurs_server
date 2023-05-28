@@ -6,6 +6,11 @@ import com.example.WarehouseDatabaseJava.model.order.CustomService;
 import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeCustom;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeRepository;
+import com.example.WarehouseDatabaseJava.model.users.manager.Manager;
+import com.example.WarehouseDatabaseJava.model.users.manager.ManagerRepository;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.Department;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentCustom;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +26,8 @@ public class ReportService {
     ReportRepository reportRepository;
     @Autowired
     EmployeeRepository employeeRepository;
+    @Autowired
+    ManagerRepository managerRepository;
     @Autowired
     CustomRepository customRepository;
     @Autowired
@@ -70,36 +77,59 @@ public class ReportService {
         }
     }
 
-//    // метод отримання всіх звітів
-//    public List<Report> getAllReports() {
-//        return reportRepository.findAll();
-//    }
-
     // метод для отримання всіх звітів, у яких статус WAITING (очікують відповіді менеджера) TESTED
 
-    public List<ReportDTO> getAllWaitingReports() {
+    public List<ReportDTO> getAllWaitingReportsForManager(int managerId) {
+        Manager manager = managerRepository.getReferenceById(managerId);
+        List<Department> managerDepartments = manager.getDepartmentList();
         List<Report> allReports = reportRepository.findAll();
 
         List<ReportDTO> reportsDTO = new ArrayList<>();
         for (Report report : allReports) {
             if (report.getStatus() == Report.Status.WAITING) {
-                ReportDTO reportDTO = new ReportDTO();
-                reportDTO.setReportId(report.getId());
-                reportDTO.setCustomId(report.getCustom().getId());
-                reportDTO.setReportText(report.getReportText());
-                reportDTO.setStatus(report.getStatus().toString());
+                Custom custom = report.getCustom();
+                List<DepartmentCustom> departmentCustoms = custom.getDepartmentCustomList();
+                boolean hasMatchingDepartment = false;
 
-                reportsDTO.add(reportDTO);
+                for (DepartmentCustom departmentCustom : departmentCustoms) {
+                    Department department = departmentCustom.getDepartment();
+
+                    if (managerDepartments.contains(department)) {
+                        hasMatchingDepartment = true;
+                        break;
+                    }
+                }
+
+                if (hasMatchingDepartment) {
+                    ReportDTO reportDTO = new ReportDTO();
+                    reportDTO.setReportId(report.getId());
+                    reportDTO.setCustomId(custom.getId());
+                    reportDTO.setReportText(report.getReportText());
+                    reportDTO.setStatus(report.getStatus().toString());
+
+                    reportsDTO.add(reportDTO);
+                }
             }
         }
         return reportsDTO;
     }
 
-//    public List<Report> getAllWaitingReports() {
-//        List<Report> allWaitingReports = reportRepository.findAll();
-//        return allWaitingReports.stream()
-//                .filter(report -> report.getStatus() == Report.Status.WAITING)
-//                .collect(Collectors.toList());
+//    public List<ReportDTO> getAllWaitingReports() {
+//        List<Report> allReports = reportRepository.findAll();
+//
+//        List<ReportDTO> reportsDTO = new ArrayList<>();
+//        for (Report report : allReports) {
+//            if (report.getStatus() == Report.Status.WAITING) {
+//                ReportDTO reportDTO = new ReportDTO();
+//                reportDTO.setReportId(report.getId());
+//                reportDTO.setCustomId(report.getCustom().getId());
+//                reportDTO.setReportText(report.getReportText());
+//                reportDTO.setStatus(report.getStatus().toString());
+//
+//                reportsDTO.add(reportDTO);
+//            }
+//        }
+//        return reportsDTO;
 //    }
 
     //метод отримання всіх звітів зі статусом WAITING для конкретного робітника TESTED
@@ -109,7 +139,7 @@ public class ReportService {
 
         List<ReportDTO> reportsDTO = new ArrayList<>();
 
-        for(EmployeeCustom employeeCustom : employee.getEmployeeCustomList()) {
+        for (EmployeeCustom employeeCustom : employee.getEmployeeCustomList()) {
             Custom custom = employeeCustom.getCustom();
 
             Report report = custom.getReport();
@@ -150,7 +180,7 @@ public class ReportService {
 
         List<ReportDTO> reportsDTO = new ArrayList<>();
 
-        for(EmployeeCustom employeeCustom : employee.getEmployeeCustomList()) {
+        for (EmployeeCustom employeeCustom : employee.getEmployeeCustomList()) {
             Custom custom = employeeCustom.getCustom();
 
             Report report = custom.getReport();
@@ -191,7 +221,7 @@ public class ReportService {
 
         List<ReportDTO> reportsDTO = new ArrayList<>();
 
-        for(EmployeeCustom employeeCustom : employee.getEmployeeCustomList()) {
+        for (EmployeeCustom employeeCustom : employee.getEmployeeCustomList()) {
             Custom custom = employeeCustom.getCustom();
 
             Report report = custom.getReport();

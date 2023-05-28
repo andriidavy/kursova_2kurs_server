@@ -125,9 +125,10 @@ public class ManagerController {
     }
 
     //отримати список усіх звітів, які чекають на відповідь менеджера TESTED
-    @GetMapping("/manager/custom/get-waiting")
-    public List<ReportDTO> getAllWaiting() {
-        return reportService.getAllWaitingReports();
+    //+ враховує відділи для замовлень
+    @GetMapping("/manager/custom/report/get-waiting")
+    public List<ReportDTO> getAllWaiting(@RequestParam int managerId) {
+        return reportService.getAllWaitingReportsForManager(managerId);
     }
 
     //прийняти звіт TESTED
