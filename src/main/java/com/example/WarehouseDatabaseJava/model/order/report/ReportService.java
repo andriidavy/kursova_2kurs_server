@@ -4,7 +4,6 @@ import com.example.WarehouseDatabaseJava.model.order.Custom;
 import com.example.WarehouseDatabaseJava.model.order.CustomRepository;
 import com.example.WarehouseDatabaseJava.model.order.CustomService;
 import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
-import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeCustom;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeRepository;
 import com.example.WarehouseDatabaseJava.model.users.manager.Manager;
 import com.example.WarehouseDatabaseJava.model.users.manager.ManagerRepository;

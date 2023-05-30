@@ -79,14 +79,4 @@ public class Manager {
         this.departmentList = departmentList;
     }
 
-    @Override
-    public String toString() {
-        return "Manager{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
 }

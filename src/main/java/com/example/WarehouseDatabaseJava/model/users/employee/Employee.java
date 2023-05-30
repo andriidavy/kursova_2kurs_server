@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.model.users.employee;
 
+import com.example.WarehouseDatabaseJava.model.order.Custom;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -19,7 +20,7 @@ public class Employee {
     //One-to-Many relation with EmployeeCustom
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
     @JsonIgnore
-    private List<EmployeeCustom> employeeCustomList = new ArrayList<>();
+    private List<Custom> customList = new ArrayList<>();
 
     public Employee() {
     }
@@ -71,22 +72,11 @@ public class Employee {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+    public List<Custom> getCustomList() {
+        return customList;
     }
 
-    public List<EmployeeCustom> getEmployeeCustomList() {
-        return employeeCustomList;
-    }
-
-    public void setEmployeeCustomList(List<EmployeeCustom> employeeCustomList) {
-        this.employeeCustomList = employeeCustomList;
+    public void setCustomList(List<Custom> customList) {
+        this.customList = customList;
     }
 }

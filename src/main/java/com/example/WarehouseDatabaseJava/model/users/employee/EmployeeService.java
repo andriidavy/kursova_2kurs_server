@@ -1,10 +1,5 @@
 package com.example.WarehouseDatabaseJava.model.users.employee;
 
-import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
-import com.example.WarehouseDatabaseJava.model.users.customer.CustomerProfileDTO;
-import com.example.WarehouseDatabaseJava.model.users.customer.cart.Cart;
-import com.example.WarehouseDatabaseJava.model.users.manager.Manager;
-import com.example.WarehouseDatabaseJava.model.users.manager.ManagerProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
