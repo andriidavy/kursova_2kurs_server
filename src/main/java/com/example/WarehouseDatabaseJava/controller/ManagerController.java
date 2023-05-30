@@ -145,8 +145,8 @@ public class ManagerController {
 
     //зберегти відділ TESTED
     @PostMapping("/manager/department/save")
-    public Department save(@RequestBody Department department) {
-        return departmentService.save(department);
+    public Department saveDepartment(@RequestParam String departmentName) {
+        return departmentService.save(departmentName);
     }
 
     //видалити відділ по id TESTED

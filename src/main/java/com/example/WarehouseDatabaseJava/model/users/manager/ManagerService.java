@@ -19,10 +19,6 @@ public class ManagerService {
     DepartmentRepository departmentRepository;
 
     //збереження менеджера
-//    public Manager save(Manager manager) {
-//        return managerRepository.save(manager);
-//    }
-
     public Manager save(String name, String surname, String email, String password) {
         Manager existingManager = managerRepository.findByEmail(email);
         if (existingManager != null) {

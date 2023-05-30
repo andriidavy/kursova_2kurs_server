@@ -19,7 +19,12 @@ public class DepartmentService {
     CustomRepository customRepository;
 
     // збереження нового відділу
-    public Department save(Department department) {
+    public Department save(String departmentName) {
+        Department existingDepartment = departmentRepository.findByDepartmentName(departmentName);
+        if (existingDepartment != null) {
+            throw new IllegalArgumentException("Department with the same name already exists");
+        }
+        Department department = new Department(departmentName);
         return departmentRepository.save(department);
     }
 
@@ -78,24 +83,4 @@ public class DepartmentService {
         custom.setDepartment(department);
         customRepository.save(custom);
     }
-
-//    public void assignDepartmentToCustom(int customId, int departmentId) {
-//        Custom custom = customRepository.getReferenceById(customId);
-//        if (custom == null) {
-//            throw new RuntimeException("Custom not found with id: " + customId);
-//        }
-//
-//        Department department = departmentRepository.getReferenceById(departmentId);
-//        if (department == null) {
-//            throw new RuntimeException("Department not found with id: " + departmentId);
-//        }
-//
-//        DepartmentCustom departmentCustom = new DepartmentCustom();
-//        departmentCustom.setDepartment(department);
-//        departmentCustom.setCustom(custom);
-//
-//        custom.getDepartmentCustomList().add(departmentCustom);
-//
-//        customRepository.save(custom);
-//    }
 }

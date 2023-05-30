@@ -15,6 +15,12 @@ public class Department {
 
     private String departmentName;
 
+    private Department(){}
+
+    public Department(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
     //зв'язок Many-to-Many з Manager
     @ManyToMany
     @JoinTable(name = "manager_department",

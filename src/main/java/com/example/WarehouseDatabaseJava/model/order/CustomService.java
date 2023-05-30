@@ -78,46 +78,6 @@ public class CustomService {
         return -1;  // Возвращаем -1 в случае, если заказ не был создан
     }
 
-//    @Transactional
-//    public int createCustom(int customerId) {
-//        Customer customer = customerRepository.getReferenceById(customerId);
-//        if (customer.getCart() != null && !customer.getCart().getCartProductList().isEmpty()) {
-//            // Проверяем наличие достаточного количества продукта в базе данных
-//            for (CartProduct cartProduct : customer.getCart().getCartProductList()) {
-//                Product product = cartProduct.getProduct();
-//                int quantityInCart = cartProduct.getQuantity();
-//                int quantityInStock = product.getQuantity();
-//                if (quantityInStock < quantityInCart) {
-//                    throw new RuntimeException("Not enough stock for product: " + product.getName());
-//                }
-//            }
-//            Custom custom = new Custom();
-//            customRepository.save(custom);
-//            custom.setStatus(Custom.Status.CREATED);
-//            CustomerCustom customerCustom = new CustomerCustom();
-//            customerCustom.setCustomer(customer);
-//            customerCustom.setCustom(custom);
-//            customerCustomRepository.save(customerCustom);
-//            for (CartProduct cartProduct : customer.getCart().getCartProductList()) {
-//                Product product = cartProduct.getProduct();
-//                int quantityInCart = cartProduct.getQuantity();
-//                int quantityInStock = product.getQuantity();
-//                // Обновляем количество продукта в базе данных
-//                product.setQuantity(quantityInStock - quantityInCart);
-//                productRepository.save(product);
-//                CustomProduct customProduct = new CustomProduct();
-//                customProduct.setProduct(product);
-//                customProduct.setQuantity(quantityInCart);
-//                customProduct.setCustom(custom);
-//                customProductRepository.save(customProduct);
-//            }
-//            cartProductRepository.deleteAll(customer.getCart().getCartProductList());
-//            customer.getCart().getCartProductList().clear();
-//            return custom.getId(); //повертаємо значення id новоствореного замовлення
-//        }
-//        return -1;  // Возвращаем -1 в случае, если заказ не был создан
-//    }
-
     // Отримання списку замовлень для конкретного покупця(по його id) TESTED
 // (повертає об'єкт DTO з всіма потрібними параметрами)
 
@@ -158,48 +118,6 @@ public class CustomService {
 
         return customDTOs;
     }
-
-//    public List<CustomDTO> getCustomsForCustomer(int customerId) {
-//        Customer customer = customerRepository.getReferenceById(customerId);
-//
-//        List<CustomerCustom> customerCustoms = customer.getCustomerCustomList();
-//        List<CustomDTO> customDTOs = new ArrayList<>();
-//
-//        CustomDTO customDTO = null;
-//
-//        for (CustomerCustom customerCustom : customerCustoms) {
-//            Custom custom = customerCustom.getCustom();
-//            // Проверяем, существует ли уже CustomDTO для данного Custom
-//            if (customDTO == null || customDTO.getCustomId() != custom.getId()) {
-//                customDTO = new CustomDTO();
-//                customDTO.setCustomId(custom.getId());
-//                customDTO.setCustomerId(customer.getId());
-//                customDTO.setCustomerName(customer.getName());
-//                customDTO.setCustomerSurname(customer.getSurname());
-//                customDTO.setStatus(custom.getStatus().toString());
-//                customDTO.setCustomProductDTOList(new ArrayList<>());
-//                customDTOs.add(customDTO);
-//            }
-//            DepartmentCustom departmentCustom = custom.getDepartmentCustomList().stream().findFirst().orElse(null);
-//            if (departmentCustom != null) {
-//                Department department = departmentCustom.getDepartment();
-//                customDTO.setDepartment(department.getDepartmentName());
-//            }
-//            for (CustomProduct customProduct : custom.getCustomProductList()) {
-//                Product product = customProduct.getProduct();
-//                int quantity = customProduct.getQuantity();
-//
-//                CustomProductDTO customProductDTO = new CustomProductDTO();
-//                customProductDTO.setProductId(product.getId());
-//                customProductDTO.setProductName(product.getName());
-//                customProductDTO.setQuantity(quantity);
-//
-//                customDTO.getCustomProductDTOList().add(customProductDTO);
-//            }
-//        }
-//        return customDTOs;
-//    }
-
 
 // Отримання списку актуальних призначених замовлень зі статусом IN_PROCESSING для конкретного робітника(по його id)
     //(повертає об'єкт DTO з всіма потрібними параметрами)
@@ -242,45 +160,6 @@ public class CustomService {
         return customDTOs;
     }
 
-//    public List<CustomDTO> getProcessingCustomsForEmployee(int employeeId) {
-//        Employee employee = employeeRepository.getReferenceById(employeeId);
-//        List<CustomDTO> customDTOs = new ArrayList<>();
-//
-//        for (EmployeeCustom employeeCustom : employee.getEmployeeCustomList()) {
-//            Custom custom = employeeCustom.getCustom();
-//
-//            if (custom.getStatus() == Custom.Status.IN_PROCESSING || custom.getStatus() == Custom.Status.WAITING_RESPONSE) {
-//                CustomDTO customDTO = new CustomDTO();
-//                customDTO.setCustomId(custom.getId());
-//
-//                Customer customer = custom.getCustomer();
-//                customDTO.setCustomerId(customer.getId());
-//                customDTO.setCustomerName(customer.getName());
-//                customDTO.setCustomerSurname(customer.getSurname());
-//
-//                customDTO.setStatus(custom.getStatus().toString());
-//
-//                List<CustomProductDTO> customProductDTOs = new ArrayList<>();
-//                for (CustomProduct customProduct : custom.getCustomProductList()) {
-//                    Product product = customProduct.getProduct();
-//                    int quantity = customProduct.getQuantity();
-//
-//                    CustomProductDTO customProductDTO = new CustomProductDTO();
-//                    customProductDTO.setProductId(product.getId());
-//                    customProductDTO.setProductName(product.getName());
-//                    customProductDTO.setQuantity(quantity);
-//
-//                    customProductDTOs.add(customProductDTO);
-//                }
-//
-//                customDTO.setCustomProductDTOList(customProductDTOs);
-//                customDTOs.add(customDTO);
-//            }
-//        }
-//
-//        return customDTOs;
-//    }
-
     // Отримання списку виконаних призначених замовлень зі статусом PROCESSED для конкретного робітника(по його id)
     //(повертає об'єкт DTO з всіма потрібними параметрами)
 
@@ -322,45 +201,6 @@ public class CustomService {
         return customDTOs;
     }
 
-//    public List<CustomDTO> getProcessedCustomsForEmployee(int employeeId) {
-//        Employee employee = employeeRepository.getReferenceById(employeeId);
-//        List<CustomDTO> customDTOs = new ArrayList<>();
-//
-//        for (EmployeeCustom employeeCustom : employee.getEmployeeCustomList()) {
-//            Custom custom = employeeCustom.getCustom();
-//
-//            if (custom.getStatus() == Custom.Status.PROCESSED) {
-//                CustomDTO customDTO = new CustomDTO();
-//                customDTO.setCustomId(custom.getId());
-//
-//                Customer customer = custom.getCustomer();
-//                customDTO.setCustomerId(customer.getId());
-//                customDTO.setCustomerName(customer.getName());
-//                customDTO.setCustomerSurname(customer.getSurname());
-//
-//                customDTO.setStatus(custom.getStatus().toString());
-//
-//                List<CustomProductDTO> customProductDTOs = new ArrayList<>();
-//                for (CustomProduct customProduct : custom.getCustomProductList()) {
-//                    Product product = customProduct.getProduct();
-//                    int quantity = customProduct.getQuantity();
-//
-//                    CustomProductDTO customProductDTO = new CustomProductDTO();
-//                    customProductDTO.setProductId(product.getId());
-//                    customProductDTO.setProductName(product.getName());
-//                    customProductDTO.setQuantity(quantity);
-//
-//                    customProductDTOs.add(customProductDTO);
-//                }
-//
-//                customDTO.setCustomProductDTOList(customProductDTOs);
-//                customDTOs.add(customDTO);
-//            }
-//        }
-//
-//        return customDTOs;
-//    }
-
     // Отримання всіх створених замовлень зі статусом CREATED (Для Manager`a)
     // (повертає об'єкт DTO з всіма потрібними параметрами)
 
@@ -401,54 +241,6 @@ public class CustomService {
 
         return customDTOs;
     }
-
-//    public List<CustomDTO> getAllCreatedCustoms(int managerId) {
-//        Manager manager = managerRepository.getReferenceById(managerId);
-//        List<Department> managerDepartments = manager.getDepartmentList();
-//
-//        List<Custom> allCreatedCustoms = customRepository.findAllByStatus(Custom.Status.CREATED);
-//        List<CustomDTO> customDTOs = new ArrayList<>();
-//
-//        for (Custom custom : allCreatedCustoms) {
-//            List<DepartmentCustom> departmentCustoms = custom.getDepartmentCustomList();
-//            Department matchingDepartment = null;
-//
-//            for (DepartmentCustom departmentCustom : departmentCustoms) {
-//                Department department = departmentCustom.getDepartment();
-//
-//                if (managerDepartments.contains(department)) {
-//                    matchingDepartment = department;
-//                    break;
-//                }
-//            }
-//
-//            if (matchingDepartment != null) {
-//                CustomDTO customDTO = new CustomDTO();
-//                customDTO.setCustomId(custom.getId());
-//
-//                customDTO.setStatus(custom.getStatus().toString());
-//                customDTO.setDepartment(matchingDepartment.getDepartmentName());
-//
-//                List<CustomProductDTO> customProductDTOs = new ArrayList<>();
-//                for (CustomProduct customProduct : custom.getCustomProductList()) {
-//                    Product product = customProduct.getProduct();
-//                    int quantity = customProduct.getQuantity();
-//
-//                    CustomProductDTO customProductDTO = new CustomProductDTO();
-//                    customProductDTO.setProductId(product.getId());
-//                    customProductDTO.setProductName(product.getName());
-//                    customProductDTO.setQuantity(quantity);
-//
-//                    customProductDTOs.add(customProductDTO);
-//                }
-//
-//                customDTO.setCustomProductDTOList(customProductDTOs);
-//                customDTOs.add(customDTO);
-//            }
-//        }
-//
-//        return customDTOs;
-//    }
 
     // Отримання всіх замовлень з повним переліком данних про покупця і робітника що стосуються данного замовлення(Для Manager`a)
     // (повертає об'єкт DTO з всіма потрібними параметрами)
@@ -501,55 +293,6 @@ public class CustomService {
         return customDTOs;
     }
 
-//    public List<CustomDTO> getAllCustoms() {
-//        List<Custom> allCreatedCustoms = customRepository.findAll();
-//        List<CustomDTO> customDTOs = new ArrayList<>();
-//
-//        for (Custom custom : allCreatedCustoms) {
-//            CustomDTO customDTO = new CustomDTO();
-//            customDTO.setCustomId(custom.getId());
-//
-//            Customer customer = custom.getCustomer();
-//            customDTO.setCustomerId(customer.getId());
-//            customDTO.setCustomerName(customer.getName());
-//            customDTO.setCustomerSurname(customer.getSurname());
-//
-//            if (custom.getStatus() != Custom.Status.CREATED) {
-//                Employee employee = custom.getEmployee();
-//                customDTO.setEmployeeId(employee.getId());
-//                customDTO.setEmployeeName(employee.getName());
-//                customDTO.setEmployeeSurname(employee.getSurname());
-//            }
-//
-//            customDTO.setStatus(custom.getStatus().toString());
-//
-//            DepartmentCustom departmentCustom = custom.getDepartmentCustomList().stream().findFirst().orElse(null);
-//            if (departmentCustom != null) {
-//                Department department = departmentCustom.getDepartment();
-//                customDTO.setDepartment(department.getDepartmentName());
-//            }
-//
-//            List<CustomProductDTO> customProductDTOs = new ArrayList<>();
-//            for (CustomProduct customProduct : custom.getCustomProductList()) {
-//                Product product = customProduct.getProduct();
-//                int quantity = customProduct.getQuantity();
-//
-//                CustomProductDTO customProductDTO = new CustomProductDTO();
-//                customProductDTO.setProductId(product.getId());
-//                customProductDTO.setProductName(product.getName());
-//                customProductDTO.setQuantity(quantity);
-//
-//                customProductDTOs.add(customProductDTO);
-//            }
-//
-//            customDTO.setCustomProductDTOList(customProductDTOs);
-//            customDTOs.add(customDTO);
-//        }
-//
-//        return customDTOs;
-//    }
-
-
     // Призначення замовлення на виконання конкретному робітнику (Для Manager`a) TESTED
     //ОБНОВА!!!
     public void assignEmployeeToCustom(int customId, int employeeId) {
@@ -562,25 +305,6 @@ public class CustomService {
             customRepository.save(custom);
         }
     }
-
-//    public void assignEmployeeToCustom(int customId, int employeeId) {
-//        Custom custom = customRepository.getReferenceById(customId);
-//        Employee employee = employeeRepository.getReferenceById(employeeId);
-//
-//        if (custom != null && employee != null) {
-//
-//            EmployeeCustom employeeCustom = new EmployeeCustom();
-//            employeeCustom.setEmployee(employee);
-//            employeeCustom.setCustom(custom);
-//
-//            List<EmployeeCustom> employeeCustomList = custom.getEmployeeCustomList();
-//            employeeCustomList.add(employeeCustom);
-//
-//            custom.setEmployeeCustomList(employeeCustomList);
-//            custom.setStatus(Custom.Status.IN_PROCESSING);
-//            customRepository.save(custom);
-//        }
-//    }
 
     // Встановлення для замовлення статусу PROCESSED(виконаний) TESTED
     @Transactional

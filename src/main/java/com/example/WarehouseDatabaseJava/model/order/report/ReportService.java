@@ -69,49 +69,6 @@ public class ReportService {
         }
     }
 
-//    @Transactional
-//    public void createReport(int employeeId, int customId, String reportText) {
-//        Employee employee = employeeRepository.getReferenceById(employeeId);
-//        Custom custom = customRepository.getReferenceById(customId);
-//
-//        if (employee != null && custom != null) {
-//            // Check if the custom belongs to the employee
-//            boolean hasCustom = false;
-//            for (EmployeeCustom ec : employee.getEmployeeCustomList()) {
-//                if (ec.getCustom().getId() == custom.getId()) {
-//                    hasCustom = true;
-//                    break;
-//                }
-//            }
-//            if (!hasCustom) {
-//                throw new IllegalArgumentException("Custom does not belong to the employee");
-//            }
-//            if (custom.getStatus() != Custom.Status.IN_PROCESSING) {
-//                throw new IllegalArgumentException("Report can only be created for Custom with Status IN_PROCESSING");
-//            }
-//
-//            Report existingReport = custom.getReport();
-//            if (existingReport != null) {
-//                if (existingReport.getStatus() == Report.Status.REJECTED) {
-//                    existingReport.setReportText(reportText);
-//                    existingReport.setStatus(Report.Status.WAITING);
-//                    customService.setCustomWaitingResponse(customId);
-//                    reportRepository.save(existingReport);
-//                } else {
-//                    throw new IllegalArgumentException("Report for this Custom already exists and cannot be updated or created");
-//                }
-//            } else {
-//                Report report = new Report();
-//                report.setReportText(reportText);
-//                report.setStatus(Report.Status.WAITING);
-//                customService.setCustomWaitingResponse(customId);
-//                report.setCustom(custom);
-//
-//                reportRepository.save(report);
-//            }
-//        }
-//    }
-
     // метод для отримання всіх звітів, у яких статус WAITING (очікують відповіді менеджера) TESTED
     //ОБНОВА!!!
 
@@ -140,41 +97,6 @@ public class ReportService {
         return reportsDTO;
     }
 
-//    public List<ReportDTO> getAllWaitingReportsForManager(int managerId) {
-//        Manager manager = managerRepository.getReferenceById(managerId);
-//        List<Department> managerDepartments = manager.getDepartmentList();
-//        List<Report> allReports = reportRepository.findAll();
-//
-//        List<ReportDTO> reportsDTO = new ArrayList<>();
-//        for (Report report : allReports) {
-//            if (report.getStatus() == Report.Status.WAITING) {
-//                Custom custom = report.getCustom();
-//                List<DepartmentCustom> departmentCustoms = custom.getDepartmentCustomList();
-//                boolean hasMatchingDepartment = false;
-//
-//                for (DepartmentCustom departmentCustom : departmentCustoms) {
-//                    Department department = departmentCustom.getDepartment();
-//
-//                    if (managerDepartments.contains(department)) {
-//                        hasMatchingDepartment = true;
-//                        break;
-//                    }
-//                }
-//
-//                if (hasMatchingDepartment) {
-//                    ReportDTO reportDTO = new ReportDTO();
-//                    reportDTO.setReportId(report.getId());
-//                    reportDTO.setCustomId(custom.getId());
-//                    reportDTO.setReportText(report.getReportText());
-//                    reportDTO.setStatus(report.getStatus().toString());
-//
-//                    reportsDTO.add(reportDTO);
-//                }
-//            }
-//        }
-//        return reportsDTO;
-//    }
-
     //метод отримання всіх звітів зі статусом WAITING для конкретного робітника TESTED
     //ОБНОВА!!!
 
@@ -197,28 +119,6 @@ public class ReportService {
         }
         return reportsDTO;
     }
-
-//    public List<ReportDTO> getAllWaitingReportsForEmployee(int employeeId) {
-//        Employee employee = employeeRepository.getReferenceById(employeeId);
-//
-//        List<ReportDTO> reportsDTO = new ArrayList<>();
-//
-//        for (EmployeeCustom employeeCustom : employee.getEmployeeCustomList()) {
-//            Custom custom = employeeCustom.getCustom();
-//
-//            Report report = custom.getReport();
-//            if (report != null && report.getStatus() == Report.Status.WAITING) {
-//                ReportDTO reportDTO = new ReportDTO();
-//                reportDTO.setReportId(report.getId());
-//                reportDTO.setCustomId(custom.getId());
-//                reportDTO.setReportText(report.getReportText());
-//                reportDTO.setStatus(report.getStatus().toString());
-//
-//                reportsDTO.add(reportDTO);
-//            }
-//        }
-//        return reportsDTO;
-//    }
 
     //метод отримання всіх звітів зі статусом ACCEPTED для конкретного робітника TESTED
     //ОБНОВА!!!
@@ -243,28 +143,6 @@ public class ReportService {
         return reportsDTO;
     }
 
-//    public List<ReportDTO> getAllAcceptedReportsForEmployee(int employeeId) {
-//        Employee employee = employeeRepository.getReferenceById(employeeId);
-//
-//        List<ReportDTO> reportsDTO = new ArrayList<>();
-//
-//        for (EmployeeCustom employeeCustom : employee.getEmployeeCustomList()) {
-//            Custom custom = employeeCustom.getCustom();
-//
-//            Report report = custom.getReport();
-//            if (report != null && report.getStatus() == Report.Status.ACCEPTED) {
-//                ReportDTO reportDTO = new ReportDTO();
-//                reportDTO.setReportId(report.getId());
-//                reportDTO.setCustomId(custom.getId());
-//                reportDTO.setReportText(report.getReportText());
-//                reportDTO.setStatus(report.getStatus().toString());
-//
-//                reportsDTO.add(reportDTO);
-//            }
-//        }
-//        return reportsDTO;
-//    }
-
     //метод отримання всіх звітів зі статусом REJECTED для конкретного робітника TESTED
     //ОБНОВА!!!
 
@@ -287,28 +165,6 @@ public class ReportService {
         }
         return reportsDTO;
     }
-
-//    public List<ReportDTO> getAllRejectedReportsForEmployee(int employeeId) {
-//        Employee employee = employeeRepository.getReferenceById(employeeId);
-//
-//        List<ReportDTO> reportsDTO = new ArrayList<>();
-//
-//        for (EmployeeCustom employeeCustom : employee.getEmployeeCustomList()) {
-//            Custom custom = employeeCustom.getCustom();
-//
-//            Report report = custom.getReport();
-//            if (report != null && report.getStatus() == Report.Status.REJECTED) {
-//                ReportDTO reportDTO = new ReportDTO();
-//                reportDTO.setReportId(report.getId());
-//                reportDTO.setCustomId(custom.getId());
-//                reportDTO.setReportText(report.getReportText());
-//                reportDTO.setStatus(report.getStatus().toString());
-//
-//                reportsDTO.add(reportDTO);
-//            }
-//        }
-//        return reportsDTO;
-//    }
 
     // метод для встановлення конкретному звіту статусу ACCEPTED TESTED
     @Transactional
