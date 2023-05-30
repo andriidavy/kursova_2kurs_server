@@ -2,9 +2,7 @@ package com.example.WarehouseDatabaseJava.model.order;
 
 import com.example.WarehouseDatabaseJava.model.order.report.Report;
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
-import com.example.WarehouseDatabaseJava.model.users.customer.CustomerCustom;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeCustom;
-import com.example.WarehouseDatabaseJava.model.users.manager.stage.Department;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentCustom;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -18,10 +16,10 @@ public class Custom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    // One-to-Many relation with CustomerCustom
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "custom")
-    @JsonIgnore
-    private List<CustomerCustom> customerCustomList = new ArrayList<>();
+    // Many-to-One relation with Customer
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     // One-to-Many relation with CustomProduct
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "custom")
@@ -72,7 +70,6 @@ public class Custom {
         this.status = status;
     }
 
-
     public int getId() {
         return id;
     }
@@ -89,12 +86,12 @@ public class Custom {
         this.customProductList = customProductList;
     }
 
-    public List<CustomerCustom> getCustomerCustomList() {
-        return customerCustomList;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerCustomList(List<CustomerCustom> customerCustomList) {
-        this.customerCustomList = customerCustomList;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public List<EmployeeCustom> getEmployeeCustomList() {

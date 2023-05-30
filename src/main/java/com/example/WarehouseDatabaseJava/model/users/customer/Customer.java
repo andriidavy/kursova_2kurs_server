@@ -27,7 +27,7 @@ import java.util.List;
         //One-to-Many relation with Custom
         @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
         @JsonIgnore
-        private List<CustomerCustom> customerCustomList = new ArrayList<>();
+        private List<Custom> customList = new ArrayList<>();
 
         public Customer() {
         }
@@ -88,12 +88,11 @@ import java.util.List;
             this.cart = cart;
         }
 
-
-        public List<CustomerCustom> getCustomerCustomList() {
-            return customerCustomList;
+        public List<Custom> getCustomList() {
+            return customList;
         }
 
-        public void setCustomerCustomList(List<CustomerCustom> customerCustomList) {
-            this.customerCustomList = customerCustomList;
+        public void setCustomList(List<Custom> customList) {
+            this.customList = customList;
         }
     }

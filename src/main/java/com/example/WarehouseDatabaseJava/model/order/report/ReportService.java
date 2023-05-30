@@ -10,7 +10,6 @@ import com.example.WarehouseDatabaseJava.model.users.manager.Manager;
 import com.example.WarehouseDatabaseJava.model.users.manager.ManagerRepository;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.Department;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentCustom;
-import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ReportService {
@@ -78,7 +76,6 @@ public class ReportService {
     }
 
     // метод для отримання всіх звітів, у яких статус WAITING (очікують відповіді менеджера) TESTED
-
     public List<ReportDTO> getAllWaitingReportsForManager(int managerId) {
         Manager manager = managerRepository.getReferenceById(managerId);
         List<Department> managerDepartments = manager.getDepartmentList();
@@ -114,26 +111,7 @@ public class ReportService {
         return reportsDTO;
     }
 
-//    public List<ReportDTO> getAllWaitingReports() {
-//        List<Report> allReports = reportRepository.findAll();
-//
-//        List<ReportDTO> reportsDTO = new ArrayList<>();
-//        for (Report report : allReports) {
-//            if (report.getStatus() == Report.Status.WAITING) {
-//                ReportDTO reportDTO = new ReportDTO();
-//                reportDTO.setReportId(report.getId());
-//                reportDTO.setCustomId(report.getCustom().getId());
-//                reportDTO.setReportText(report.getReportText());
-//                reportDTO.setStatus(report.getStatus().toString());
-//
-//                reportsDTO.add(reportDTO);
-//            }
-//        }
-//        return reportsDTO;
-//    }
-
     //метод отримання всіх звітів зі статусом WAITING для конкретного робітника TESTED
-
     public List<ReportDTO> getAllWaitingReportsForEmployee(int employeeId) {
         Employee employee = employeeRepository.getReferenceById(employeeId);
 
@@ -156,25 +134,7 @@ public class ReportService {
         return reportsDTO;
     }
 
-//    public List<Report> getAllWaitingReportsForEmployee(int employeeId) {
-//        Employee employee = employeeRepository.getReferenceById(employeeId);
-//
-//        List<Custom> customs = employee.getEmployeeCustomList().stream()
-//                .map(EmployeeCustom::getCustom)
-//                .toList();
-//
-//        List<Report> reports = new ArrayList<>();
-//        for (Custom custom : customs) {
-//            Report report = custom.getReport();
-//            if (report != null && (report.getStatus() == Report.Status.WAITING)) {
-//                reports.add(report);
-//            }
-//        }
-//        return reports;
-//    }
-
     //метод отримання всіх звітів зі статусом ACCEPTED для конкретного робітника TESTED
-
     public List<ReportDTO> getAllAcceptedReportsForEmployee(int employeeId) {
         Employee employee = employeeRepository.getReferenceById(employeeId);
 
@@ -197,25 +157,7 @@ public class ReportService {
         return reportsDTO;
     }
 
-//    public List<Report> getAllAcceptedReportsForEmployee(int employeeId) {
-//        Employee employee = employeeRepository.getReferenceById(employeeId);
-//
-//        List<Custom> customs = employee.getEmployeeCustomList().stream()
-//                .map(EmployeeCustom::getCustom)
-//                .toList();
-//
-//        List<Report> reports = new ArrayList<>();
-//        for (Custom custom : customs) {
-//            Report report = custom.getReport();
-//            if (report != null && (report.getStatus() == Report.Status.ACCEPTED)) {
-//                reports.add(report);
-//            }
-//        }
-//        return reports;
-//    }
-
     //метод отримання всіх звітів зі статусом REJECTED для конкретного робітника TESTED
-
     public List<ReportDTO> getAllRejectedReportsForEmployee(int employeeId) {
         Employee employee = employeeRepository.getReferenceById(employeeId);
 
@@ -237,23 +179,6 @@ public class ReportService {
         }
         return reportsDTO;
     }
-
-//    public List<Report> getAllRejectedReportsForEmployee(int employeeId) {
-//        Employee employee = employeeRepository.getReferenceById(employeeId);
-//
-//        List<Custom> customs = employee.getEmployeeCustomList().stream()
-//                .map(EmployeeCustom::getCustom)
-//                .toList();
-//
-//        List<Report> reports = new ArrayList<>();
-//        for (Custom custom : customs) {
-//            Report report = custom.getReport();
-//            if (report != null && (report.getStatus() == Report.Status.REJECTED)) {
-//                reports.add(report);
-//            }
-//        }
-//        return reports;
-//    }
 
     // метод для встановлення конкретному звіту статусу ACCEPTED TESTED
     @Transactional

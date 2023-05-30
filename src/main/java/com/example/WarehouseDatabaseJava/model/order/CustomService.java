@@ -3,13 +3,10 @@ package com.example.WarehouseDatabaseJava.model.order;
 import com.example.WarehouseDatabaseJava.model.product.Product;
 import com.example.WarehouseDatabaseJava.model.product.ProductRepository;
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
-import com.example.WarehouseDatabaseJava.model.users.customer.CustomerCustom;
-import com.example.WarehouseDatabaseJava.model.users.customer.CustomerCustomRepository;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerRepository;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProduct;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProductRepository;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartRepository;
-import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProductDTO;
 import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeCustom;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeRepository;
@@ -24,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomService {
@@ -32,8 +28,6 @@ public class CustomService {
     private CustomRepository customRepository;
     @Autowired
     private CustomerRepository customerRepository;
-    @Autowired
-    private CustomerCustomRepository customerCustomRepository;
     @Autowired
     private CustomProductRepository customProductRepository;
     @Autowired
@@ -49,10 +43,13 @@ public class CustomService {
     private ManagerRepository managerRepository;
 
     //Створення замовлення покупцем TESTED
+    // ПОТРЕБУЄ ЗМІНИ В ЗВ'ЯЗКУ CUSTOMER-CUSTOM
+
+    //ОБНОВА!!!
     @Transactional
     public int createCustom(int customerId) {
         Customer customer = customerRepository.getReferenceById(customerId);
-        if (customer.getCart() != null && !customer.getCart().getCartProductList().isEmpty()) {
+        if (customer != null && customer.getCart() != null && !customer.getCart().getCartProductList().isEmpty()) {
             // Проверяем наличие достаточного количества продукта в базе данных
             for (CartProduct cartProduct : customer.getCart().getCartProductList()) {
                 Product product = cartProduct.getProduct();
@@ -65,10 +62,9 @@ public class CustomService {
             Custom custom = new Custom();
             customRepository.save(custom);
             custom.setStatus(Custom.Status.CREATED);
-            CustomerCustom customerCustom = new CustomerCustom();
-            customerCustom.setCustomer(customer);
-            customerCustom.setCustom(custom);
-            customerCustomRepository.save(customerCustom);
+            custom.setCustomer(customer); // Set the customer for the custom order
+            custom.getCustomer().getCustomList().add(custom); // Add the custom order to the customer's custom list
+            customRepository.save(custom); // Save the custom order again to update the relationship
             for (CartProduct cartProduct : customer.getCart().getCartProductList()) {
                 Product product = cartProduct.getProduct();
                 int quantityInCart = cartProduct.getQuantity();
@@ -89,37 +85,69 @@ public class CustomService {
         return -1;  // Возвращаем -1 в случае, если заказ не был создан
     }
 
+//    @Transactional
+//    public int createCustom(int customerId) {
+//        Customer customer = customerRepository.getReferenceById(customerId);
+//        if (customer.getCart() != null && !customer.getCart().getCartProductList().isEmpty()) {
+//            // Проверяем наличие достаточного количества продукта в базе данных
+//            for (CartProduct cartProduct : customer.getCart().getCartProductList()) {
+//                Product product = cartProduct.getProduct();
+//                int quantityInCart = cartProduct.getQuantity();
+//                int quantityInStock = product.getQuantity();
+//                if (quantityInStock < quantityInCart) {
+//                    throw new RuntimeException("Not enough stock for product: " + product.getName());
+//                }
+//            }
+//            Custom custom = new Custom();
+//            customRepository.save(custom);
+//            custom.setStatus(Custom.Status.CREATED);
+//            CustomerCustom customerCustom = new CustomerCustom();
+//            customerCustom.setCustomer(customer);
+//            customerCustom.setCustom(custom);
+//            customerCustomRepository.save(customerCustom);
+//            for (CartProduct cartProduct : customer.getCart().getCartProductList()) {
+//                Product product = cartProduct.getProduct();
+//                int quantityInCart = cartProduct.getQuantity();
+//                int quantityInStock = product.getQuantity();
+//                // Обновляем количество продукта в базе данных
+//                product.setQuantity(quantityInStock - quantityInCart);
+//                productRepository.save(product);
+//                CustomProduct customProduct = new CustomProduct();
+//                customProduct.setProduct(product);
+//                customProduct.setQuantity(quantityInCart);
+//                customProduct.setCustom(custom);
+//                customProductRepository.save(customProduct);
+//            }
+//            cartProductRepository.deleteAll(customer.getCart().getCartProductList());
+//            customer.getCart().getCartProductList().clear();
+//            return custom.getId(); //повертаємо значення id новоствореного замовлення
+//        }
+//        return -1;  // Возвращаем -1 в случае, если заказ не был создан
+//    }
+
     // Отримання списку замовлень для конкретного покупця(по його id) TESTED
 // (повертає об'єкт DTO з всіма потрібними параметрами)
+
+    //ОБНОВА!!!
     public List<CustomDTO> getCustomsForCustomer(int customerId) {
         Customer customer = customerRepository.getReferenceById(customerId);
-
-        List<CustomerCustom> customerCustoms = customer.getCustomerCustomList();
+        List<Custom> customs = customer.getCustomList();
         List<CustomDTO> customDTOs = new ArrayList<>();
 
-        CustomDTO customDTO = null;
-
-        for (CustomerCustom customerCustom : customerCustoms) {
-            Custom custom = customerCustom.getCustom();
-
-            // Проверяем, существует ли уже CustomDTO для данного Custom
-            if (customDTO == null || customDTO.getCustomId() != custom.getId()) {
-                customDTO = new CustomDTO();
-                customDTO.setCustomId(custom.getId());
-                customDTO.setCustomerId(customer.getId());
-                customDTO.setCustomerName(customer.getName());
-                customDTO.setCustomerSurname(customer.getSurname());
-                customDTO.setStatus(custom.getStatus().toString());
-                customDTO.setCustomProductDTOList(new ArrayList<>());
-                customDTOs.add(customDTO);
-            }
+        for (Custom custom : customs) {
+            CustomDTO customDTO = new CustomDTO();
+            customDTO.setCustomId(custom.getId());
+            customDTO.setCustomerId(customer.getId());
+            customDTO.setCustomerName(customer.getName());
+            customDTO.setCustomerSurname(customer.getSurname());
+            customDTO.setStatus(custom.getStatus().toString());
+            customDTO.setCustomProductDTOList(new ArrayList<>());
 
             DepartmentCustom departmentCustom = custom.getDepartmentCustomList().stream().findFirst().orElse(null);
             if (departmentCustom != null) {
                 Department department = departmentCustom.getDepartment();
                 customDTO.setDepartment(department.getDepartmentName());
             }
-
 
             for (CustomProduct customProduct : custom.getCustomProductList()) {
                 Product product = customProduct.getProduct();
@@ -132,10 +160,53 @@ public class CustomService {
 
                 customDTO.getCustomProductDTOList().add(customProductDTO);
             }
+
+            customDTOs.add(customDTO);
         }
 
         return customDTOs;
     }
+
+//    public List<CustomDTO> getCustomsForCustomer(int customerId) {
+//        Customer customer = customerRepository.getReferenceById(customerId);
+//
+//        List<CustomerCustom> customerCustoms = customer.getCustomerCustomList();
+//        List<CustomDTO> customDTOs = new ArrayList<>();
+//
+//        CustomDTO customDTO = null;
+//
+//        for (CustomerCustom customerCustom : customerCustoms) {
+//            Custom custom = customerCustom.getCustom();
+//            // Проверяем, существует ли уже CustomDTO для данного Custom
+//            if (customDTO == null || customDTO.getCustomId() != custom.getId()) {
+//                customDTO = new CustomDTO();
+//                customDTO.setCustomId(custom.getId());
+//                customDTO.setCustomerId(customer.getId());
+//                customDTO.setCustomerName(customer.getName());
+//                customDTO.setCustomerSurname(customer.getSurname());
+//                customDTO.setStatus(custom.getStatus().toString());
+//                customDTO.setCustomProductDTOList(new ArrayList<>());
+//                customDTOs.add(customDTO);
+//            }
+//            DepartmentCustom departmentCustom = custom.getDepartmentCustomList().stream().findFirst().orElse(null);
+//            if (departmentCustom != null) {
+//                Department department = departmentCustom.getDepartment();
+//                customDTO.setDepartment(department.getDepartmentName());
+//            }
+//            for (CustomProduct customProduct : custom.getCustomProductList()) {
+//                Product product = customProduct.getProduct();
+//                int quantity = customProduct.getQuantity();
+//
+//                CustomProductDTO customProductDTO = new CustomProductDTO();
+//                customProductDTO.setProductId(product.getId());
+//                customProductDTO.setProductName(product.getName());
+//                customProductDTO.setQuantity(quantity);
+//
+//                customDTO.getCustomProductDTOList().add(customProductDTO);
+//            }
+//        }
+//        return customDTOs;
+//    }
 
 
 // Отримання списку актуальних призначених замовлень зі статусом IN_PROCESSING для конкретного робітника(по його id)
@@ -152,7 +223,7 @@ public class CustomService {
                 CustomDTO customDTO = new CustomDTO();
                 customDTO.setCustomId(custom.getId());
 
-                Customer customer = getCustomerByCustom(custom);
+                Customer customer = custom.getCustomer();
                 customDTO.setCustomerId(customer.getId());
                 customDTO.setCustomerName(customer.getName());
                 customDTO.setCustomerSurname(customer.getSurname());
@@ -193,7 +264,7 @@ public class CustomService {
                 CustomDTO customDTO = new CustomDTO();
                 customDTO.setCustomId(custom.getId());
 
-                Customer customer = getCustomerByCustom(custom);
+                Customer customer = custom.getCustomer();
                 customDTO.setCustomerId(customer.getId());
                 customDTO.setCustomerName(customer.getName());
                 customDTO.setCustomerSurname(customer.getSurname());
@@ -274,40 +345,6 @@ public class CustomService {
         return customDTOs;
     }
 
-    //ПОПЕРЕДНЯ РОБОЧА РЕАЛІЗАЦІЯ БЕЗ ФІЧІ З ВІДДІЛАМИ
-//    public List<CustomDTO> getAllCreatedCustoms() {
-//        List<Custom> allCreatedCustoms = customRepository.findAll();
-//        List<CustomDTO> customDTOs = new ArrayList<>();
-//
-//        for (Custom custom : allCreatedCustoms) {
-//            if (custom.getStatus() == Custom.Status.CREATED) {
-//                CustomDTO customDTO = new CustomDTO();
-//                customDTO.setCustomId(custom.getId());
-//
-//                customDTO.setStatus(custom.getStatus().toString());
-//
-//                List<CustomProductDTO> customProductDTOs = new ArrayList<>();
-//                for (CustomProduct customProduct : custom.getCustomProductList()) {
-//                    Product product = customProduct.getProduct();
-//                    int quantity = customProduct.getQuantity();
-//
-//                    CustomProductDTO customProductDTO = new CustomProductDTO();
-//                    customProductDTO.setProductId(product.getId());
-//                    customProductDTO.setProductName(product.getName());
-//                    customProductDTO.setQuantity(quantity);
-//
-//                    customProductDTOs.add(customProductDTO);
-//                }
-//
-//                customDTO.setCustomProductDTOList(customProductDTOs);
-//                customDTOs.add(customDTO);
-//            }
-//        }
-//
-//        return customDTOs;
-//    }
-
-
     // Отримання всіх замовлень з повним переліком данних про покупця і робітника що стосуються данного замовлення(Для Manager`a)
     // (повертає об'єкт DTO з всіма потрібними параметрами)
     public List<CustomDTO> getAllCustoms() {
@@ -318,7 +355,7 @@ public class CustomService {
             CustomDTO customDTO = new CustomDTO();
             customDTO.setCustomId(custom.getId());
 
-            Customer customer = getCustomerByCustom(custom);
+            Customer customer = custom.getCustomer();
             customDTO.setCustomerId(customer.getId());
             customDTO.setCustomerName(customer.getName());
             customDTO.setCustomerSurname(customer.getSurname());
@@ -433,18 +470,6 @@ public class CustomService {
         customRepository.save(custom);
     }
 
-    // Внутрішній метод, для встановлення покупця по його замовленню
-    private Customer getCustomerByCustom(Custom custom) {
-        Customer customer = null;
-
-        // Проверяем, что список CustomerCustom не пустой
-        if (!custom.getCustomerCustomList().isEmpty()) {
-            CustomerCustom customerCustom = custom.getCustomerCustomList().get(0);
-            customer = customerCustom.getCustomer();
-        }
-
-        return customer;
-    }
 
     // Внутрішній метод, для встановлення робітника для замовлення
     private Employee getEmployeeByCustom(Custom custom) {
