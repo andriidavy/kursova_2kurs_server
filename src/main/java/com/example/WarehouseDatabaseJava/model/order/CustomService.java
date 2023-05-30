@@ -6,13 +6,11 @@ import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerRepository;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProduct;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProductRepository;
-import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartRepository;
 import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeRepository;
 import com.example.WarehouseDatabaseJava.model.users.manager.Manager;
 import com.example.WarehouseDatabaseJava.model.users.manager.ManagerRepository;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.Department;
-import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentCustom;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +34,10 @@ public class CustomService {
     @Autowired
     private CartProductRepository cartProductRepository;
     @Autowired
-    private CartRepository cartRepository;
-    @Autowired
     private ManagerRepository managerRepository;
 
     //Створення замовлення покупцем TESTED
     // ПОТРЕБУЄ ЗМІНИ В ЗВ'ЯЗКУ CUSTOMER-CUSTOM
-
     //ОБНОВА!!!
     @Transactional
     public int createCustom(int customerId) {
@@ -141,9 +136,8 @@ public class CustomService {
             customDTO.setStatus(custom.getStatus().toString());
             customDTO.setCustomProductDTOList(new ArrayList<>());
 
-            DepartmentCustom departmentCustom = custom.getDepartmentCustomList().stream().findFirst().orElse(null);
-            if (departmentCustom != null) {
-                Department department = departmentCustom.getDepartment();
+            Department department = custom.getDepartment();
+            if (department != null) {
                 customDTO.setDepartment(department.getDepartmentName());
             }
 
@@ -371,6 +365,7 @@ public class CustomService {
     // (повертає об'єкт DTO з всіма потрібними параметрами)
 
     //+ враховує відділ замовлення і відділи менеджера TESTED
+    //ОБНОВА!!!
     public List<CustomDTO> getAllCreatedCustoms(int managerId) {
         Manager manager = managerRepository.getReferenceById(managerId);
         List<Department> managerDepartments = manager.getDepartmentList();
@@ -379,24 +374,12 @@ public class CustomService {
         List<CustomDTO> customDTOs = new ArrayList<>();
 
         for (Custom custom : allCreatedCustoms) {
-            List<DepartmentCustom> departmentCustoms = custom.getDepartmentCustomList();
-            Department matchingDepartment = null;
-
-            for (DepartmentCustom departmentCustom : departmentCustoms) {
-                Department department = departmentCustom.getDepartment();
-
-                if (managerDepartments.contains(department)) {
-                    matchingDepartment = department;
-                    break;
-                }
-            }
-
-            if (matchingDepartment != null) {
+            Department department = custom.getDepartment();
+            if (department != null && managerDepartments.contains(department)) {
                 CustomDTO customDTO = new CustomDTO();
                 customDTO.setCustomId(custom.getId());
-
                 customDTO.setStatus(custom.getStatus().toString());
-                customDTO.setDepartment(matchingDepartment.getDepartmentName());
+                customDTO.setDepartment(department.getDepartmentName());
 
                 List<CustomProductDTO> customProductDTOs = new ArrayList<>();
                 for (CustomProduct customProduct : custom.getCustomProductList()) {
@@ -419,13 +402,63 @@ public class CustomService {
         return customDTOs;
     }
 
+//    public List<CustomDTO> getAllCreatedCustoms(int managerId) {
+//        Manager manager = managerRepository.getReferenceById(managerId);
+//        List<Department> managerDepartments = manager.getDepartmentList();
+//
+//        List<Custom> allCreatedCustoms = customRepository.findAllByStatus(Custom.Status.CREATED);
+//        List<CustomDTO> customDTOs = new ArrayList<>();
+//
+//        for (Custom custom : allCreatedCustoms) {
+//            List<DepartmentCustom> departmentCustoms = custom.getDepartmentCustomList();
+//            Department matchingDepartment = null;
+//
+//            for (DepartmentCustom departmentCustom : departmentCustoms) {
+//                Department department = departmentCustom.getDepartment();
+//
+//                if (managerDepartments.contains(department)) {
+//                    matchingDepartment = department;
+//                    break;
+//                }
+//            }
+//
+//            if (matchingDepartment != null) {
+//                CustomDTO customDTO = new CustomDTO();
+//                customDTO.setCustomId(custom.getId());
+//
+//                customDTO.setStatus(custom.getStatus().toString());
+//                customDTO.setDepartment(matchingDepartment.getDepartmentName());
+//
+//                List<CustomProductDTO> customProductDTOs = new ArrayList<>();
+//                for (CustomProduct customProduct : custom.getCustomProductList()) {
+//                    Product product = customProduct.getProduct();
+//                    int quantity = customProduct.getQuantity();
+//
+//                    CustomProductDTO customProductDTO = new CustomProductDTO();
+//                    customProductDTO.setProductId(product.getId());
+//                    customProductDTO.setProductName(product.getName());
+//                    customProductDTO.setQuantity(quantity);
+//
+//                    customProductDTOs.add(customProductDTO);
+//                }
+//
+//                customDTO.setCustomProductDTOList(customProductDTOs);
+//                customDTOs.add(customDTO);
+//            }
+//        }
+//
+//        return customDTOs;
+//    }
+
     // Отримання всіх замовлень з повним переліком данних про покупця і робітника що стосуються данного замовлення(Для Manager`a)
     // (повертає об'єкт DTO з всіма потрібними параметрами)
+    //ОБНОВА!!!
+
     public List<CustomDTO> getAllCustoms() {
-        List<Custom> allCreatedCustoms = customRepository.findAll();
+        List<Custom> allCustoms = customRepository.findAll();
         List<CustomDTO> customDTOs = new ArrayList<>();
 
-        for (Custom custom : allCreatedCustoms) {
+        for (Custom custom : allCustoms) {
             CustomDTO customDTO = new CustomDTO();
             customDTO.setCustomId(custom.getId());
 
@@ -434,7 +467,7 @@ public class CustomService {
             customDTO.setCustomerName(customer.getName());
             customDTO.setCustomerSurname(customer.getSurname());
 
-            if (custom.getStatus() != Custom.Status.CREATED) {
+            if (custom.getEmployee() != null) {
                 Employee employee = custom.getEmployee();
                 customDTO.setEmployeeId(employee.getId());
                 customDTO.setEmployeeName(employee.getName());
@@ -443,9 +476,8 @@ public class CustomService {
 
             customDTO.setStatus(custom.getStatus().toString());
 
-            DepartmentCustom departmentCustom = custom.getDepartmentCustomList().stream().findFirst().orElse(null);
-            if (departmentCustom != null) {
-                Department department = departmentCustom.getDepartment();
+            if (custom.getDepartment() != null) {
+                Department department = custom.getDepartment();
                 customDTO.setDepartment(department.getDepartmentName());
             }
 
@@ -469,8 +501,57 @@ public class CustomService {
         return customDTOs;
     }
 
+//    public List<CustomDTO> getAllCustoms() {
+//        List<Custom> allCreatedCustoms = customRepository.findAll();
+//        List<CustomDTO> customDTOs = new ArrayList<>();
+//
+//        for (Custom custom : allCreatedCustoms) {
+//            CustomDTO customDTO = new CustomDTO();
+//            customDTO.setCustomId(custom.getId());
+//
+//            Customer customer = custom.getCustomer();
+//            customDTO.setCustomerId(customer.getId());
+//            customDTO.setCustomerName(customer.getName());
+//            customDTO.setCustomerSurname(customer.getSurname());
+//
+//            if (custom.getStatus() != Custom.Status.CREATED) {
+//                Employee employee = custom.getEmployee();
+//                customDTO.setEmployeeId(employee.getId());
+//                customDTO.setEmployeeName(employee.getName());
+//                customDTO.setEmployeeSurname(employee.getSurname());
+//            }
+//
+//            customDTO.setStatus(custom.getStatus().toString());
+//
+//            DepartmentCustom departmentCustom = custom.getDepartmentCustomList().stream().findFirst().orElse(null);
+//            if (departmentCustom != null) {
+//                Department department = departmentCustom.getDepartment();
+//                customDTO.setDepartment(department.getDepartmentName());
+//            }
+//
+//            List<CustomProductDTO> customProductDTOs = new ArrayList<>();
+//            for (CustomProduct customProduct : custom.getCustomProductList()) {
+//                Product product = customProduct.getProduct();
+//                int quantity = customProduct.getQuantity();
+//
+//                CustomProductDTO customProductDTO = new CustomProductDTO();
+//                customProductDTO.setProductId(product.getId());
+//                customProductDTO.setProductName(product.getName());
+//                customProductDTO.setQuantity(quantity);
+//
+//                customProductDTOs.add(customProductDTO);
+//            }
+//
+//            customDTO.setCustomProductDTOList(customProductDTOs);
+//            customDTOs.add(customDTO);
+//        }
+//
+//        return customDTOs;
+//    }
+
 
     // Призначення замовлення на виконання конкретному робітнику (Для Manager`a) TESTED
+    //ОБНОВА!!!
     public void assignEmployeeToCustom(int customId, int employeeId) {
         Custom custom = customRepository.getReferenceById(customId);
         Employee employee = employeeRepository.getReferenceById(employeeId);

@@ -63,6 +63,7 @@ public class DepartmentService {
     }
 
     //метод призначення конкретному замовленню конкретного відділу доставки
+    //ОНОВЛЕНО!!!
     public void assignDepartmentToCustom(int customId, int departmentId) {
         Custom custom = customRepository.getReferenceById(customId);
         if (custom == null) {
@@ -74,12 +75,27 @@ public class DepartmentService {
             throw new RuntimeException("Department not found with id: " + departmentId);
         }
 
-        DepartmentCustom departmentCustom = new DepartmentCustom();
-        departmentCustom.setDepartment(department);
-        departmentCustom.setCustom(custom);
-
-        custom.getDepartmentCustomList().add(departmentCustom);
-
+        custom.setDepartment(department);
         customRepository.save(custom);
     }
+
+//    public void assignDepartmentToCustom(int customId, int departmentId) {
+//        Custom custom = customRepository.getReferenceById(customId);
+//        if (custom == null) {
+//            throw new RuntimeException("Custom not found with id: " + customId);
+//        }
+//
+//        Department department = departmentRepository.getReferenceById(departmentId);
+//        if (department == null) {
+//            throw new RuntimeException("Department not found with id: " + departmentId);
+//        }
+//
+//        DepartmentCustom departmentCustom = new DepartmentCustom();
+//        departmentCustom.setDepartment(department);
+//        departmentCustom.setCustom(custom);
+//
+//        custom.getDepartmentCustomList().add(departmentCustom);
+//
+//        customRepository.save(custom);
+//    }
 }

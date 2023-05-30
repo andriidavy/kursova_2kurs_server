@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.model.users.manager.stage;
 
+import com.example.WarehouseDatabaseJava.model.order.Custom;
 import com.example.WarehouseDatabaseJava.model.users.manager.Manager;
 import jakarta.persistence.*;
 
@@ -22,9 +23,9 @@ public class Department {
     )
     private List<Manager> managerList;
 
-    // зв'язок One-to-Many з DepartmentCustom
+    // зв'язок One-to-Many з Custom
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "department")
-    private List<DepartmentCustom> departmentCustomList = new ArrayList<>();
+    private List<Custom> customList = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -50,11 +51,11 @@ public class Department {
         this.managerList = managerList;
     }
 
-    public List<DepartmentCustom> getDepartmentCustomList() {
-        return departmentCustomList;
+    public List<Custom> getCustomList() {
+        return customList;
     }
 
-    public void setDepartmentCustomList(List<DepartmentCustom> departmentCustomList) {
-        this.departmentCustomList = departmentCustomList;
+    public void setCustomList(List<Custom> customList) {
+        this.customList = customList;
     }
 }
