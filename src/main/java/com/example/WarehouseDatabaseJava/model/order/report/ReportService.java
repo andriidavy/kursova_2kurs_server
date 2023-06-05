@@ -182,6 +182,7 @@ public class ReportService {
     }
 
     // метод для встановлення конкретному звіту статусу REJECTED TESTED
+    @Transactional
     public void setReportRejected(int reportId) {
         Report report = reportRepository.getReferenceById(reportId);
         if (report != null) {
