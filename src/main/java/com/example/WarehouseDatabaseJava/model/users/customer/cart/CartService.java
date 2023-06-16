@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CartService {
@@ -23,7 +24,7 @@ public class CartService {
     private CartProductRepository cartProductRepository;
 
     //додавання продукту в кошик покупцем TESTED
-    public void addProductToCart(int customerId, int productId, int quantity) {
+    public void addProductToCart(int customerId, String productId, int quantity) {
         Customer customer = customerRepository.getReferenceById(customerId);
         Product product = productRepository.getReferenceById(productId);
         Cart cart = customer.getCart();
@@ -66,7 +67,7 @@ public class CartService {
     }
 
     // видалення продукту з кошика покупцем
-    public void removeProductFromCart(int customerId, int productId) {
+    public void removeProductFromCart(int customerId, String productId) {
         Customer customer = customerRepository.getReferenceById(customerId);
         List<CartProduct> cartProductList = customer.getCart().getCartProductList();
         cartProductList.stream()

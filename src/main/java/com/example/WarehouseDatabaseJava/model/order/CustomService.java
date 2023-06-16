@@ -320,20 +320,6 @@ public class CustomService {
         customRepository.save(custom);
     }
 
-    //Встановлення для замовлення статусу WAITING_RESPONSE(очікує відповіді менеджера)
-//    @Transactional
-//    public void setCustomWaitingResponse(int customId) {
-//        Custom custom = customRepository.getReferenceById(customId);
-//        if (custom == null) {
-//            throw new EntityNotFoundException("Custom with id " + customId + " not found");
-//        }
-//        if (custom.getStatus() != Custom.Status.IN_PROCESSING) {
-//            throw new IllegalStateException("Custom with id " + customId + " cannot be set to WAITING_RESPONSE status because it is not in IN_PROCESSING status");
-//        }
-//        custom.setStatus(Custom.Status.WAITING_RESPONSE);
-//        customRepository.save(custom);
-//    }
-
     @Transactional
     public void setCustomInProcessing(int customId) {
         Custom custom = customRepository.getReferenceById(customId);

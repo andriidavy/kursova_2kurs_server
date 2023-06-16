@@ -1,15 +1,17 @@
 package com.example.WarehouseDatabaseJava.model.users.customer.cart;
 
+import java.util.UUID;
+
 public class CartProductDTO {
-    private int productId;
+    private String productId;
     private String productName;
     private int quantity;
 
-    public int getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 

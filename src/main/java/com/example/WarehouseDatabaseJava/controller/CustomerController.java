@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class CustomerController {
@@ -56,13 +57,13 @@ public class CustomerController {
 
     // додати продукт до корзини конкретним покупцем TESTED
     @PostMapping("/customer/cart/add-product-to-cart")
-    public void addProductToCart(@RequestParam int customerId, @RequestParam int productId, @RequestParam int quantity) {
+    public void addProductToCart(@RequestParam int customerId, @RequestParam String productId, @RequestParam int quantity) {
         cartService.addProductToCart(customerId, productId, quantity);
     }
 
     //видалити продукт з корзини для конкретного покупця TESTED
     @DeleteMapping("/customer/cart/remove-product-by-id")
-    public void removeProductFromCart(@RequestParam int customerId, @RequestParam int productId) {
+    public void removeProductFromCart(@RequestParam int customerId, @RequestParam String productId) {
         cartService.removeProductFromCart(customerId, productId);
     }
 

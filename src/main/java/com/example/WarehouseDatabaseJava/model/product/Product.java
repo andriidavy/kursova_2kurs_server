@@ -8,13 +8,16 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
+    private long sku;
     private String name;
+    private double price;
     private String description;
     private int quantity;
 
@@ -37,18 +40,28 @@ public class Product {
         this.description = description;
     }
 
-    public Product(int id, String name, int quantity) {
+    public Product(String id, long sku, String name, double price, int quantity) {
         this.id = id;
+        this.sku = sku;
         this.name = name;
+        this.price = price;
         this.quantity = quantity;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public long getSku() {
+        return sku;
+    }
+
+    public void setSku(long sku) {
+        this.sku = sku;
     }
 
     public String getName() {
@@ -57,6 +70,14 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public String getDescription() {

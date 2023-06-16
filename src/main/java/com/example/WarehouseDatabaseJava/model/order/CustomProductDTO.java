@@ -1,15 +1,17 @@
 package com.example.WarehouseDatabaseJava.model.order;
 
+import java.util.UUID;
+
 public class CustomProductDTO {
-    private int productId;
+    private String productId;
     private String productName;
     private int quantity;
 
-    public int getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 
