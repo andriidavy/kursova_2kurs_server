@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Integer> {
+public interface ProductRepository extends JpaRepository<Product, String> {
     Product findBySku(Long sku);
-    Product getReferenceById(String productId);
 }

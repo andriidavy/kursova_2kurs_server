@@ -1,14 +1,14 @@
 package com.example.WarehouseDatabaseJava.model.product;
 
 import com.example.WarehouseDatabaseJava.model.order.CustomProduct;
+import com.example.WarehouseDatabaseJava.model.product.image.ProductImage;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProduct;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 public class Product {
@@ -20,6 +20,11 @@ public class Product {
     private double price;
     private String description;
     private int quantity;
+
+    // One-to-One relation with ProductImage
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnore
+    ProductImage productImage;
 
     // One-to-Many relation with CartProduct
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
@@ -110,5 +115,13 @@ public class Product {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public ProductImage getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(ProductImage productImage) {
+        this.productImage = productImage;
     }
 }
