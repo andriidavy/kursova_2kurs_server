@@ -44,13 +44,21 @@ public class CartService {
             cartProduct.setQuantity(quantity);
             cartProduct.setCart(customer.getCart());
             cart.getCartProductList().add(cartProduct);
+
+            //установка новой цены корзины
+            cart.setPrice(cart.getPrice() + (product.getPrice() * quantity));
+
             cartProductRepository.save(cartProduct);
             cartRepository.save(cart);
         } else {
             if (product.getQuantity() < cartProduct.getQuantity() + quantity) {
                 throw new RuntimeException("Not enough stock for product: " + product.getName());
             }
+
+            //установка новой цены корзины
             cartProduct.setQuantity(cartProduct.getQuantity() + quantity);
+            cart.setPrice(cart.getPrice() + (product.getPrice() * quantity));
+
             cartProductRepository.save(cartProduct);
             cartRepository.save(cart);
         }
@@ -69,14 +77,22 @@ public class CartService {
     // видалення продукту з кошика покупцем
     public void removeProductFromCart(int customerId, String productId) {
         Customer customer = customerRepository.getReferenceById(customerId);
-        List<CartProduct> cartProductList = customer.getCart().getCartProductList();
-        cartProductList.stream()
-                .filter(cartProduct -> cartProduct.getProduct().getId() == productId)
-                .findFirst()
-                .ifPresent(cartProduct -> {
-                    customer.getCart().getCartProductList().remove(cartProduct);
-                    cartProductRepository.delete(cartProduct);
-                });
+        if (customer != null) {
+            Cart cart = customer.getCart();
+            if (cart != null) {
+                List<CartProduct> cartProductList = cart.getCartProductList();
+                cartProductList.stream()
+                        .filter(cartProduct -> cartProduct.getProduct().getId() == productId)
+                        .findFirst()
+                        .ifPresent(cartProduct -> {
+                            cart.getCartProductList().remove(cartProduct);
+                            cartProductRepository.delete(cartProduct);
+                            //установка новой цены корзины
+                            cart.setPrice(cart.getPrice() - (cartProduct.getProduct().getPrice() * cartProduct.getQuantity()));
+                            cartRepository.save(cart);
+                        });
+            }
+        }
     }
 
     // очищення кошика покупцем
@@ -88,6 +104,9 @@ public class CartService {
             if (cart != null) {
                 cart.getCartProductList().clear();
                 cartRepository.deleteAllCartProductsByCart(cart);
+                //установка новой цены корзины
+                cart.setPrice(0);
+                cartRepository.save(cart);
             }
         }
     }
@@ -107,6 +126,7 @@ public class CartService {
             CartProductDTO cartProductDTO = new CartProductDTO();
             cartProductDTO.setProductId(product.getId());
             cartProductDTO.setProductName(product.getName());
+            cartProductDTO.setProductPrice(product.getPrice());
             cartProductDTO.setQuantity(quantity);
 
             cartProductDTOS.add(cartProductDTO);

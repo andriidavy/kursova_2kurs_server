@@ -1,4 +1,6 @@
 package com.example.WarehouseDatabaseJava.model.product;
+
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,15 +12,59 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    //метод save зберігає новий запис якщо продукту з таким sku ще немає і якщо є то додає до кількості цього продукту TESTED
-    public Product save(Product product) {
-        Product existingProduct = productRepository.findBySku(product.getSku());
+    //метод перевірки наявності товару з даним sku
+    public boolean checkSku(long sku) {
+        Product existingProduct = productRepository.getReferenceBySku(sku);
         if (existingProduct != null) {
-            existingProduct.setQuantity(existingProduct.getQuantity() + product.getQuantity());
-            return productRepository.save(existingProduct);
+            return true;
         } else {
-            return productRepository.save(product);
+            return false;
         }
+    }
+
+    //метод додавання кількості уже наявного товару
+    public Product addProductQuantity(long sku, int quantity) {
+        Product existingProduct = productRepository.getReferenceBySku(sku);
+        if (existingProduct ==null) {
+            throw new EntityNotFoundException("Product with sku " + sku + " not found");
+        }
+        existingProduct.setQuantity(existingProduct.getQuantity() + quantity);
+        return productRepository.save(existingProduct);
+    }
+
+    //метод збереження нового товару
+    public Product saveProduct(long sku, String name, double price, String description, int quantity){
+        Product existingProduct = productRepository.getReferenceBySku(sku);
+        if (existingProduct != null){
+            throw new IllegalArgumentException("Product with the same sku already exists");
+        }
+        Product product = new Product(sku, name, price, description, quantity);
+            return productRepository.save(product);
+    }
+
+    //метод для додавання та оновлення url зображення для продукту
+    public void addImageUrlToProduct(String productId, String url) {
+        // Получаем продукт по его идентификатору
+        Product product = productRepository.getReferenceById(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found with ID: " + productId);
+        }
+
+        // Устанавливаем новое url изображения
+        product.setImageUrl(url);
+
+        productRepository.save(product);
+    }
+
+    // метод для видалення url зображення для продукту
+        public void deleteImageForProduct(String productId) {
+        // Получаем продукт по его идентификатору
+        Product product = productRepository.getReferenceById(productId);
+        if (product == null) {
+            throw new EntityNotFoundException("Product with id " + productId + " not found");
+        }
+        product.setImageUrl(null);
+        productRepository.save(product);
     }
 
     //метод save (Product) РЕАЛІЗАЦІЯ БЕЗ ВИКОРИСТАННЯ JPAREPOSITORY!!! TESTED

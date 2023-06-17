@@ -37,7 +37,6 @@ public class CustomService {
     private ManagerRepository managerRepository;
 
     //Створення замовлення покупцем TESTED
-    // ПОТРЕБУЄ ЗМІНИ В ЗВ'ЯЗКУ CUSTOMER-CUSTOM
     //ОБНОВА!!!
     @Transactional
     public int createCustom(int customerId) {
@@ -53,11 +52,9 @@ public class CustomService {
                 }
             }
             Custom custom = new Custom();
-            customRepository.save(custom);
             custom.setStatus(Custom.Status.CREATED);
             custom.setCustomer(customer); // Set the customer for the custom order
             custom.getCustomer().getCustomList().add(custom); // Add the custom order to the customer's custom list
-            customRepository.save(custom); // Save the custom order again to update the relationship
             for (CartProduct cartProduct : customer.getCart().getCartProductList()) {
                 Product product = cartProduct.getProduct();
                 int quantityInCart = cartProduct.getQuantity();
@@ -71,8 +68,12 @@ public class CustomService {
                 customProduct.setCustom(custom);
                 customProductRepository.save(customProduct);
             }
+            custom.setPrice(customer.getCart().getPrice());
+            customRepository.save(custom);
+
             cartProductRepository.deleteAll(customer.getCart().getCartProductList());
             customer.getCart().getCartProductList().clear();
+            customer.getCart().setPrice(0);
             return custom.getId(); //повертаємо значення id новоствореного замовлення
         }
         return -1;  // Возвращаем -1 в случае, если заказ не был создан
@@ -93,6 +94,7 @@ public class CustomService {
             customDTO.setCustomerId(customer.getId());
             customDTO.setCustomerName(customer.getName());
             customDTO.setCustomerSurname(customer.getSurname());
+            customDTO.setPrice(custom.getPrice());
             customDTO.setStatus(custom.getStatus().toString());
             customDTO.setCustomProductDTOList(new ArrayList<>());
 
@@ -267,6 +269,7 @@ public class CustomService {
             }
 
             customDTO.setStatus(custom.getStatus().toString());
+            customDTO.setPrice(custom.getPrice());
 
             if (custom.getDepartment() != null) {
                 Department department = custom.getDepartment();

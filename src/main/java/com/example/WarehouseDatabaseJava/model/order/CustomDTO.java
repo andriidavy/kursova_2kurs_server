@@ -10,6 +10,7 @@ public class CustomDTO {
     private int employeeId;
     private String employeeName;
     private String employeeSurname;
+    private double price;
     private String status;
     private String department;
     private List<CustomProductDTO> customProductDTOList;
@@ -68,6 +69,14 @@ public class CustomDTO {
 
     public void setEmployeeSurname(String employeeSurname) {
         this.employeeSurname = employeeSurname;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public List<CustomProductDTO> getCustomProductDTOList() {

@@ -119,10 +119,10 @@ public class ManagerController {
     }
 
     //додати новий продукт TESTED
-    @PostMapping("/manager/product/save")
-    public Product saveProduct(@RequestBody Product product) {
-        return productService.save(product);
-    }
+//    @PostMapping("/manager/product/save")
+//    public Product saveProduct(@RequestBody Product product) {
+//        return productService.save(product);
+//    }
 
     //отримати список усіх звітів, які чекають на відповідь менеджера TESTED
     //+ враховує відділи для замовлень

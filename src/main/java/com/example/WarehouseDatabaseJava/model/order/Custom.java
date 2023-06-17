@@ -16,6 +16,8 @@ public class Custom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    private double price;
+
     // Many-to-One relation with Customer
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -75,6 +77,14 @@ public class Custom {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public List<CustomProduct> getCustomProductList() {

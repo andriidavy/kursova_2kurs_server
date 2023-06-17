@@ -1,12 +1,10 @@
 package com.example.WarehouseDatabaseJava.model.product;
 
 import com.example.WarehouseDatabaseJava.model.order.CustomProduct;
-import com.example.WarehouseDatabaseJava.model.product.image.ProductImage;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProduct;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +18,12 @@ public class Product {
     private double price;
     private String description;
     private int quantity;
+    private String imageUrl;
 
-    // One-to-One relation with ProductImage
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonIgnore
-    ProductImage productImage;
+    // One-to-One relation with ProductImage (SAVING IMAGE TO DATABASE(not used now))
+//    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    ProductImage productImage;
 
     // One-to-Many relation with CartProduct
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
@@ -45,11 +44,11 @@ public class Product {
         this.description = description;
     }
 
-    public Product(String id, long sku, String name, double price, int quantity) {
-        this.id = id;
+    public Product(long sku, String name, double price, String description, int quantity) {
         this.sku = sku;
         this.name = name;
         this.price = price;
+        this.description = description;
         this.quantity = quantity;
     }
 
@@ -117,11 +116,20 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public ProductImage getProductImage() {
-        return productImage;
+//    public ProductImage getProductImage() {
+//        return productImage;
+//    }
+//
+//    public void setProductImage(ProductImage productImage) {
+//        this.productImage = productImage;
+//    }
+
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setProductImage(ProductImage productImage) {
-        this.productImage = productImage;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
