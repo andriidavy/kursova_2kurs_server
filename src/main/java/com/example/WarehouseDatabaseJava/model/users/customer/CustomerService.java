@@ -2,6 +2,7 @@ package com.example.WarehouseDatabaseJava.model.users.customer;
 
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.Cart;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,9 @@ public class CustomerService {
     private CartRepository cartRepository;
 
     //додавання нового покупця та його корзини TESTED
-
     public Customer save(String name, String surname, String email, String password) {
-        Customer existingCustomer = customerRepository.findByEmail(email);
-        if (existingCustomer != null) {
-            throw new IllegalArgumentException("Customer with the same email already exists");
+        if (customerRepository.existsByEmail(email)) {
+            throw new RuntimeException("Customer with email: " + email + " already exists");
         }
 
         Customer customer = new Customer(name, surname, email, password);
@@ -32,11 +31,11 @@ public class CustomerService {
         return customer;
     }
 
-    public void delete(Customer customer) {
-        customerRepository.delete(customer);
-    }
-
-    public void deleteById(String id) {
+    //not used now!!!
+    public void deleteCustomerById(String id) {
+        if (!customerRepository.existsById(id)) {
+            throw new EntityNotFoundException("Customer not found with id: " + id);
+        }
         customerRepository.deleteById(id);
     }
 
@@ -51,14 +50,16 @@ public class CustomerService {
                 return customer;
             }
         }
-        throw new RuntimeException("Invalid email or password");
+        throw new IllegalArgumentException("Invalid email or password");
     }
 
     public CustomerProfileDTO getCustomerProfile(String customerId) {
-        Customer customer = customerRepository.getReferenceById(customerId);
-        if (customer == null) {
-            throw new RuntimeException("Customer not found with id: " + customerId);
+        if (!customerRepository.existsById(customerId)) {
+            throw new EntityNotFoundException("Customer not found with id: " + customerId);
         }
+
+        Customer customer = customerRepository.getReferenceById(customerId);
+
         String name = customer.getName();
         String surname = customer.getSurname();
         String email = customer.getEmail();

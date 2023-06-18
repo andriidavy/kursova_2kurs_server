@@ -2,6 +2,7 @@ package com.example.WarehouseDatabaseJava.model.product.category;
 
 import com.example.WarehouseDatabaseJava.model.product.Product;
 import com.example.WarehouseDatabaseJava.model.product.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +18,20 @@ public class ProductCategoryService {
 
     // метод створення нової категорії продуктів
     public ProductCategory createProductCategory(String categoryName) {
-        ProductCategory existingProductCategory = productCategoryRepository.findByCategoryName(categoryName);
-        if (existingProductCategory != null) {
-            throw new IllegalArgumentException("ProductCategory with the same name already exists");
+        if (productCategoryRepository.existsByCategoryName(categoryName)) {
+            throw new IllegalArgumentException("ProductCategory with the name " + categoryName + " already exists");
         }
+
         ProductCategory productCategory = new ProductCategory(categoryName);
         return productCategoryRepository.save(productCategory);
     }
 
     //видалити категорію по її id
     public void removeProductCategoryById(String categoryId) {
+        if (!productCategoryRepository.existsById(categoryId)) {
+            throw new EntityNotFoundException("Category with id " + categoryId + " not found");
+        }
+
         productCategoryRepository.deleteById(categoryId);
     }
 
@@ -46,11 +51,11 @@ public class ProductCategoryService {
     //метод призначення певному продукту певної категорії
     public void assignProductToCategory(String productId, String categoryId) {
 
-        if (!productRepository.existsById(productId) ) {
-            throw new IllegalArgumentException("Invalid product ID");
+        if (!productRepository.existsById(productId)) {
+            throw new EntityNotFoundException("Product with id " + productId + " not found");
         }
         if (!productCategoryRepository.existsById(categoryId)) {
-            throw new IllegalArgumentException("Invalid category ID");
+            throw new EntityNotFoundException("Category with id " + categoryId + " not found");
         }
 
         // Find the product and category by their IDs

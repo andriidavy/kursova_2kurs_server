@@ -109,7 +109,7 @@ public class ManagerController {
     //видалення робітника по id TESTED
     @DeleteMapping("/manager/employee/delete-employee-by-id")
     public void deleteEmployeeById(@RequestParam String employeeId) {
-        employeeService.deleteId(employeeId);
+        employeeService.deleteEmployeeById(employeeId);
     }
 
     //отримати список всіх продуктів TESTED

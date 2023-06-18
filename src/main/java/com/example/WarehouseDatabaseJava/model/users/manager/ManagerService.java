@@ -1,9 +1,9 @@
 package com.example.WarehouseDatabaseJava.model.users.manager;
 
-import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.Department;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentDTO;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +20,8 @@ public class ManagerService {
 
     //збереження менеджера
     public Manager save(String name, String surname, String email, String password) {
-        Manager existingManager = managerRepository.findByEmail(email);
-        if (existingManager != null) {
-            throw new IllegalArgumentException("Manager with the same email already exists");
+        if (managerRepository.existsByEmail(email)) {
+            throw new RuntimeException("Manager with email: " + email + " already exists");
         }
 
         Manager manager = new Manager(name, surname, email, password);
@@ -43,7 +42,7 @@ public class ManagerService {
                 return manager;
             }
         }
-        throw new RuntimeException("Invalid email or password");
+        throw new IllegalArgumentException("Invalid email or password");
     }
 
 
@@ -57,16 +56,20 @@ public class ManagerService {
 
     //видалення певного менеджера по його id
     public void deleteManagerById(String managerId) {
+        if (!managerRepository.existsById(managerId)) {
+            throw new EntityNotFoundException("Manager not found with id: " + managerId);
+        }
         managerRepository.deleteById(managerId);
     }
 
     //отримати всіх список менеджерів (DTO!)
 
     public ManagerProfileDTO getManagerProfile(String managerId) {
-        Manager manager = managerRepository.getReferenceById(managerId);
-        if (manager == null) {
-            throw new RuntimeException("Manager not found with id: " + managerId);
+        if (!managerRepository.existsById(managerId)) {
+            throw new EntityNotFoundException("Manager not found with id: " + managerId);
         }
+
+        Manager manager = managerRepository.getReferenceById(managerId);
 
         String name = manager.getName();
         String surname = manager.getSurname();
@@ -88,75 +91,90 @@ public class ManagerService {
 
     //метод призначення певному менеджеру певний етап
     public void assignDepartmentToManager(String managerId, String departmentId) {
+        if (!managerRepository.existsById(managerId)) {
+            throw new EntityNotFoundException("Manager not found with id: " + managerId);
+        }
+        if (!departmentRepository.existsById(departmentId)) {
+            throw new EntityNotFoundException("Department not found with id: " + departmentId);
+        }
+
         Manager manager = managerRepository.getReferenceById(managerId);
         Department department = departmentRepository.getReferenceById(departmentId);
 
-        if (manager != null && department != null) {
-            List<Department> managerDepartments = manager.getDepartmentList();
-            List<Manager> departmentManagers = department.getManagerList();
+        List<Department> managerDepartments = manager.getDepartmentList();
+        List<Manager> departmentManagers = department.getManagerList();
 
-            // Добавляем этап в список этапов менеджера, если его там нет
-            if (!managerDepartments.contains(department)) {
-                managerDepartments.add(department);
-            }
-
-            // Добавляем менеджера в список менеджеров этапа, если его там нет
-            if (!departmentManagers.contains(manager)) {
-                departmentManagers.add(manager);
-            }
-
-            // Сохраняем изменения в базе данных
-            managerRepository.save(manager);
-            departmentRepository.save(department);
+        // Добавляем этап в список этапов менеджера, если его там нет
+        if (!managerDepartments.contains(department)) {
+            managerDepartments.add(department);
         }
+
+        // Добавляем менеджера в список менеджеров этапа, если его там нет
+        if (!departmentManagers.contains(manager)) {
+            departmentManagers.add(manager);
+        }
+
+        // Сохраняем изменения в базе данных
+        managerRepository.save(manager);
+        departmentRepository.save(department);
     }
 
     //метод видалення для певного менеджера зв'язку з певним етапом
     public void removeDepartmentFromManager(String managerId, String departmentId) {
+        if (!managerRepository.existsById(managerId)) {
+            throw new EntityNotFoundException("Manager not found with id: " + managerId);
+        }
+        if (!departmentRepository.existsById(departmentId)) {
+            throw new EntityNotFoundException("Department not found with id: " + departmentId);
+        }
+
         Manager manager = managerRepository.getReferenceById(managerId);
         Department department = departmentRepository.getReferenceById(departmentId);
 
-        if (manager != null && department != null) {
-            List<Department> managerDepartments = manager.getDepartmentList();
-            List<Manager> departmentManagers = department.getManagerList();
+        List<Department> managerDepartments = manager.getDepartmentList();
+        List<Manager> departmentManagers = department.getManagerList();
 
-            // Удаляем этап из списка этапов менеджера
-            if (managerDepartments.contains(department)) {
-                managerDepartments.remove(department);
-            }
-
-            // Удаляем менеджера из списка менеджеров этапа
-            if (departmentManagers.contains(manager)) {
-                departmentManagers.remove(manager);
-            }
-
-            // Сохраняем изменения в базе данных
-            managerRepository.save(manager);
-            departmentRepository.save(department);
+        // Удаляем этап из списка этапов менеджера
+        if (managerDepartments.contains(department)) {
+            managerDepartments.remove(department);
         }
+
+        // Удаляем менеджера из списка менеджеров этапа
+        if (departmentManagers.contains(manager)) {
+            departmentManagers.remove(manager);
+        }
+
+        // Сохраняем изменения в базе данных
+        managerRepository.save(manager);
+        departmentRepository.save(department);
     }
 
     //метод отримання всіх етапів, на які призначений певний менеджер
     public List<DepartmentDTO> getAllDepartmentsForManager(String managerId) {
+        if (!managerRepository.existsById(managerId)) {
+            throw new EntityNotFoundException("Manager not found with id: " + managerId);
+        }
+
         Manager manager = managerRepository.getReferenceById(managerId);
         List<DepartmentDTO> departmentDTOList = new ArrayList<>();
 
-        if (manager != null) {
-            List<Department> departmentList = manager.getDepartmentList();
+        List<Department> departmentList = manager.getDepartmentList();
 
-            for (Department department : departmentList) {
-                DepartmentDTO departmentDTO = new DepartmentDTO();
-                departmentDTO.setId(department.getId());
-                departmentDTO.setDepartmentName(department.getDepartmentName());
-                departmentDTOList.add(departmentDTO);
-            }
+        for (Department department : departmentList) {
+            DepartmentDTO departmentDTO = new DepartmentDTO();
+            departmentDTO.setId(department.getId());
+            departmentDTO.setDepartmentName(department.getDepartmentName());
+            departmentDTOList.add(departmentDTO);
         }
-
         return departmentDTOList;
     }
 
     //метод отримання всіх етапів, на які певний менеджер НЕ призначений
     public List<DepartmentDTO> getDepartmentsWithoutManager(String managerId) {
+        if (!managerRepository.existsById(managerId)) {
+            throw new EntityNotFoundException("Manager not found with id: " + managerId);
+        }
+
         Manager manager = managerRepository.getReferenceById(managerId);
         List<Department> departments = departmentRepository.findAll();
         List<DepartmentDTO> departmentDTOs = new ArrayList<>();
@@ -169,7 +187,6 @@ public class ManagerService {
                 departmentDTOs.add(departmentDTO);
             }
         }
-
         return departmentDTOs;
     }
 }

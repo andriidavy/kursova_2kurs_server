@@ -40,8 +40,17 @@ public class CustomService {
     //ОБНОВА!!!
     @Transactional
     public String createCustom(String customerId) {
+        if (!customerRepository.existsById(customerId)) {
+            throw new EntityNotFoundException("Customer not found with id:" + customerId);
+        }
+
         Customer customer = customerRepository.getReferenceById(customerId);
-        if (customer != null && customer.getCart() != null && !customer.getCart().getCartProductList().isEmpty()) {
+
+        if (customer.getCart() == null){
+            throw new NullPointerException("Cart for customer with id " + customerId + " is not be created");
+        }
+
+        if (!customer.getCart().getCartProductList().isEmpty()) {
             // Проверяем наличие достаточного количества продукта в базе данных
             for (CartProduct cartProduct : customer.getCart().getCartProductList()) {
                 Product product = cartProduct.getProduct();
@@ -75,8 +84,9 @@ public class CustomService {
             customer.getCart().getCartProductList().clear();
             customer.getCart().setPrice(0);
             return custom.getId(); //повертаємо значення id новоствореного замовлення
+        } else {
+            return "-1";
         }
-        return "-1";  // Возвращаем -1 в случае, если заказ не был создан
     }
 
     // Отримання списку замовлень для конкретного покупця(по його id) TESTED
@@ -84,6 +94,10 @@ public class CustomService {
 
     //ОБНОВА!!!
     public List<CustomDTO> getCustomsForCustomer(String customerId) {
+        if (!customerRepository.existsById(customerId)) {
+            throw new EntityNotFoundException("Customer not found with id:" + customerId);
+        }
+
         Customer customer = customerRepository.getReferenceById(customerId);
         List<Custom> customs = customer.getCustomList();
         List<CustomDTO> customDTOs = new ArrayList<>();
@@ -126,6 +140,10 @@ public class CustomService {
 
     //ОБНОВА!!!
     public List<CustomDTO> getProcessingCustomsForEmployee(String employeeId) {
+        if (!employeeRepository.existsById(employeeId)) {
+            throw new EntityNotFoundException("Employee not found with id:" + employeeId);
+        }
+
         Employee employee = employeeRepository.getReferenceById(employeeId);
         List<CustomDTO> customDTOs = new ArrayList<>();
 
@@ -167,6 +185,10 @@ public class CustomService {
 
     //ОБНОВА!!!
     public List<CustomDTO> getProcessedCustomsForEmployee(String employeeId) {
+        if (!employeeRepository.existsById(employeeId)) {
+            throw new EntityNotFoundException("Employee not found with id:" + employeeId);
+        }
+
         Employee employee = employeeRepository.getReferenceById(employeeId);
         List<CustomDTO> customDTOs = new ArrayList<>();
 
@@ -209,6 +231,10 @@ public class CustomService {
     //+ враховує відділ замовлення і відділи менеджера TESTED
     //ОБНОВА!!!
     public List<CustomDTO> getAllCreatedCustoms(String managerId) {
+        if (!managerRepository.existsById(managerId)) {
+            throw new EntityNotFoundException("Manager not found with id:" + managerId);
+        }
+
         Manager manager = managerRepository.getReferenceById(managerId);
         List<Department> managerDepartments = manager.getDepartmentList();
 
@@ -299,23 +325,30 @@ public class CustomService {
     // Призначення замовлення на виконання конкретному робітнику (Для Manager`a) TESTED
     //ОБНОВА!!!
     public void assignEmployeeToCustom(String customId, String employeeId) {
+        if (!customRepository.existsById(customId)) {
+            throw new EntityNotFoundException("Custom not found with id:" + customId);
+        }
+        if (!employeeRepository.existsById(employeeId)) {
+            throw new EntityNotFoundException("Employee not found with id:" + employeeId);
+        }
+
         Custom custom = customRepository.getReferenceById(customId);
         Employee employee = employeeRepository.getReferenceById(employeeId);
 
-        if (custom != null && employee != null) {
             custom.setEmployee(employee);
             custom.setStatus(Custom.Status.IN_PROCESSING);
             customRepository.save(custom);
-        }
     }
 
     // Встановлення для замовлення статусу PROCESSED(виконаний) TESTED
     @Transactional
     public void setCustomProcessed(String customId) {
-        Custom custom = customRepository.getReferenceById(customId);
-        if (custom == null) {
-            throw new EntityNotFoundException("Custom with id " + customId + " not found");
+        if (!customRepository.existsById(customId)) {
+            throw new EntityNotFoundException("Custom not found with id:" + customId);
         }
+
+        Custom custom = customRepository.getReferenceById(customId);
+
         if (custom.getStatus() != Custom.Status.WAITING_RESPONSE) {
             throw new IllegalStateException("Custom with id " + customId + " cannot be set to WAITING_RESPONSE status because it is not in IN_PROCESSING status");
         }
@@ -325,10 +358,12 @@ public class CustomService {
 
     @Transactional
     public void setCustomInProcessing(String customId) {
-        Custom custom = customRepository.getReferenceById(customId);
-        if (custom == null) {
-            throw new EntityNotFoundException("Custom with id " + customId + " not found");
+        if (!customRepository.existsById(customId)) {
+            throw new EntityNotFoundException("Custom not found with id:" + customId);
         }
+
+        Custom custom = customRepository.getReferenceById(customId);
+
         if (custom.getStatus() != Custom.Status.WAITING_RESPONSE) {
             throw new IllegalStateException("Custom with id " + customId + " cannot be set to IN_PROCESSING status because it is not in WAITING_RESPONSE status");
         }
@@ -338,10 +373,12 @@ public class CustomService {
 
     // Встановлення для готового замовлення статусу SENT(відправлений) TESTED
     public void setCustomSent(String customId) {
-        Custom custom = customRepository.getReferenceById(customId);
-        if (custom == null) {
-            throw new EntityNotFoundException("Custom with id " + customId + " not found");
+        if (!customRepository.existsById(customId)) {
+            throw new EntityNotFoundException("Custom not found with id:" + customId);
         }
+
+        Custom custom = customRepository.getReferenceById(customId);
+
         if (custom.getStatus() != Custom.Status.PROCESSED) {
             throw new IllegalStateException("Custom with id " + customId + " cannot be set to SENT status because it is not in PROCESSED status");
         }

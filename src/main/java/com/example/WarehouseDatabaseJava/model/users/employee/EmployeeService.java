@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.model.users.employee;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +14,8 @@ public class EmployeeService {
 
     //TESTED
     public Employee save(String name, String surname, String email, String password) {
-        Employee existingEmployee = employeeRepository.findByEmail(email);
-        if (existingEmployee != null) {
-            throw new IllegalArgumentException("Employee with the same email already exists");
+        if (employeeRepository.existsByEmail(email)) {
+            throw new RuntimeException("Employee with email: " + email + " already exists");
         }
 
         Employee employee = new Employee(name, surname, email, password);
@@ -24,7 +24,10 @@ public class EmployeeService {
         return employee;
     }
 
-    public void deleteId(String employeeId) {
+    public void deleteEmployeeById(String employeeId) {
+        if (!employeeRepository.existsById(employeeId)) {
+            throw new EntityNotFoundException("Employee not found with id: " + employeeId);
+        }
         employeeRepository.deleteById(employeeId);
     }
 
@@ -39,7 +42,7 @@ public class EmployeeService {
                 return employee;
             }
         }
-        throw new RuntimeException("Invalid email or password");
+        throw new IllegalArgumentException("Invalid email or password");
     }
 
     public List<EmployeeProfileDTO> getAllEmployeesProfile() {
@@ -60,10 +63,12 @@ public class EmployeeService {
     }
 
     public EmployeeProfileDTO getEmployeeProfile(String employeeId) {
-        Employee employee = employeeRepository.getReferenceById(employeeId);
-        if (employee == null) {
-            throw new RuntimeException("Manager not found with id: " + employeeId);
+        if (!employeeRepository.existsById(employeeId)) {
+            throw new EntityNotFoundException("Employee not found with id: " + employeeId);
         }
+
+        Employee employee = employeeRepository.getReferenceById(employeeId);
+
         String name = employee.getName();
         String surname = employee.getSurname();
         String email = employee.getEmail();

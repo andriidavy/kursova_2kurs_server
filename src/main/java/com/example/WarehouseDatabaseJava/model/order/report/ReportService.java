@@ -33,46 +33,59 @@ public class ReportService {
     //ОБНОВА!!!
     @Transactional
     public void createReport(String employeeId, String customId, String reportText) {
+        if (!employeeRepository.existsById(employeeId)) {
+            throw new EntityNotFoundException("Employee not found with id:" + employeeId);
+        }
+        if (!customRepository.existsById(customId)) {
+            throw new EntityNotFoundException("Custom not found with id:" + customId);
+        }
+        if (reportText == null) {
+            throw new NullPointerException("reportText is null");
+        }
+
         Employee employee = employeeRepository.getReferenceById(employeeId);
         Custom custom = customRepository.getReferenceById(customId);
 
-        if (employee != null && custom != null) {
-            // Check if the custom belongs to the employee
-            if (!employee.getCustomList().contains(custom)) {
-                throw new IllegalArgumentException("Custom does not belong to the employee");
-            }
-            if (custom.getStatus() != Custom.Status.IN_PROCESSING) {
-                throw new IllegalArgumentException("Report can only be created for Custom with Status IN_PROCESSING");
-            }
-
-            Report existingReport = custom.getReport();
-            if (existingReport != null) {
-                if (existingReport.getStatus() == Report.Status.REJECTED) {
-                    existingReport.setReportText(reportText);
-                    existingReport.setStatus(Report.Status.WAITING);
-                    custom.setStatus(Custom.Status.WAITING_RESPONSE);
-                    reportRepository.save(existingReport);
-                    customRepository.save(custom);
-                } else {
-                    throw new IllegalArgumentException("Report for this Custom already exists and cannot be updated or created");
-                }
-            } else {
-                Report report = new Report();
-                report.setReportText(reportText);
-                report.setStatus(Report.Status.WAITING);
-                custom.setStatus(Custom.Status.WAITING_RESPONSE);
-                report.setCustom(custom);
-
-                reportRepository.save(report);
-                customRepository.save(custom);
-            }
+        // Check if the custom belongs to the employee
+        if (!employee.getCustomList().contains(custom)) {
+            throw new RuntimeException("Custom does not belong to the employee");
         }
+        if (custom.getStatus() != Custom.Status.IN_PROCESSING) {
+            throw new IllegalStateException("Report can only be created for Custom with Status IN_PROCESSING");
+        }
+
+        Report existingReport = custom.getReport();
+        if (existingReport != null) {
+            if (existingReport.getStatus() == Report.Status.REJECTED) {
+                existingReport.setReportText(reportText);
+                existingReport.setStatus(Report.Status.WAITING);
+                custom.setStatus(Custom.Status.WAITING_RESPONSE);
+                reportRepository.save(existingReport);
+                customRepository.save(custom);
+            } else {
+                throw new IllegalStateException("Report for Custom: " + customId + " already exists and cannot be updated or created");
+            }
+        } else {
+            Report report = new Report();
+            report.setReportText(reportText);
+            report.setStatus(Report.Status.WAITING);
+            custom.setStatus(Custom.Status.WAITING_RESPONSE);
+            report.setCustom(custom);
+
+            reportRepository.save(report);
+            customRepository.save(custom);
+        }
+
     }
 
     // метод для отримання всіх звітів, у яких статус WAITING (очікують відповіді менеджера) TESTED
     //ОБНОВА!!!
 
     public List<ReportDTO> getAllWaitingReportsForManager(String managerId) {
+        if (!managerRepository.existsById(managerId)) {
+            throw new EntityNotFoundException("Manager not found with id:" + managerId);
+        }
+
         Manager manager = managerRepository.getReferenceById(managerId);
         List<Department> managerDepartments = manager.getDepartmentList();
 
@@ -93,7 +106,6 @@ public class ReportService {
                 reportsDTO.add(reportDTO);
             }
         }
-
         return reportsDTO;
     }
 
@@ -101,6 +113,10 @@ public class ReportService {
     //ОБНОВА!!!
 
     public List<ReportDTO> getAllWaitingReportsForEmployee(String employeeId) {
+        if (!employeeRepository.existsById(employeeId)) {
+            throw new EntityNotFoundException("Employee not found with id:" + employeeId);
+        }
+
         Employee employee = employeeRepository.getReferenceById(employeeId);
 
         List<ReportDTO> reportsDTO = new ArrayList<>();
@@ -124,6 +140,10 @@ public class ReportService {
     //ОБНОВА!!!
 
     public List<ReportDTO> getAllAcceptedReportsForEmployee(String employeeId) {
+        if (!employeeRepository.existsById(employeeId)) {
+            throw new EntityNotFoundException("Employee not found with id:" + employeeId);
+        }
+
         Employee employee = employeeRepository.getReferenceById(employeeId);
 
         List<ReportDTO> reportsDTO = new ArrayList<>();
@@ -147,6 +167,10 @@ public class ReportService {
     //ОБНОВА!!!
 
     public List<ReportDTO> getAllRejectedReportsForEmployee(String employeeId) {
+        if (!employeeRepository.existsById(employeeId)) {
+            throw new EntityNotFoundException("Employee not found with id:" + employeeId);
+        }
+
         Employee employee = employeeRepository.getReferenceById(employeeId);
 
         List<ReportDTO> reportsDTO = new ArrayList<>();
@@ -169,10 +193,12 @@ public class ReportService {
     // метод для встановлення конкретному звіту статусу ACCEPTED TESTED
     @Transactional
     public void setReportAccepted(String reportId) {
-        Report report = reportRepository.getReferenceById(reportId);
-        if (report == null) {
-            throw new EntityNotFoundException("Report with id " + reportId + " not found");
+        if (!reportRepository.existsById(reportId)) {
+            throw new EntityNotFoundException("Report not found with id:" + reportId);
         }
+
+        Report report = reportRepository.getReferenceById(reportId);
+
         if (report.getStatus() != Report.Status.WAITING) {
             throw new IllegalStateException("Report with id " + reportId + " cannot be accepted because it is not in WAITING status");
         }
@@ -184,12 +210,14 @@ public class ReportService {
     // метод для встановлення конкретному звіту статусу REJECTED TESTED
     @Transactional
     public void setReportRejected(String reportId) {
-        Report report = reportRepository.getReferenceById(reportId);
-        if (report != null) {
-            report.setStatus(Report.Status.REJECTED);
-            reportRepository.save(report);
-            customService.setCustomInProcessing(report.getCustom().getId());
+        if (!reportRepository.existsById(reportId)) {
+            throw new EntityNotFoundException("Report not found with id:" + reportId);
         }
-    }
 
+        Report report = reportRepository.getReferenceById(reportId);
+
+        report.setStatus(Report.Status.REJECTED);
+        reportRepository.save(report);
+        customService.setCustomInProcessing(report.getCustom().getId());
+    }
 }

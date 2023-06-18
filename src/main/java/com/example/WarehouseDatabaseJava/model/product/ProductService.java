@@ -4,7 +4,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.*;
 import java.util.List;
 
 @Service
@@ -13,42 +12,61 @@ public class ProductService {
     private ProductRepository productRepository;
 
     //метод перевірки наявності товару з даним sku
-    public boolean checkSku(long sku) {
-        Product existingProduct = productRepository.getReferenceBySku(sku);
-        if (existingProduct != null) {
-            return true;
-        } else {
-            return false;
-        }
+    public boolean checkSku(long barcode) {
+        return productRepository.existsByBarcode(barcode);
     }
 
     //метод додавання кількості уже наявного товару
-    public Product addProductQuantity(long sku, int quantity) {
-        Product existingProduct = productRepository.getReferenceBySku(sku);
-        if (existingProduct ==null) {
-            throw new EntityNotFoundException("Product with sku " + sku + " not found");
+    public Product addProductQuantity(long barcode, int quantity) {
+        if (!productRepository.existsByBarcode(barcode)) {
+            throw new EntityNotFoundException("Product with barcode " + barcode + " not found");
         }
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Invalid quantity");
+        }
+
+        Product existingProduct = productRepository.getReferenceByBarcode(barcode);
+
         existingProduct.setQuantity(existingProduct.getQuantity() + quantity);
         return productRepository.save(existingProduct);
     }
 
     //метод збереження нового товару
-    public Product saveProduct(long sku, String name, double price, String description, int quantity){
-        Product existingProduct = productRepository.getReferenceBySku(sku);
-        if (existingProduct != null){
-            throw new IllegalArgumentException("Product with the same sku already exists");
+    public Product saveProduct(long barcode, String name, double price, String description, int quantity) {
+        if (barcode < 0) {
+            throw new IllegalArgumentException("Invalid barcode");
         }
-        Product product = new Product(sku, name, price, description, quantity);
-            return productRepository.save(product);
+        if (price < 0) {
+            throw new IllegalArgumentException("Invalid price");
+        }
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Invalid quantity");
+        }
+        if (name == null) {
+            throw new NullPointerException("name is null");
+        }
+        if (description == null) {
+            description = "Non description";
+        }
+        if (productRepository.existsByBarcode(barcode)) {
+            throw new RuntimeException("Product with barcode: " + barcode + " already exists");
+        }
+
+        Product product = new Product(barcode, name, price, description, quantity);
+        return productRepository.save(product);
     }
 
     //метод для додавання та оновлення url зображення для продукту
     public void addImageUrlToProduct(String productId, String url) {
+        if (!productRepository.existsById(productId)) {
+            throw new EntityNotFoundException("Product with id: " + productId + " not found");
+        }
+        if (url == null) {
+            throw new NullPointerException("url is null");
+        }
+
         // Получаем продукт по его идентификатору
         Product product = productRepository.getReferenceById(productId);
-        if (product == null) {
-            throw new IllegalArgumentException("Product not found with ID: " + productId);
-        }
 
         // Устанавливаем новое url изображения
         product.setImageUrl(url);
@@ -57,12 +75,14 @@ public class ProductService {
     }
 
     // метод для видалення url зображення для продукту
-        public void deleteImageForProduct(String productId) {
+    public void deleteImageForProduct(String productId) {
+        if (!productRepository.existsById(productId)) {
+            throw new EntityNotFoundException("Product with id: " + productId + " not found");
+        }
+
         // Получаем продукт по его идентификатору
         Product product = productRepository.getReferenceById(productId);
-        if (product == null) {
-            throw new EntityNotFoundException("Product with id " + productId + " not found");
-        }
+
         product.setImageUrl(null);
         productRepository.save(product);
     }

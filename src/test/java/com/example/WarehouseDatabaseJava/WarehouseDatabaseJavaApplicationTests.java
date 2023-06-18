@@ -30,17 +30,8 @@ class WarehouseDatabaseJavaApplicationTests {
         System.out.println(customerList);
     }
 
-//    @Test
-    void deleteUser(){
-        List<Customer> customerList = customerService.getAllCustomers();
-        for(Customer customer : customerList){
-            customerService.delete(customer);
-        }
-    }
 
 //    @Test
-    void deleteById(){
-        customerService.deleteById("1");
-    }
+
 
 }

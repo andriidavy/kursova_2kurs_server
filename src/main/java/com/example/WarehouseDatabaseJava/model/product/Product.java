@@ -14,7 +14,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private long sku;
+    private long barcode;
     private String name;
     private double price;
     private String description;
@@ -48,8 +48,8 @@ public class Product {
         this.description = description;
     }
 
-    public Product(long sku, String name, double price, String description, int quantity) {
-        this.sku = sku;
+    public Product(long barcode, String name, double price, String description, int quantity) {
+        this.barcode = barcode;
         this.name = name;
         this.price = price;
         this.description = description;
@@ -64,12 +64,12 @@ public class Product {
         this.id = id;
     }
 
-    public long getSku() {
-        return sku;
+    public long getBarcode() {
+        return barcode;
     }
 
-    public void setSku(long sku) {
-        this.sku = sku;
+    public void setBarcode(long barcode) {
+        this.barcode = barcode;
     }
 
     public String getName() {
