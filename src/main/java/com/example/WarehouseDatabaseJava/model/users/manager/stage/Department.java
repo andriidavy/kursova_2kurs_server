@@ -10,8 +10,8 @@ import java.util.List;
 @Entity
 public class Department {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     private String departmentName;
 
@@ -33,11 +33,11 @@ public class Department {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "department")
     private List<Custom> customList = new ArrayList<>();
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

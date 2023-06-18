@@ -45,7 +45,7 @@ public class CustomerController {
 
     //отримати покупця по його id
     @GetMapping("/customer/get-customer-by-id")
-    public CustomerProfileDTO getCustomerProfile(@RequestParam int customerId) {
+    public CustomerProfileDTO getCustomerProfile(@RequestParam String customerId) {
         return customerService.getCustomerProfile(customerId);
     }
 
@@ -57,37 +57,37 @@ public class CustomerController {
 
     // додати продукт до корзини конкретним покупцем TESTED
     @PostMapping("/customer/cart/add-product-to-cart")
-    public void addProductToCart(@RequestParam int customerId, @RequestParam String productId, @RequestParam int quantity) {
+    public void addProductToCart(@RequestParam String customerId, @RequestParam String productId, @RequestParam int quantity) {
         cartService.addProductToCart(customerId, productId, quantity);
     }
 
     //видалити продукт з корзини для конкретного покупця TESTED
     @DeleteMapping("/customer/cart/remove-product-by-id")
-    public void removeProductFromCart(@RequestParam int customerId, @RequestParam String productId) {
+    public void removeProductFromCart(@RequestParam String customerId, @RequestParam String productId) {
         cartService.removeProductFromCart(customerId, productId);
     }
 
     //очистити корзину для конкретного покупця
     @PostMapping("/customer/cart/clear")
-    public void clearCart(@RequestParam int customerId) {
+    public void clearCart(@RequestParam String customerId) {
         cartService.clearCart(customerId);
     }
 
     //створення замовлення конкретним покупцем TESTED
     @PostMapping("/customer/create-custom")
-    public int createCustom(@RequestParam int customerId) {
+    public String createCustom(@RequestParam String customerId) {
         return customService.createCustom(customerId);
     }
 
     //отримати список всіх замовлень для конкретного покупця TESTED
     @GetMapping("/customer/get-customs")
-    public List<CustomDTO> getCustomsForCustomer(@RequestParam int customerId) {
+    public List<CustomDTO> getCustomsForCustomer(@RequestParam String customerId) {
         return customService.getCustomsForCustomer(customerId);
     }
 
     //отримати список товарів в корзині для конкретного покупця TESTED
     @GetMapping("/customer/get-cart")
-    public List<CartProductDTO> getCartProductsByCustomerId(@RequestParam int customerId) {
+    public List<CartProductDTO> getCartProductsByCustomerId(@RequestParam String customerId) {
         return cartService.getCartProductsByCustomerId(customerId);
     }
 
@@ -99,7 +99,7 @@ public class CustomerController {
 
     //призначити конкретний відділ для конкретного замовлення TESTED
     @PostMapping("/customer/custom/assign-department")
-    public void assignDepartmentToCustom(@RequestParam int customId, @RequestParam int departmentId) {
+    public void assignDepartmentToCustom(@RequestParam String customId, @RequestParam String departmentId) {
         departmentService.assignDepartmentToCustom(customId, departmentId);
     }
 

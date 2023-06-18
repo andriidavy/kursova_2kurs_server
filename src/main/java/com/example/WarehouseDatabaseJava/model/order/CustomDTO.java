@@ -3,11 +3,11 @@ package com.example.WarehouseDatabaseJava.model.order;
 import java.util.List;
 
 public class CustomDTO {
-    private int customId;
-    private int customerId;
+    private String customId;
+    private String customerId;
     private String customerName;
     private String customerSurname;
-    private int employeeId;
+    private String employeeId;
     private String employeeName;
     private String employeeSurname;
     private double price;
@@ -15,19 +15,19 @@ public class CustomDTO {
     private String department;
     private List<CustomProductDTO> customProductDTOList;
 
-    public int getCustomId() {
+    public String getCustomId() {
         return customId;
     }
 
-    public void setCustomId(int customId) {
+    public void setCustomId(String customId) {
         this.customId = customId;
     }
 
-    public int getCustomerId() {
+    public String getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
 
@@ -47,11 +47,11 @@ public class CustomDTO {
         this.customerSurname = customerSurname;
     }
 
-    public int getEmployeeId() {
+    public String getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(int employeeId) {
+    public void setEmployeeId(String employeeId) {
         this.employeeId = employeeId;
     }
 

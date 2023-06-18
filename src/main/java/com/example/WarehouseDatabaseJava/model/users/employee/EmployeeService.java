@@ -24,7 +24,7 @@ public class EmployeeService {
         return employee;
     }
 
-    public void deleteId(int employeeId) {
+    public void deleteId(String employeeId) {
         employeeRepository.deleteById(employeeId);
     }
 
@@ -47,7 +47,7 @@ public class EmployeeService {
         List<EmployeeProfileDTO> employeeProfiles = new ArrayList<>();
 
         for (Employee employee : employees) {
-            int id = employee.getId();
+            String id = employee.getId();
             String name = employee.getName();
             String surname = employee.getSurname();
             String email = employee.getEmail();
@@ -59,7 +59,7 @@ public class EmployeeService {
         return employeeProfiles;
     }
 
-    public EmployeeProfileDTO getEmployeeProfile(int employeeId) {
+    public EmployeeProfileDTO getEmployeeProfile(String employeeId) {
         Employee employee = employeeRepository.getReferenceById(employeeId);
         if (employee == null) {
             throw new RuntimeException("Manager not found with id: " + employeeId);

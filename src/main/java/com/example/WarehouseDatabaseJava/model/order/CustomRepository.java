@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CustomRepository extends JpaRepository<Custom, Integer> {
+public interface CustomRepository extends JpaRepository<Custom, String> {
     List<Custom> findAllByStatus(Custom.Status status);
 }

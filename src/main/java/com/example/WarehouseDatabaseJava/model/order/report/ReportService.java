@@ -32,7 +32,7 @@ public class ReportService {
     // метод створення звіту робітником для конкретного замовлення TESTED
     //ОБНОВА!!!
     @Transactional
-    public void createReport(int employeeId, int customId, String reportText) {
+    public void createReport(String employeeId, String customId, String reportText) {
         Employee employee = employeeRepository.getReferenceById(employeeId);
         Custom custom = customRepository.getReferenceById(customId);
 
@@ -72,7 +72,7 @@ public class ReportService {
     // метод для отримання всіх звітів, у яких статус WAITING (очікують відповіді менеджера) TESTED
     //ОБНОВА!!!
 
-    public List<ReportDTO> getAllWaitingReportsForManager(int managerId) {
+    public List<ReportDTO> getAllWaitingReportsForManager(String managerId) {
         Manager manager = managerRepository.getReferenceById(managerId);
         List<Department> managerDepartments = manager.getDepartmentList();
 
@@ -100,7 +100,7 @@ public class ReportService {
     //метод отримання всіх звітів зі статусом WAITING для конкретного робітника TESTED
     //ОБНОВА!!!
 
-    public List<ReportDTO> getAllWaitingReportsForEmployee(int employeeId) {
+    public List<ReportDTO> getAllWaitingReportsForEmployee(String employeeId) {
         Employee employee = employeeRepository.getReferenceById(employeeId);
 
         List<ReportDTO> reportsDTO = new ArrayList<>();
@@ -123,7 +123,7 @@ public class ReportService {
     //метод отримання всіх звітів зі статусом ACCEPTED для конкретного робітника TESTED
     //ОБНОВА!!!
 
-    public List<ReportDTO> getAllAcceptedReportsForEmployee(int employeeId) {
+    public List<ReportDTO> getAllAcceptedReportsForEmployee(String employeeId) {
         Employee employee = employeeRepository.getReferenceById(employeeId);
 
         List<ReportDTO> reportsDTO = new ArrayList<>();
@@ -146,7 +146,7 @@ public class ReportService {
     //метод отримання всіх звітів зі статусом REJECTED для конкретного робітника TESTED
     //ОБНОВА!!!
 
-    public List<ReportDTO> getAllRejectedReportsForEmployee(int employeeId) {
+    public List<ReportDTO> getAllRejectedReportsForEmployee(String employeeId) {
         Employee employee = employeeRepository.getReferenceById(employeeId);
 
         List<ReportDTO> reportsDTO = new ArrayList<>();
@@ -168,7 +168,7 @@ public class ReportService {
 
     // метод для встановлення конкретному звіту статусу ACCEPTED TESTED
     @Transactional
-    public void setReportAccepted(int reportId) {
+    public void setReportAccepted(String reportId) {
         Report report = reportRepository.getReferenceById(reportId);
         if (report == null) {
             throw new EntityNotFoundException("Report with id " + reportId + " not found");
@@ -183,7 +183,7 @@ public class ReportService {
 
     // метод для встановлення конкретному звіту статусу REJECTED TESTED
     @Transactional
-    public void setReportRejected(int reportId) {
+    public void setReportRejected(String reportId) {
         Report report = reportRepository.getReferenceById(reportId);
         if (report != null) {
             report.setStatus(Report.Status.REJECTED);

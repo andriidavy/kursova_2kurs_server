@@ -40,7 +40,7 @@ class WarehouseDatabaseJavaApplicationTests {
 
 //    @Test
     void deleteById(){
-        customerService.deleteById(1);
+        customerService.deleteById("1");
     }
 
 }

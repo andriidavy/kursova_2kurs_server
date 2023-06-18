@@ -1,7 +1,7 @@
 package com.example.WarehouseDatabaseJava.model.users.manager;
 
 public class ManagerProfileDTO {
-    private int id;
+    private String id;
     private String name;
     private String surname;
     private String email;
@@ -9,18 +9,10 @@ public class ManagerProfileDTO {
     private String departmentDTOstring;
 
     public ManagerProfileDTO(String name, String surname, String email, String departmentDTOstring) {
-        this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.departmentDTOstring = departmentDTOstring;
-    }
-
-    public ManagerProfileDTO(int id, String name, String surname, String email) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
     }
 
     public ManagerProfileDTO(String name, String surname, String email) {
@@ -29,11 +21,11 @@ public class ManagerProfileDTO {
         this.email = email;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

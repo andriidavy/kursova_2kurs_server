@@ -36,7 +36,7 @@ public class CustomerService {
         customerRepository.delete(customer);
     }
 
-    public void deleteById(Integer id) {
+    public void deleteById(String id) {
         customerRepository.deleteById(id);
     }
 
@@ -54,7 +54,7 @@ public class CustomerService {
         throw new RuntimeException("Invalid email or password");
     }
 
-    public CustomerProfileDTO getCustomerProfile(int customerId) {
+    public CustomerProfileDTO getCustomerProfile(String customerId) {
         Customer customer = customerRepository.getReferenceById(customerId);
         if (customer == null) {
             throw new RuntimeException("Customer not found with id: " + customerId);

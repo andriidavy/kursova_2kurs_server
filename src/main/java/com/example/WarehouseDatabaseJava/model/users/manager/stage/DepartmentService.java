@@ -29,7 +29,7 @@ public class DepartmentService {
     }
 
     //видалити відділ по його id
-    public void removeDepartmentById(int departmentId){
+    public void removeDepartmentById(String departmentId){
         departmentRepository.deleteById(departmentId);
     }
 
@@ -49,7 +49,7 @@ public class DepartmentService {
     }
 
     //метод отримання всіх менеджерів, призначених на певний етап NOT USING IN CLIENT NOW!
-    public List<ManagerProfileDTO> getAllManagersForDepartment(int departmentId) {
+    public List<ManagerProfileDTO> getAllManagersForDepartment(String departmentId) {
         Department department = departmentRepository.getReferenceById(departmentId);
         List<ManagerProfileDTO> managerProfiles = new ArrayList<>();
         if (department != null) {
@@ -69,7 +69,7 @@ public class DepartmentService {
 
     //метод призначення конкретному замовленню конкретного відділу доставки
     //ОНОВЛЕНО!!!
-    public void assignDepartmentToCustom(int customId, int departmentId) {
+    public void assignDepartmentToCustom(String customId, String departmentId) {
         Custom custom = customRepository.getReferenceById(customId);
         if (custom == null) {
             throw new RuntimeException("Custom not found with id: " + customId);

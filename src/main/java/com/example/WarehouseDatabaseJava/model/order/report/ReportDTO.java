@@ -1,24 +1,24 @@
 package com.example.WarehouseDatabaseJava.model.order.report;
 
 public class ReportDTO {
-    private int reportId;
-    private int customId;
+    private String reportId;
+    private String customId;
     private String reportText;
     private String status;
 
-    public int getReportId() {
+    public String getReportId() {
         return reportId;
     }
 
-    public void setReportId(int reportId) {
+    public void setReportId(String reportId) {
         this.reportId = reportId;
     }
 
-    public int getCustomId() {
+    public String getCustomId() {
         return customId;
     }
 
-    public void setCustomId(int customId) {
+    public void setCustomId(String customId) {
         this.customId = customId;
     }
 

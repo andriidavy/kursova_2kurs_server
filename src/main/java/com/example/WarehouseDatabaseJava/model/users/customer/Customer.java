@@ -12,8 +12,8 @@ import java.util.List;
     public class Customer {
 
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private int id;
+        @GeneratedValue(strategy = GenerationType.UUID)
+        private String id;
         private String name;
         private String surname;
         private String email;
@@ -40,11 +40,11 @@ import java.util.List;
         }
 
 
-        public int getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(String id) {
             this.id = id;
         }
 

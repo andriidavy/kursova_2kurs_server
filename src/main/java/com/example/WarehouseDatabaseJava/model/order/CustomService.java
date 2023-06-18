@@ -39,7 +39,7 @@ public class CustomService {
     //Створення замовлення покупцем TESTED
     //ОБНОВА!!!
     @Transactional
-    public int createCustom(int customerId) {
+    public String createCustom(String customerId) {
         Customer customer = customerRepository.getReferenceById(customerId);
         if (customer != null && customer.getCart() != null && !customer.getCart().getCartProductList().isEmpty()) {
             // Проверяем наличие достаточного количества продукта в базе данных
@@ -76,14 +76,14 @@ public class CustomService {
             customer.getCart().setPrice(0);
             return custom.getId(); //повертаємо значення id новоствореного замовлення
         }
-        return -1;  // Возвращаем -1 в случае, если заказ не был создан
+        return "-1";  // Возвращаем -1 в случае, если заказ не был создан
     }
 
     // Отримання списку замовлень для конкретного покупця(по його id) TESTED
 // (повертає об'єкт DTO з всіма потрібними параметрами)
 
     //ОБНОВА!!!
-    public List<CustomDTO> getCustomsForCustomer(int customerId) {
+    public List<CustomDTO> getCustomsForCustomer(String customerId) {
         Customer customer = customerRepository.getReferenceById(customerId);
         List<Custom> customs = customer.getCustomList();
         List<CustomDTO> customDTOs = new ArrayList<>();
@@ -125,7 +125,7 @@ public class CustomService {
     //(повертає об'єкт DTO з всіма потрібними параметрами)
 
     //ОБНОВА!!!
-    public List<CustomDTO> getProcessingCustomsForEmployee(int employeeId) {
+    public List<CustomDTO> getProcessingCustomsForEmployee(String employeeId) {
         Employee employee = employeeRepository.getReferenceById(employeeId);
         List<CustomDTO> customDTOs = new ArrayList<>();
 
@@ -166,7 +166,7 @@ public class CustomService {
     //(повертає об'єкт DTO з всіма потрібними параметрами)
 
     //ОБНОВА!!!
-    public List<CustomDTO> getProcessedCustomsForEmployee(int employeeId) {
+    public List<CustomDTO> getProcessedCustomsForEmployee(String employeeId) {
         Employee employee = employeeRepository.getReferenceById(employeeId);
         List<CustomDTO> customDTOs = new ArrayList<>();
 
@@ -208,7 +208,7 @@ public class CustomService {
 
     //+ враховує відділ замовлення і відділи менеджера TESTED
     //ОБНОВА!!!
-    public List<CustomDTO> getAllCreatedCustoms(int managerId) {
+    public List<CustomDTO> getAllCreatedCustoms(String managerId) {
         Manager manager = managerRepository.getReferenceById(managerId);
         List<Department> managerDepartments = manager.getDepartmentList();
 
@@ -298,7 +298,7 @@ public class CustomService {
 
     // Призначення замовлення на виконання конкретному робітнику (Для Manager`a) TESTED
     //ОБНОВА!!!
-    public void assignEmployeeToCustom(int customId, int employeeId) {
+    public void assignEmployeeToCustom(String customId, String employeeId) {
         Custom custom = customRepository.getReferenceById(customId);
         Employee employee = employeeRepository.getReferenceById(employeeId);
 
@@ -311,7 +311,7 @@ public class CustomService {
 
     // Встановлення для замовлення статусу PROCESSED(виконаний) TESTED
     @Transactional
-    public void setCustomProcessed(int customId) {
+    public void setCustomProcessed(String customId) {
         Custom custom = customRepository.getReferenceById(customId);
         if (custom == null) {
             throw new EntityNotFoundException("Custom with id " + customId + " not found");
@@ -324,7 +324,7 @@ public class CustomService {
     }
 
     @Transactional
-    public void setCustomInProcessing(int customId) {
+    public void setCustomInProcessing(String customId) {
         Custom custom = customRepository.getReferenceById(customId);
         if (custom == null) {
             throw new EntityNotFoundException("Custom with id " + customId + " not found");
@@ -337,7 +337,7 @@ public class CustomService {
     }
 
     // Встановлення для готового замовлення статусу SENT(відправлений) TESTED
-    public void setCustomSent(int customId) {
+    public void setCustomSent(String customId) {
         Custom custom = customRepository.getReferenceById(customId);
         if (custom == null) {
             throw new EntityNotFoundException("Custom with id " + customId + " not found");

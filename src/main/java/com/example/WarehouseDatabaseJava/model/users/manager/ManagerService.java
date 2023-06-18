@@ -51,18 +51,18 @@ public class ManagerService {
     public List<ManagerProfileDTO> getAllManagersProfileDTO() {
         List<Manager> managers = managerRepository.findAll();
         return managers.stream()
-                .map(manager -> new ManagerProfileDTO(manager.getId(), manager.getName(), manager.getSurname(), manager.getEmail()))
+                .map(manager -> new ManagerProfileDTO(manager.getName(), manager.getSurname(), manager.getEmail()))
                 .collect(Collectors.toList());
     }
 
     //видалення певного менеджера по його id
-    public void deleteManagerById(int managerId) {
+    public void deleteManagerById(String managerId) {
         managerRepository.deleteById(managerId);
     }
 
     //отримати всіх список менеджерів (DTO!)
 
-    public ManagerProfileDTO getManagerProfile(int managerId) {
+    public ManagerProfileDTO getManagerProfile(String managerId) {
         Manager manager = managerRepository.getReferenceById(managerId);
         if (manager == null) {
             throw new RuntimeException("Manager not found with id: " + managerId);
@@ -87,7 +87,7 @@ public class ManagerService {
     }
 
     //метод призначення певному менеджеру певний етап
-    public void assignDepartmentToManager(int managerId, int departmentId) {
+    public void assignDepartmentToManager(String managerId, String departmentId) {
         Manager manager = managerRepository.getReferenceById(managerId);
         Department department = departmentRepository.getReferenceById(departmentId);
 
@@ -112,7 +112,7 @@ public class ManagerService {
     }
 
     //метод видалення для певного менеджера зв'язку з певним етапом
-    public void removeDepartmentFromManager(int managerId, int departmentId) {
+    public void removeDepartmentFromManager(String managerId, String departmentId) {
         Manager manager = managerRepository.getReferenceById(managerId);
         Department department = departmentRepository.getReferenceById(departmentId);
 
@@ -137,7 +137,7 @@ public class ManagerService {
     }
 
     //метод отримання всіх етапів, на які призначений певний менеджер
-    public List<DepartmentDTO> getAllDepartmentsForManager(int managerId) {
+    public List<DepartmentDTO> getAllDepartmentsForManager(String managerId) {
         Manager manager = managerRepository.getReferenceById(managerId);
         List<DepartmentDTO> departmentDTOList = new ArrayList<>();
 
@@ -156,7 +156,7 @@ public class ManagerService {
     }
 
     //метод отримання всіх етапів, на які певний менеджер НЕ призначений
-    public List<DepartmentDTO> getDepartmentsWithoutManager(int managerId) {
+    public List<DepartmentDTO> getDepartmentsWithoutManager(String managerId) {
         Manager manager = managerRepository.getReferenceById(managerId);
         List<Department> departments = departmentRepository.findAll();
         List<DepartmentDTO> departmentDTOs = new ArrayList<>();

@@ -1,12 +1,12 @@
 package com.example.WarehouseDatabaseJava.model.users.employee;
 
 public class EmployeeProfileDTO {
-    private int id;
+    private String id;
     private String name;
     private String surname;
     private String email;
 
-    public EmployeeProfileDTO(int id, String name, String surname, String email) {
+    public EmployeeProfileDTO(String id, String name, String surname, String email) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -19,11 +19,11 @@ public class EmployeeProfileDTO {
         this.email = email;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

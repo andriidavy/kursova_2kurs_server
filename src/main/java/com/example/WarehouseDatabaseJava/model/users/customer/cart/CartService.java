@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class CartService {
@@ -24,7 +23,7 @@ public class CartService {
     private CartProductRepository cartProductRepository;
 
     //додавання продукту в кошик покупцем TESTED
-    public void addProductToCart(int customerId, String productId, int quantity) {
+    public void addProductToCart(String customerId, String productId, int quantity) {
         Customer customer = customerRepository.getReferenceById(customerId);
         Product product = productRepository.getReferenceById(productId);
         Cart cart = customer.getCart();
@@ -75,7 +74,7 @@ public class CartService {
     }
 
     // видалення продукту з кошика покупцем
-    public void removeProductFromCart(int customerId, String productId) {
+    public void removeProductFromCart(String customerId, String productId) {
         Customer customer = customerRepository.getReferenceById(customerId);
         if (customer != null) {
             Cart cart = customer.getCart();
@@ -97,7 +96,7 @@ public class CartService {
 
     // очищення кошика покупцем
     @Transactional
-    public void clearCart(int customerId) {
+    public void clearCart(String customerId) {
         Customer customer = customerRepository.getReferenceById(customerId);
         if (customer != null) {
             Cart cart = customer.getCart();
@@ -113,7 +112,7 @@ public class CartService {
 
     // отримати список товарів у корзині для певного покупця
     // (повертає список об'єктів класу що містить назву, кількість і id продукту що є в корзині) TESTED
-    public List<CartProductDTO> getCartProductsByCustomerId(int customerId) {
+    public List<CartProductDTO> getCartProductsByCustomerId(String customerId) {
         Customer customer = customerRepository.getReferenceById(customerId);
 
         Cart cart = customer.getCart();
