@@ -1,6 +1,7 @@
 package com.example.WarehouseDatabaseJava.model.product;
 
 import com.example.WarehouseDatabaseJava.model.order.CustomProduct;
+import com.example.WarehouseDatabaseJava.model.product.category.ProductCategory;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProduct;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -31,10 +32,13 @@ public class Product {
     List<CartProduct> cartProductList = new ArrayList<>();
 
     // One-to-Many relation with CustomProduct
-
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonIgnore
     List<CustomProduct> customProductList = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    ProductCategory productCategory;
 
     public Product() {
     }
@@ -131,5 +135,13 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public ProductCategory getProductCategory() {
+        return productCategory;
+    }
+
+    public void setProductCategory(ProductCategory productCategory) {
+        this.productCategory = productCategory;
     }
 }
