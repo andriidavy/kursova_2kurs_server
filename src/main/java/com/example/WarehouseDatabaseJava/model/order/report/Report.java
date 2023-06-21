@@ -9,6 +9,7 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String reportText;
+    private String callbackText;
 
     public enum Status{
         WAITING(1),
@@ -55,6 +56,14 @@ public class Report {
 
     public void setReportText(String reportText) {
         this.reportText = reportText;
+    }
+
+    public String getCallbackText() {
+        return callbackText;
+    }
+
+    public void setCallbackText(String callbackText) {
+        this.callbackText = callbackText;
     }
 
     public Custom getCustom() {

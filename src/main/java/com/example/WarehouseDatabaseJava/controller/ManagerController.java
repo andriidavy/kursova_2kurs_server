@@ -1,15 +1,13 @@
 package com.example.WarehouseDatabaseJava.controller;
 
-import com.example.WarehouseDatabaseJava.model.order.Custom;
 import com.example.WarehouseDatabaseJava.model.order.CustomDTO;
-import com.example.WarehouseDatabaseJava.model.order.CustomProductDTO;
 import com.example.WarehouseDatabaseJava.model.order.CustomService;
-import com.example.WarehouseDatabaseJava.model.order.report.Report;
 import com.example.WarehouseDatabaseJava.model.order.report.ReportDTO;
 import com.example.WarehouseDatabaseJava.model.order.report.ReportService;
 import com.example.WarehouseDatabaseJava.model.product.Product;
 import com.example.WarehouseDatabaseJava.model.product.ProductService;
-import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
+import com.example.WarehouseDatabaseJava.model.product.category.ProductCategory;
+import com.example.WarehouseDatabaseJava.model.product.category.ProductCategoryService;
 import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeProfileDTO;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeService;
@@ -38,6 +36,8 @@ public class ManagerController {
     ReportService reportService;
     @Autowired
     DepartmentService departmentService;
+    @Autowired
+    ProductCategoryService productCategoryService;
 
     //зберегти нового менеджера TESTED
     @PostMapping("/manager/save")
@@ -59,7 +59,7 @@ public class ManagerController {
 
     //метод для логіну
     @PostMapping("/manager/login")
-    public Manager loginManager(String email, String password) {
+    public Manager loginManager(@RequestParam String email, @RequestParam String password) {
         return managerService.loginManager(email, password);
     }
 
@@ -118,11 +118,23 @@ public class ManagerController {
         return productService.getAllProducts();
     }
 
-    //додати новий продукт TESTED
-//    @PostMapping("/manager/product/save")
-//    public Product saveProduct(@RequestBody Product product) {
-//        return productService.save(product);
-//    }
+    //перевірити наявність продукту по barcode
+    @GetMapping("/manager/product/check-barcode")
+    public boolean checkBarcode(long barcode) {
+        return productService.checkBarcode(barcode);
+    }
+
+    //додати новий продукт
+    @PostMapping("/manager/product/save")
+    public Product saveProduct(@RequestParam long barcode, @RequestParam String name, @RequestParam double price, @RequestParam String description, @RequestParam int quantity) {
+        return productService.saveProduct(barcode, name, price, description, quantity);
+    }
+
+    //збільшити кількість наявного продукту
+    @PostMapping("/manager/product/add-count")
+    public Product addProductQuantity(@RequestParam long barcode, @RequestParam int quantity) {
+        return productService.addProductQuantity(barcode, quantity);
+    }
 
     //отримати список усіх звітів, які чекають на відповідь менеджера TESTED
     //+ враховує відділи для замовлень
@@ -141,6 +153,12 @@ public class ManagerController {
     @PostMapping("/manager/custom/report/reject")
     public void setReportRejected(@RequestParam String reportId) {
         reportService.setReportRejected(reportId);
+    }
+
+    //додати зворотнє повідомлення для відхиленого звіту
+    @PostMapping("/manager/custom/report/set-callback")
+    public void setReportCallback(@RequestParam String reportId, @RequestParam String callbackText) {
+        reportService.setReportCallback(reportId, callbackText);
     }
 
     //зберегти відділ TESTED
@@ -189,5 +207,29 @@ public class ManagerController {
     @GetMapping("/manager/department/get-managers-for-department")
     public List<ManagerProfileDTO> getAllManagersForDepartment(@RequestParam String departmentId) {
         return departmentService.getAllManagersForDepartment(departmentId);
+    }
+
+    //метод створення нової категорії товарів
+    @PostMapping("/manager/category-product/create")
+    public ProductCategory createProductCategory(@RequestParam String categoryName) {
+        return productCategoryService.createProductCategory(categoryName);
+    }
+
+    //метод видалення категорії товарів
+    @DeleteMapping("/manager/category-product/delete")
+    public void removeProductCategoryById(@RequestParam String categoryId) {
+        productCategoryService.removeProductCategoryById(categoryId);
+    }
+
+    //метод отримання назв всіх категорій товарів
+    @GetMapping("/manager/category-product/get-all")
+    public List<String> getAllCategoryNames() {
+        return productCategoryService.getAllCategoryNames();
+    }
+
+    //метод призначення певного товару на певну категорію
+    @PostMapping("/manager/category-product/assign-to-product")
+    public void assignProductToCategory(@RequestParam String productId, @RequestParam String categoryId) {
+        productCategoryService.assignProductToCategory(productId, categoryId);
     }
 }

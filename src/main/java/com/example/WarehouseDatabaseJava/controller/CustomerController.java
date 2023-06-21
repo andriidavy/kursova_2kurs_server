@@ -1,10 +1,10 @@
 package com.example.WarehouseDatabaseJava.controller;
 
 import com.example.WarehouseDatabaseJava.model.order.CustomDTO;
-import com.example.WarehouseDatabaseJava.model.order.CustomProductDTO;
 import com.example.WarehouseDatabaseJava.model.order.CustomService;
 import com.example.WarehouseDatabaseJava.model.product.Product;
 import com.example.WarehouseDatabaseJava.model.product.ProductService;
+import com.example.WarehouseDatabaseJava.model.product.category.ProductCategoryService;
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerProfileDTO;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerService;
@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 public class CustomerController {
@@ -30,6 +29,8 @@ public class CustomerController {
     ProductService productService;
     @Autowired
     DepartmentService departmentService;
+    @Autowired
+    ProductCategoryService productCategoryService;
 
     //отримати список всіх покупців TESTED
     @GetMapping("/customer/get-all")
@@ -91,6 +92,12 @@ public class CustomerController {
         return cartService.getCartProductsByCustomerId(customerId);
     }
 
+    //отримати ціну кошика для конкретного покупця
+    @GetMapping("/customer/get-cart-price")
+    public double getCartPriceByCustomerId(@RequestParam String customerId) {
+        return cartService.getCartPriceByCustomerId(customerId);
+    }
+
     //отримати список всіх продуктів TESTED
     @GetMapping("/customer/product/get-all")
     public List<Product> getAllProducts() {
@@ -107,5 +114,11 @@ public class CustomerController {
     @GetMapping("/customer/department/get-all")
     public List<DepartmentDTO> getAllDepartments() {
         return departmentService.getAllDepartments();
+    }
+
+    //метод отримання назв всіх категорій товарів
+    @GetMapping("/customer/category-product/get-all")
+    public List<String> getAllCategoryNames() {
+        return productCategoryService.getAllCategoryNames();
     }
 }

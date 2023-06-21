@@ -78,7 +78,7 @@ public class CartService {
     //пошук співпадінь між продуктами які є в кошику і продуктом який хочемо додати в кошик TESTED
     private CartProduct findCartProductByProduct(Cart cart, Product product) {
         for (CartProduct cartProduct : cart.getCartProductList()) {
-            if (cartProduct.getProduct().getId() == product.getId()) {
+            if (Objects.equals(cartProduct.getProduct().getId(), product.getId())) {
                 return cartProduct;
             }
         }
@@ -95,20 +95,23 @@ public class CartService {
         }
 
         Customer customer = customerRepository.getReferenceById(customerId);
+
         Cart cart = customer.getCart();
-        if (cart != null) {
-            List<CartProduct> cartProductList = cart.getCartProductList();
-            cartProductList.stream()
-                    .filter(cartProduct -> Objects.equals(cartProduct.getProduct().getId(), productId))
-                    .findFirst()
-                    .ifPresent(cartProduct -> {
-                        cart.getCartProductList().remove(cartProduct);
-                        cartProductRepository.delete(cartProduct);
-                        //установка новой цены корзины
-                        cart.setPrice(cart.getPrice() - (cartProduct.getProduct().getPrice() * cartProduct.getQuantity()));
-                        cartRepository.save(cart);
-                    });
+        if (cart == null) {
+            throw new NullPointerException("Cart for customer with id " + customerId + " is not be created");
         }
+
+        List<CartProduct> cartProductList = cart.getCartProductList();
+        cartProductList.stream()
+                .filter(cartProduct -> Objects.equals(cartProduct.getProduct().getId(), productId))
+                .findFirst()
+                .ifPresent(cartProduct -> {
+                    cart.getCartProductList().remove(cartProduct);
+                    cartProductRepository.delete(cartProduct);
+                    //установка новой цены корзины
+                    cart.setPrice(cart.getPrice() - (cartProduct.getProduct().getPrice() * cartProduct.getQuantity()));
+                    cartRepository.save(cart);
+                });
     }
 
     // очищення кошика покупцем
@@ -119,14 +122,17 @@ public class CartService {
         }
 
         Customer customer = customerRepository.getReferenceById(customerId);
+
         Cart cart = customer.getCart();
-        if (cart != null) {
-            cart.getCartProductList().clear();
-            cartRepository.deleteAllCartProductsByCart(cart);
-            //установка новой цены корзины
-            cart.setPrice(0);
-            cartRepository.save(cart);
+        if (cart == null) {
+            throw new NullPointerException("Cart for customer with id " + customerId + " is not be created");
         }
+
+        cart.getCartProductList().clear();
+        cartRepository.deleteAllCartProductsByCart(cart);
+        //установка новой цены корзины
+        cart.setPrice(0);
+        cartRepository.save(cart);
     }
 
     // отримати список товарів у корзині для певного покупця
@@ -139,6 +145,11 @@ public class CartService {
         Customer customer = customerRepository.getReferenceById(customerId);
 
         Cart cart = customer.getCart();
+
+        if (cart == null) {
+            throw new NullPointerException("Cart for customer with id " + customerId + " is not be created");
+        }
+
         List<CartProductDTO> cartProductDTOS = new ArrayList<>();
 
         for (CartProduct cartProduct : cart.getCartProductList()) {
@@ -154,5 +165,22 @@ public class CartService {
             cartProductDTOS.add(cartProductDTO);
         }
         return cartProductDTOS;
+    }
+
+    //отримати ціну кошика для певного покупця
+    public double getCartPriceByCustomerId(String customerId) {
+        if (!customerRepository.existsById(customerId)) {
+            throw new EntityNotFoundException("Customer not found with id: " + customerId);
+        }
+
+        Customer customer = customerRepository.getReferenceById(customerId);
+
+        Cart cart = customer.getCart();
+
+        if (cart == null) {
+            throw new NullPointerException("Cart for customer with id " + customerId + " is not be created");
+        }
+
+        return cart.getPrice();
     }
 }

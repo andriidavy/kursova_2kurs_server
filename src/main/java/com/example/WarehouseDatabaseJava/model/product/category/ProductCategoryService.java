@@ -35,20 +35,19 @@ public class ProductCategoryService {
         productCategoryRepository.deleteById(categoryId);
     }
 
-    // отримання всіх категорій (DTO!)
-    public List<ProductCategoryDTO> getAllDepartments() {
+    // отримання назв всіх категорій
+    public List<String> getAllCategoryNames() {
         List<ProductCategory> productCategoryList = productCategoryRepository.findAll();
-        List<ProductCategoryDTO> productCategoryDTOs = new ArrayList<>();
+        List<String> productCategoryNames = new ArrayList<>();
 
         for (ProductCategory productCategory : productCategoryList) {
-            ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO();
-            productCategoryDTO.setCategoryName(productCategory.getCategoryName());
-            productCategoryDTOs.add(productCategoryDTO);
+            String categoryName = productCategory.getCategoryName();
+            productCategoryNames.add(categoryName);
         }
-        return productCategoryDTOs;
+        return productCategoryNames;
     }
 
-    //метод призначення певному продукту певної категорії
+    // метод призначення певному продукту певної категорії
     public void assignProductToCategory(String productId, String categoryId) {
 
         if (!productRepository.existsById(productId)) {

@@ -30,7 +30,7 @@ public class EmployeeController {
 
     //метод для логіну
     @PostMapping("/employee/login")
-    public Employee loginEmployee(String email, String password){
+    public Employee loginEmployee(@RequestParam String email, @RequestParam String password){
         return employeeService.loginEmployee(email, password);
     }
 

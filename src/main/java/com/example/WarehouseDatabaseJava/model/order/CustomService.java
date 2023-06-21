@@ -266,7 +266,6 @@ public class CustomService {
                 customDTOs.add(customDTO);
             }
         }
-
         return customDTOs;
     }
 

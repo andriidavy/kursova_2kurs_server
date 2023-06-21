@@ -203,6 +203,9 @@ public class ReportService {
             throw new IllegalStateException("Report with id " + reportId + " cannot be accepted because it is not in WAITING status");
         }
         report.setStatus(Report.Status.ACCEPTED);
+        if (report.getCallbackText() != null) {
+            report.setCallbackText(null);
+        }
         reportRepository.save(report);
         customService.setCustomProcessed(report.getCustom().getId());
     }
@@ -219,5 +222,21 @@ public class ReportService {
         report.setStatus(Report.Status.REJECTED);
         reportRepository.save(report);
         customService.setCustomInProcessing(report.getCustom().getId());
+    }
+
+    //метод для встановлення зворотнього повідомлення callback для відхиленого звіту
+    public void setReportCallback(String reportId, String callbackText) {
+        if (!reportRepository.existsById(reportId)) {
+            throw new EntityNotFoundException("Report not found with id:" + reportId);
+        }
+
+        Report report = reportRepository.getReferenceById(reportId);
+
+        if (report.getStatus() != Report.Status.REJECTED) {
+            throw new IllegalStateException("Report with id " + reportId + " cannot have callback because it is not in REJECTED status");
+        }
+
+        report.setCallbackText(callbackText);
+        reportRepository.save(report);
     }
 }

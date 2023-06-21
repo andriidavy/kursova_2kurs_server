@@ -11,8 +11,8 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    //метод перевірки наявності товару з даним sku
-    public boolean checkSku(long barcode) {
+    //метод перевірки наявності товару з даним barcode
+    public boolean checkBarcode(long barcode) {
         return productRepository.existsByBarcode(barcode);
     }
 
@@ -87,7 +87,16 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    //метод save (Product) РЕАЛІЗАЦІЯ БЕЗ ВИКОРИСТАННЯ JPAREPOSITORY!!! TESTED
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
+}
+
+
+
+
+//метод save (Product) РЕАЛІЗАЦІЯ БЕЗ ВИКОРИСТАННЯ JPAREPOSITORY!!! TESTED
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //    private Connection connection;
 //
@@ -154,8 +163,3 @@ public class ProductService {
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
-    }
-}

@@ -4,6 +4,7 @@ public class ReportDTO {
     private String reportId;
     private String customId;
     private String reportText;
+    private String callbackText;
     private String status;
 
     public String getReportId() {
@@ -28,6 +29,14 @@ public class ReportDTO {
 
     public void setReportText(String reportText) {
         this.reportText = reportText;
+    }
+
+    public String getCallbackText() {
+        return callbackText;
+    }
+
+    public void setCallbackText(String callbackText) {
+        this.callbackText = callbackText;
     }
 
     public String getStatus() {
