@@ -1,4 +1,4 @@
-//package com.example.WarehouseDatabaseJava.model.product.image;
+//package com.example.WarehouseDatabaseJava.model.product.image_(non used!);
 //
 //import com.example.WarehouseDatabaseJava.model.product.Product;
 //import com.example.WarehouseDatabaseJava.model.product.ProductRepository;
@@ -49,7 +49,7 @@
 //        // Получаем текущее изображение продукта
 //        ProductImage productImage = product.getProductImage();
 //        if (productImage == null) {
-//            throw new IllegalStateException("Product does not have an associated image.");
+//            throw new IllegalStateException("Product does not have an associated image_(non used!).");
 //        }
 //        // Удаляем изображение продукта из базы данных
 //        productImageRepository.delete(productImage);

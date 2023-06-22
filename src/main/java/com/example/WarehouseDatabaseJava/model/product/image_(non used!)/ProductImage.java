@@ -1,4 +1,4 @@
-//package com.example.WarehouseDatabaseJava.model.product.image;
+//package com.example.WarehouseDatabaseJava.model.product.image_(non used!);
 //
 //import com.example.WarehouseDatabaseJava.model.product.Product;
 //import jakarta.persistence.*;
@@ -9,7 +9,7 @@
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.UUID)
 //    String id;
-//    byte[] image;
+//    byte[] image_(non used!);
 //
 //    // One-to-One relation with ProductImage
 //    @OneToOne
@@ -25,11 +25,11 @@
 //    }
 //
 //    public byte[] getImage() {
-//        return image;
+//        return image_(non used!);
 //    }
 //
-//    public void setImage(byte[] image) {
-//        this.image = image;
+//    public void setImage(byte[] image_(non used!)) {
+//        this.image_(non used!) = image_(non used!);
 //    }
 //
 //    public Product getProduct() {

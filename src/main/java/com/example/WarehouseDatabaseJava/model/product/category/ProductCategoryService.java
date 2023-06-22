@@ -35,16 +35,9 @@ public class ProductCategoryService {
         productCategoryRepository.deleteById(categoryId);
     }
 
-    // отримання назв всіх категорій
-    public List<String> getAllCategoryNames() {
-        List<ProductCategory> productCategoryList = productCategoryRepository.findAll();
-        List<String> productCategoryNames = new ArrayList<>();
-
-        for (ProductCategory productCategory : productCategoryList) {
-            String categoryName = productCategory.getCategoryName();
-            productCategoryNames.add(categoryName);
-        }
-        return productCategoryNames;
+    // отримання всіх категорій
+    public List<ProductCategory> getAllProductCategory() {
+        return productCategoryRepository.findAll();
     }
 
     // метод призначення певному продукту певної категорії

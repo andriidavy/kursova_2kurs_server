@@ -5,6 +5,7 @@ import com.example.WarehouseDatabaseJava.model.order.CustomService;
 import com.example.WarehouseDatabaseJava.model.order.report.ReportDTO;
 import com.example.WarehouseDatabaseJava.model.order.report.ReportService;
 import com.example.WarehouseDatabaseJava.model.product.Product;
+import com.example.WarehouseDatabaseJava.model.product.ProductDTO;
 import com.example.WarehouseDatabaseJava.model.product.ProductService;
 import com.example.WarehouseDatabaseJava.model.product.category.ProductCategory;
 import com.example.WarehouseDatabaseJava.model.product.category.ProductCategoryService;
@@ -112,10 +113,10 @@ public class ManagerController {
         employeeService.deleteEmployeeById(employeeId);
     }
 
-    //отримати список всіх продуктів TESTED
+    //отримати список всіх продуктів (DTO!)
     @GetMapping("/manager/product/get-all")
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+    public List<ProductDTO> getAllProducts() {
+        return productService.getAllProductsDTO();
     }
 
     //перевірити наявність продукту по barcode
@@ -221,15 +222,22 @@ public class ManagerController {
         productCategoryService.removeProductCategoryById(categoryId);
     }
 
-    //метод отримання назв всіх категорій товарів
-    @GetMapping("/manager/category-product/get-all")
-    public List<String> getAllCategoryNames() {
-        return productCategoryService.getAllCategoryNames();
-    }
-
     //метод призначення певного товару на певну категорію
     @PostMapping("/manager/category-product/assign-to-product")
     public void assignProductToCategory(@RequestParam String productId, @RequestParam String categoryId) {
         productCategoryService.assignProductToCategory(productId, categoryId);
     }
+
+    //метод для додавання та оновлення url зображення для продукту
+    @PostMapping("/manager/product/set-image_(non used!)")
+    public void addImageUrlToProduct(@RequestParam String productId, @RequestParam String url){
+        productService.addImageUrlToProduct(productId, url);
+    }
+
+    // метод для видалення url зображення для продукту
+    @PostMapping("/manager/product/delete-image_(non used!)")
+    public void deleteImageForProduct(@RequestParam String productId) {
+        productService.deleteImageForProduct(productId);
+    }
+
 }

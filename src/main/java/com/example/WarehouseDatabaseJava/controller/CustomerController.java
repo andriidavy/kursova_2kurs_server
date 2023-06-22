@@ -4,6 +4,7 @@ import com.example.WarehouseDatabaseJava.model.order.CustomDTO;
 import com.example.WarehouseDatabaseJava.model.order.CustomService;
 import com.example.WarehouseDatabaseJava.model.product.Product;
 import com.example.WarehouseDatabaseJava.model.product.ProductService;
+import com.example.WarehouseDatabaseJava.model.product.category.ProductCategory;
 import com.example.WarehouseDatabaseJava.model.product.category.ProductCategoryService;
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerProfileDTO;
@@ -98,10 +99,10 @@ public class CustomerController {
         return cartService.getCartPriceByCustomerId(customerId);
     }
 
-    //отримати список всіх продуктів TESTED
-    @GetMapping("/customer/product/get-all")
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+    //отримати список всіх продуктів для певної категорії
+    @GetMapping("/customer/category/product/get-all")
+    public List<Product> getAllProductsByCategoryId(@RequestParam String categoryId) {
+        return productService.getAllProductsByCategoryId(categoryId);
     }
 
     //призначити конкретний відділ для конкретного замовлення TESTED
@@ -116,9 +117,9 @@ public class CustomerController {
         return departmentService.getAllDepartments();
     }
 
-    //метод отримання назв всіх категорій товарів
+    //метод отримання всіх категорій товарів
     @GetMapping("/customer/category-product/get-all")
-    public List<String> getAllCategoryNames() {
-        return productCategoryService.getAllCategoryNames();
+    public List<ProductCategory> getAllCategoryNames() {
+        return productCategoryService.getAllProductCategory();
     }
 }

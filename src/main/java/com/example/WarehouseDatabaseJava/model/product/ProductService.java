@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -87,13 +88,30 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    //метод повернення списку продуктів для певної категорії (для покупця)
+    public List<Product> getAllProductsByCategoryId(String categoryId) {
+        return productRepository.findAllByCategoryId(categoryId);
     }
 
+    //метод повернення списку всіх продуктів (DTO!) (для менеджера)
+    public List<ProductDTO> getAllProductsDTO() {
+        List<Product> productList = productRepository.findAll();
+        List<ProductDTO> productDTOList = new ArrayList<>();
+        for (Product product : productList) {
+            ProductDTO productDTO = new ProductDTO();
+            productDTO.setId(product.getId());
+            productDTO.setBarcode(product.getBarcode());
+            productDTO.setName(productDTO.getName());
+            productDTO.setPrice(product.getPrice());
+            productDTO.setDescription(product.getDescription());
+            productDTO.setQuantity(product.getQuantity());
+            productDTO.setImageUrl(product.getImageUrl());
+            productDTO.setCategory(product.getProductCategory().getCategoryName());
+            productDTOList.add(productDTO);
+        }
+        return productDTOList;
+    }
 }
-
-
 
 
 //метод save (Product) РЕАЛІЗАЦІЯ БЕЗ ВИКОРИСТАННЯ JPAREPOSITORY!!! TESTED
