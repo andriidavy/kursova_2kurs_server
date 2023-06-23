@@ -2,17 +2,17 @@ package com.example.WarehouseDatabaseJava.model.order;
 
 
 public class CustomProductDTO {
-    private String productId;
+    private long productBarcode;
     private String productName;
     private double productPrice;
     private int quantity;
 
-    public String getProductId() {
-        return productId;
+    public long getProductBarcode() {
+        return productBarcode;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setProductBarcode(long productBarcode) {
+        this.productBarcode = productBarcode;
     }
 
     public String getProductName() {

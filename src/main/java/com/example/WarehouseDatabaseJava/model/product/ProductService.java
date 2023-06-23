@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.model.product;
 
+import com.example.WarehouseDatabaseJava.model.product.category.ProductCategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,8 @@ import java.util.List;
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private ProductCategoryRepository productCategoryRepository;
 
     //метод перевірки наявності товару з даним barcode
     public boolean checkBarcode(long barcode) {
@@ -90,6 +93,10 @@ public class ProductService {
 
     //метод повернення списку продуктів для певної категорії (для покупця)
     public List<Product> getAllProductsByCategoryId(String categoryId) {
+        if (!productRepository.existsByCategoryId(categoryId)) {
+            throw new EntityNotFoundException("Product category with id: " + categoryId + " not found");
+        }
+
         return productRepository.findAllByCategoryId(categoryId);
     }
 
@@ -110,6 +117,54 @@ public class ProductService {
             productDTOList.add(productDTO);
         }
         return productDTOList;
+    }
+
+    //метод отримання продукту по баркоду (DTO!)
+    public ProductDTO searchProductBarcode(String searchBarcode) {
+        if (!searchBarcode.matches("\\d+")) {
+            throw new IllegalArgumentException("Argument: " + searchBarcode + " is not number");
+        }
+
+        long barcode = Long.parseLong(searchBarcode);
+
+        if (!productRepository.existsByBarcode(barcode)) {
+            throw new EntityNotFoundException("Product with barcode: " + barcode + " not found");
+        }
+
+        Product product = productRepository.getReferenceByBarcode(barcode);
+
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(product.getId());
+        productDTO.setBarcode(product.getBarcode());
+        productDTO.setName(productDTO.getName());
+        productDTO.setPrice(product.getPrice());
+        productDTO.setDescription(product.getDescription());
+        productDTO.setQuantity(product.getQuantity());
+        productDTO.setImageUrl(product.getImageUrl());
+        productDTO.setCategory(product.getProductCategory().getCategoryName());
+
+        return productDTO;
+    }
+
+    //метод отримання списку продуктів по співпадінню найменування продукту та введеної строки ігноруючи реєстр
+    public List<Product> searchProductsByName(String searchName) {
+        if (searchName == null) {
+            throw new NullPointerException("searchName is null");
+        }
+        return productRepository.findAllByNameContainingIgnoreCase(searchName);
+    }
+
+    //метод отримання списку продуктів по співпадінню найменування продукту та введеної строки ігноруючи реєстр
+    //враховуючи категорію продукту
+    public List<Product> searchProductsByNameWithCategory(String searchName, String categoryId) {
+        if (searchName == null) {
+            throw new NullPointerException("searchName is null");
+        }
+        if (!productCategoryRepository.existsById(categoryId)) {
+            throw new EntityNotFoundException("Product category with id: " + categoryId + " not found");
+        }
+
+        return productRepository.findAllByNameContainingIgnoreCaseAndCategoryId(searchName, categoryId);
     }
 }
 

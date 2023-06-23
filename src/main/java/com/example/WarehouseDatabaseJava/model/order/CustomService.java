@@ -122,7 +122,7 @@ public class CustomService {
                 int quantity = customProduct.getQuantity();
 
                 CustomProductDTO customProductDTO = new CustomProductDTO();
-                customProductDTO.setProductId(product.getId());
+                customProductDTO.setProductBarcode(product.getBarcode());
                 customProductDTO.setProductName(product.getName());
                 customProductDTO.setQuantity(quantity);
 
@@ -165,7 +165,7 @@ public class CustomService {
                     int quantity = customProduct.getQuantity();
 
                     CustomProductDTO customProductDTO = new CustomProductDTO();
-                    customProductDTO.setProductId(product.getId());
+                    customProductDTO.setProductBarcode(product.getBarcode());
                     customProductDTO.setProductName(product.getName());
                     customProductDTO.setQuantity(quantity);
 
@@ -210,7 +210,7 @@ public class CustomService {
                     int quantity = customProduct.getQuantity();
 
                     CustomProductDTO customProductDTO = new CustomProductDTO();
-                    customProductDTO.setProductId(product.getId());
+                    customProductDTO.setProductBarcode(product.getBarcode());
                     customProductDTO.setProductName(product.getName());
                     customProductDTO.setQuantity(quantity);
 
@@ -255,7 +255,7 @@ public class CustomService {
                     int quantity = customProduct.getQuantity();
 
                     CustomProductDTO customProductDTO = new CustomProductDTO();
-                    customProductDTO.setProductId(product.getId());
+                    customProductDTO.setProductBarcode(product.getBarcode());
                     customProductDTO.setProductName(product.getName());
                     customProductDTO.setQuantity(quantity);
 
@@ -307,7 +307,7 @@ public class CustomService {
                 int quantity = customProduct.getQuantity();
 
                 CustomProductDTO customProductDTO = new CustomProductDTO();
-                customProductDTO.setProductId(product.getId());
+                customProductDTO.setProductBarcode(product.getBarcode());
                 customProductDTO.setProductName(product.getName());
                 customProductDTO.setQuantity(quantity);
 
