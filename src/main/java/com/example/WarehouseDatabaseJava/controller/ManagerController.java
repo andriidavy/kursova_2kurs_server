@@ -119,6 +119,12 @@ public class ManagerController {
         return productService.getAllProductsDTO();
     }
 
+    //пошук продукта по баркоду (DTO!)
+    @GetMapping("/manager/product/search-by-barcode")
+    public ProductDTO searchProductByBarcode(@RequestParam String searchBarcode) {
+        return productService.searchProductByBarcode(searchBarcode);
+    }
+
     //перевірити наявність продукту по barcode
     @GetMapping("/manager/product/check-barcode")
     public boolean checkBarcode(long barcode) {
@@ -230,7 +236,7 @@ public class ManagerController {
 
     //метод для додавання та оновлення url зображення для продукту
     @PostMapping("/manager/product/set-image_(non used!)")
-    public void addImageUrlToProduct(@RequestParam String productId, @RequestParam String url){
+    public void addImageUrlToProduct(@RequestParam String productId, @RequestParam String url) {
         productService.addImageUrlToProduct(productId, url);
     }
 

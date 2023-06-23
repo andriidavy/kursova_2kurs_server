@@ -105,6 +105,18 @@ public class CustomerController {
         return productService.getAllProductsByCategoryId(categoryId);
     }
 
+    //пошук продуктів по найменуванню
+    @GetMapping("/customer/product/search-by-name")
+    public List<Product> searchProductsByName(@RequestParam String searchName) {
+        return productService.searchProductsByName(searchName);
+    }
+
+    //пошук продуктів по найменуванню враховуючи категорію
+    @GetMapping("/customer/category/product/search-by-name")
+    public List<Product> searchProductsByNameWithCategory(@RequestParam String searchName, @RequestParam String categoryId) {
+        return productService.searchProductsByNameWithCategory(searchName, categoryId);
+    }
+
     //призначити конкретний відділ для конкретного замовлення TESTED
     @PostMapping("/customer/custom/assign-department")
     public void assignDepartmentToCustom(@RequestParam String customId, @RequestParam String departmentId) {

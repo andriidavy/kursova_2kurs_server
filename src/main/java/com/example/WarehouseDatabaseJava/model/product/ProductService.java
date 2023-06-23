@@ -120,7 +120,7 @@ public class ProductService {
     }
 
     //метод отримання продукту по баркоду (DTO!)
-    public ProductDTO searchProductBarcode(String searchBarcode) {
+    public ProductDTO searchProductByBarcode(String searchBarcode) {
         if (!searchBarcode.matches("\\d+")) {
             throw new IllegalArgumentException("Argument: " + searchBarcode + " is not number");
         }
