@@ -135,14 +135,10 @@ public class ManagerService {
         List<Manager> departmentManagers = department.getManagerList();
 
         // Удаляем этап из списка этапов менеджера
-        if (managerDepartments.contains(department)) {
-            managerDepartments.remove(department);
-        }
+        managerDepartments.remove(department);
 
         // Удаляем менеджера из списка менеджеров этапа
-        if (departmentManagers.contains(manager)) {
-            departmentManagers.remove(manager);
-        }
+        departmentManagers.remove(manager);
 
         // Сохраняем изменения в базе данных
         managerRepository.save(manager);

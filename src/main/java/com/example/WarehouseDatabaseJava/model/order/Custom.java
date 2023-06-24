@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,6 +18,9 @@ public class Custom {
     private String id;
 
     private double price;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationTime;
 
     // Many-to-One relation with Customer
     @ManyToOne
@@ -125,5 +129,13 @@ public class Custom {
 
     public void setDepartment(Department department) {
         this.department = department;
+    }
+
+    public Date getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(Date creationTime) {
+        this.creationTime = creationTime;
     }
 }

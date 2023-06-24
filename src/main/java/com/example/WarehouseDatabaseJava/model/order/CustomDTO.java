@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.model.order;
 
+import java.util.Date;
 import java.util.List;
 
 public class CustomDTO {
@@ -13,6 +14,7 @@ public class CustomDTO {
     private double price;
     private String status;
     private String department;
+    private Date creatingTime;
     private List<CustomProductDTO> customProductDTOList;
 
     public String getCustomId() {
@@ -101,5 +103,13 @@ public class CustomDTO {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    public Date getCreatingTime() {
+        return creatingTime;
+    }
+
+    public void setCreatingTime(Date creatingTime) {
+        this.creatingTime = creatingTime;
     }
 }

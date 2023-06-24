@@ -12,4 +12,6 @@ public interface CartRepository extends JpaRepository<Cart, String> {
     @Modifying
     @Query("DELETE FROM CartProduct cp WHERE cp.cart = :cart")
     void deleteAllCartProductsByCart(@Param("cart") Cart cart);
+
+    Cart getReferenceByCustomer_Id(String customerId);
 }

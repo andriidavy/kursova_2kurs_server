@@ -93,11 +93,11 @@ public class ProductService {
 
     //метод повернення списку продуктів для певної категорії (для покупця)
     public List<Product> getAllProductsByCategoryId(String categoryId) {
-        if (!productRepository.existsByCategoryId(categoryId)) {
+        if (!productRepository.existsByProductCategory_Id(categoryId)) {
             throw new EntityNotFoundException("Product category with id: " + categoryId + " not found");
         }
 
-        return productRepository.findAllByCategoryId(categoryId);
+        return productRepository.findAllByProductCategory_Id(categoryId);
     }
 
     //метод повернення списку всіх продуктів (DTO!) (для менеджера)
@@ -161,10 +161,10 @@ public class ProductService {
             throw new NullPointerException("searchName is null");
         }
         if (!productCategoryRepository.existsById(categoryId)) {
-            throw new EntityNotFoundException("Product category with id: " + categoryId + " not found");
+            throw new EntityNotFoundException("Category with id: " + categoryId + " not found");
         }
 
-        return productRepository.findAllByNameContainingIgnoreCaseAndCategoryId(searchName, categoryId);
+        return productRepository.findAllByNameContainingIgnoreCaseAndProductCategory_Id(searchName, categoryId);
     }
 }
 

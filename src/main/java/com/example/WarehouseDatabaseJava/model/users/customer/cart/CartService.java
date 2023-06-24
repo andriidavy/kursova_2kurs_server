@@ -36,24 +36,22 @@ public class CartService {
             throw new IllegalArgumentException("Invalid quantity");
         }
 
-        Customer customer = customerRepository.getReferenceById(customerId);
         Product product = productRepository.getReferenceById(productId);
-        Cart cart = customer.getCart();
+        Cart cart = cartRepository.getReferenceByCustomer_Id(customerId);
+
         if (cart == null) {
-            cart = new Cart();
-            cart.setCustomer(customer);
-            customer.setCart(cart);
+            throw new EntityNotFoundException("Cart for customer with id: " + customerId + " not found");
         }
         // Проверяем наличие достаточного количества продукта в базе данных
         if (product.getQuantity() < quantity) {
             throw new RuntimeException("Not enough stock for product: " + product.getName());
         }
-        CartProduct cartProduct = findCartProductByProduct(customer.getCart(), product);
+        CartProduct cartProduct = findCartProductByProduct(cart, product);
         if (cartProduct == null) {
             cartProduct = new CartProduct();
             cartProduct.setProduct(product);
             cartProduct.setQuantity(quantity);
-            cartProduct.setCart(customer.getCart());
+            cartProduct.setCart(cart);
             cart.getCartProductList().add(cartProduct);
 
             //установка новой цены корзины
@@ -94,9 +92,8 @@ public class CartService {
             throw new EntityNotFoundException("Product not found with id: " + productId);
         }
 
-        Customer customer = customerRepository.getReferenceById(customerId);
+        Cart cart = cartRepository.getReferenceByCustomer_Id(customerId);
 
-        Cart cart = customer.getCart();
         if (cart == null) {
             throw new NullPointerException("Cart for customer with id " + customerId + " is not be created");
         }
@@ -121,9 +118,8 @@ public class CartService {
             throw new EntityNotFoundException("Customer not found with id: " + customerId);
         }
 
-        Customer customer = customerRepository.getReferenceById(customerId);
+        Cart cart = cartRepository.getReferenceByCustomer_Id(customerId);
 
-        Cart cart = customer.getCart();
         if (cart == null) {
             throw new NullPointerException("Cart for customer with id " + customerId + " is not be created");
         }
@@ -142,9 +138,7 @@ public class CartService {
             throw new EntityNotFoundException("Customer not found with id: " + customerId);
         }
 
-        Customer customer = customerRepository.getReferenceById(customerId);
-
-        Cart cart = customer.getCart();
+        Cart cart = cartRepository.getReferenceByCustomer_Id(customerId);
 
         if (cart == null) {
             throw new NullPointerException("Cart for customer with id " + customerId + " is not be created");
@@ -173,9 +167,7 @@ public class CartService {
             throw new EntityNotFoundException("Customer not found with id: " + customerId);
         }
 
-        Customer customer = customerRepository.getReferenceById(customerId);
-
-        Cart cart = customer.getCart();
+        Cart cart = cartRepository.getReferenceByCustomer_Id(customerId);
 
         if (cart == null) {
             throw new NullPointerException("Cart for customer with id " + customerId + " is not be created");

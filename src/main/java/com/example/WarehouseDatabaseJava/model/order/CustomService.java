@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -46,7 +47,7 @@ public class CustomService {
 
         Customer customer = customerRepository.getReferenceById(customerId);
 
-        if (customer.getCart() == null){
+        if (customer.getCart() == null) {
             throw new NullPointerException("Cart for customer with id " + customerId + " is not be created");
         }
 
@@ -57,13 +58,13 @@ public class CustomService {
                 int quantityInCart = cartProduct.getQuantity();
                 int quantityInStock = product.getQuantity();
                 if (quantityInStock < quantityInCart) {
-                    throw new RuntimeException("Not enough stock for product: " + product.getName());
+                    throw new RuntimeException("Not enough stock for product: " + product.getBarcode());
                 }
             }
             Custom custom = new Custom();
             custom.setStatus(Custom.Status.CREATED);
-            custom.setCustomer(customer); // Set the customer for the custom order
-            custom.getCustomer().getCustomList().add(custom); // Add the custom order to the customer's custom list
+            custom.setCustomer(customer); // Установить связь с заказчиком для заказа
+            custom.getCustomer().getCustomList().add(custom); // Добавить заказ в список заказов заказчика
             for (CartProduct cartProduct : customer.getCart().getCartProductList()) {
                 Product product = cartProduct.getProduct();
                 int quantityInCart = cartProduct.getQuantity();
@@ -78,6 +79,7 @@ public class CustomService {
                 customProductRepository.save(customProduct);
             }
             custom.setPrice(customer.getCart().getPrice());
+            custom.setCreationTime(new Date()); // Зарегистрировать текущее время создания
             customRepository.save(custom);
 
             cartProductRepository.deleteAll(customer.getCart().getCartProductList());
@@ -110,25 +112,14 @@ public class CustomService {
             customDTO.setCustomerSurname(customer.getSurname());
             customDTO.setPrice(custom.getPrice());
             customDTO.setStatus(custom.getStatus().toString());
-            customDTO.setCustomProductDTOList(new ArrayList<>());
 
             Department department = custom.getDepartment();
             if (department != null) {
                 customDTO.setDepartment(department.getDepartmentName());
             }
 
-            for (CustomProduct customProduct : custom.getCustomProductList()) {
-                Product product = customProduct.getProduct();
-                int quantity = customProduct.getQuantity();
-
-                CustomProductDTO customProductDTO = new CustomProductDTO();
-                customProductDTO.setProductBarcode(product.getBarcode());
-                customProductDTO.setProductName(product.getName());
-                customProductDTO.setQuantity(quantity);
-
-                customDTO.getCustomProductDTOList().add(customProductDTO);
-            }
-
+            List<CustomProductDTO> customProductDTOs = setListCustomProductDTO(custom);
+            customDTO.setCustomProductDTOList(customProductDTOs);
             customDTOs.add(customDTO);
         }
 
@@ -159,19 +150,7 @@ public class CustomService {
 
                 customDTO.setStatus(custom.getStatus().toString());
 
-                List<CustomProductDTO> customProductDTOs = new ArrayList<>();
-                for (CustomProduct customProduct : custom.getCustomProductList()) {
-                    Product product = customProduct.getProduct();
-                    int quantity = customProduct.getQuantity();
-
-                    CustomProductDTO customProductDTO = new CustomProductDTO();
-                    customProductDTO.setProductBarcode(product.getBarcode());
-                    customProductDTO.setProductName(product.getName());
-                    customProductDTO.setQuantity(quantity);
-
-                    customProductDTOs.add(customProductDTO);
-                }
-
+                List<CustomProductDTO> customProductDTOs = setListCustomProductDTO(custom);
                 customDTO.setCustomProductDTOList(customProductDTOs);
                 customDTOs.add(customDTO);
             }
@@ -204,19 +183,7 @@ public class CustomService {
 
                 customDTO.setStatus(custom.getStatus().toString());
 
-                List<CustomProductDTO> customProductDTOs = new ArrayList<>();
-                for (CustomProduct customProduct : custom.getCustomProductList()) {
-                    Product product = customProduct.getProduct();
-                    int quantity = customProduct.getQuantity();
-
-                    CustomProductDTO customProductDTO = new CustomProductDTO();
-                    customProductDTO.setProductBarcode(product.getBarcode());
-                    customProductDTO.setProductName(product.getName());
-                    customProductDTO.setQuantity(quantity);
-
-                    customProductDTOs.add(customProductDTO);
-                }
-
+                List<CustomProductDTO> customProductDTOs = setListCustomProductDTO(custom);
                 customDTO.setCustomProductDTOList(customProductDTOs);
                 customDTOs.add(customDTO);
             }
@@ -249,19 +216,7 @@ public class CustomService {
                 customDTO.setStatus(custom.getStatus().toString());
                 customDTO.setDepartment(department.getDepartmentName());
 
-                List<CustomProductDTO> customProductDTOs = new ArrayList<>();
-                for (CustomProduct customProduct : custom.getCustomProductList()) {
-                    Product product = customProduct.getProduct();
-                    int quantity = customProduct.getQuantity();
-
-                    CustomProductDTO customProductDTO = new CustomProductDTO();
-                    customProductDTO.setProductBarcode(product.getBarcode());
-                    customProductDTO.setProductName(product.getName());
-                    customProductDTO.setQuantity(quantity);
-
-                    customProductDTOs.add(customProductDTO);
-                }
-
+                List<CustomProductDTO> customProductDTOs = setListCustomProductDTO(custom);
                 customDTO.setCustomProductDTOList(customProductDTOs);
                 customDTOs.add(customDTO);
             }
@@ -278,43 +233,38 @@ public class CustomService {
         List<CustomDTO> customDTOs = new ArrayList<>();
 
         for (Custom custom : allCustoms) {
-            CustomDTO customDTO = new CustomDTO();
-            customDTO.setCustomId(custom.getId());
+            //встановлення інфи про замовлення
+            CustomDTO customDTO = setCustomDTO(custom);
 
-            Customer customer = custom.getCustomer();
-            customDTO.setCustomerId(customer.getId());
-            customDTO.setCustomerName(customer.getName());
-            customDTO.setCustomerSurname(customer.getSurname());
+            //встановлення інфи про продукти що входять до замовлення
+            List<CustomProductDTO> customProductDTOs = setListCustomProductDTO(custom);
 
-            if (custom.getEmployee() != null) {
-                Employee employee = custom.getEmployee();
-                customDTO.setEmployeeId(employee.getId());
-                customDTO.setEmployeeName(employee.getName());
-                customDTO.setEmployeeSurname(employee.getSurname());
-            }
-
-            customDTO.setStatus(custom.getStatus().toString());
-            customDTO.setPrice(custom.getPrice());
-
-            if (custom.getDepartment() != null) {
-                Department department = custom.getDepartment();
-                customDTO.setDepartment(department.getDepartmentName());
-            }
-
-            List<CustomProductDTO> customProductDTOs = new ArrayList<>();
-            for (CustomProduct customProduct : custom.getCustomProductList()) {
-                Product product = customProduct.getProduct();
-                int quantity = customProduct.getQuantity();
-
-                CustomProductDTO customProductDTO = new CustomProductDTO();
-                customProductDTO.setProductBarcode(product.getBarcode());
-                customProductDTO.setProductName(product.getName());
-                customProductDTO.setQuantity(quantity);
-
-                customProductDTOs.add(customProductDTO);
-            }
-
+            //приєднання інфи про продукти замовлення до інфи про замовлення
             customDTO.setCustomProductDTOList(customProductDTOs);
+
+            //додавання готового об'єкту інфи про замовлення до списку інф замовлень
+            customDTOs.add(customDTO);
+        }
+
+        return customDTOs;
+    }
+
+    // Отримання замовлень з повним переліком данних для певної дати створення цього замовлення
+    public List<CustomDTO> getAllCustomsByDate(Date creationTime) {
+        List<Custom> allCustoms = customRepository.findAllByCreationTime(creationTime);
+        List<CustomDTO> customDTOs = new ArrayList<>();
+
+        for (Custom custom : allCustoms) {
+            //встановлення інфи про замовлення
+            CustomDTO customDTO = setCustomDTO(custom);
+
+            //встановлення інфи про продукти що входять до замовлення
+            List<CustomProductDTO> customProductDTOs = setListCustomProductDTO(custom);
+
+            //приєднання інфи про продукти замовлення до інфи про замовлення
+            customDTO.setCustomProductDTOList(customProductDTOs);
+
+            //додавання готового об'єкту інфи про замовлення до списку інф замовлень
             customDTOs.add(customDTO);
         }
 
@@ -334,9 +284,9 @@ public class CustomService {
         Custom custom = customRepository.getReferenceById(customId);
         Employee employee = employeeRepository.getReferenceById(employeeId);
 
-            custom.setEmployee(employee);
-            custom.setStatus(Custom.Status.IN_PROCESSING);
-            customRepository.save(custom);
+        custom.setEmployee(employee);
+        custom.setStatus(Custom.Status.IN_PROCESSING);
+        customRepository.save(custom);
     }
 
     // Встановлення для замовлення статусу PROCESSED(виконаний) TESTED
@@ -383,5 +333,49 @@ public class CustomService {
         }
         custom.setStatus(Custom.Status.SENT);
         customRepository.save(custom);
+    }
+
+    //внутрішній метод для встановлення списку продуктів(DTO!) для певного замовлення Custom
+    private List<CustomProductDTO> setListCustomProductDTO(Custom custom) {
+        List<CustomProductDTO> customProductDTOs = new ArrayList<>();
+        for (CustomProduct customProduct : custom.getCustomProductList()) {
+            Product product = customProduct.getProduct();
+
+            CustomProductDTO customProductDTO = new CustomProductDTO();
+            customProductDTO.setProductBarcode(product.getBarcode());
+            customProductDTO.setProductName(product.getName());
+            customProductDTO.setQuantity(customProduct.getQuantity());
+
+            customProductDTOs.add(customProductDTO);
+        }
+        return customProductDTOs;
+    }
+
+    //внутрішній метод для встановлення певного замовлення Custom (DTO!) (вся інфа про замовлення)
+    private CustomDTO setCustomDTO(Custom custom) {
+        CustomDTO customDTO = new CustomDTO();
+        customDTO.setCustomId(custom.getId());
+
+        Customer customer = custom.getCustomer();
+        customDTO.setCustomerId(customer.getId());
+        customDTO.setCustomerName(customer.getName());
+        customDTO.setCustomerSurname(customer.getSurname());
+
+        if (custom.getEmployee() != null) {
+            Employee employee = custom.getEmployee();
+            customDTO.setEmployeeId(employee.getId());
+            customDTO.setEmployeeName(employee.getName());
+            customDTO.setEmployeeSurname(employee.getSurname());
+        }
+
+        customDTO.setStatus(custom.getStatus().toString());
+        customDTO.setPrice(custom.getPrice());
+        customDTO.setCreatingTime(custom.getCreationTime());
+
+        if (custom.getDepartment() != null) {
+            Department department = custom.getDepartment();
+            customDTO.setDepartment(department.getDepartmentName());
+        }
+        return customDTO;
     }
 }

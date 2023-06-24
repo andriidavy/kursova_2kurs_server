@@ -21,6 +21,7 @@ import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -80,6 +81,12 @@ public class ManagerController {
     @GetMapping("/manager/custom/get-all")
     public List<CustomDTO> getAllCustoms() {
         return customService.getAllCustoms();
+    }
+
+    //отримати список всіх замовлень для певної дати
+    @GetMapping("/manager/custom/get-all-by-date")
+    public List<CustomDTO> getAllCustomsByDate(Date creationTime) {
+        return customService.getAllCustomsByDate(creationTime);
     }
 
     //отримати список всіх замовлень зі статусом CREATED TESTED
