@@ -15,7 +15,7 @@ public class CustomerService {
     @Autowired
     private CartRepository cartRepository;
 
-    //додавання нового покупця та його корзини TESTED
+    //додавання нового покупця та його корзини (TESTED!)
     public Customer save(String name, String surname, String email, String password) {
         if (customerRepository.existsByEmail(email)) {
             throw new RuntimeException("Customer with email: " + email + " already exists");

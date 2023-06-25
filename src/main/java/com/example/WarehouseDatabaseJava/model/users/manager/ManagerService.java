@@ -18,7 +18,7 @@ public class ManagerService {
     @Autowired
     DepartmentRepository departmentRepository;
 
-    //збереження менеджера
+    //збереження менеджера (TESTED!)
     public Manager save(String name, String surname, String email, String password) {
         if (managerRepository.existsByEmail(email)) {
             throw new RuntimeException("Manager with email: " + email + " already exists");

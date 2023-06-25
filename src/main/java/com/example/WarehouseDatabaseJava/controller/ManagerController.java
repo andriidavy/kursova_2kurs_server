@@ -41,7 +41,7 @@ public class ManagerController {
     @Autowired
     ProductCategoryService productCategoryService;
 
-    //зберегти нового менеджера TESTED
+    //зберегти нового менеджера TESTED!
     @PostMapping("/manager/save")
     public Manager saveManager(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
         return managerService.save(name, surname, email, password);
@@ -108,7 +108,7 @@ public class ManagerController {
         return employeeService.getAllEmployeesProfile();
     }
 
-    //додати нового робітника TESTED
+    //додати нового робітника TESTED!
     @PostMapping("/manager/employee/save")
     public Employee saveEmployee(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
         return employeeService.save(name, surname, email, password);
@@ -138,7 +138,7 @@ public class ManagerController {
         return productService.checkBarcode(barcode);
     }
 
-    //додати новий продукт
+    //додати новий продукт TESTED!
     @PostMapping("/manager/product/save")
     public Product saveProduct(@RequestParam long barcode, @RequestParam String name, @RequestParam double price, @RequestParam String description, @RequestParam int quantity) {
         return productService.saveProduct(barcode, name, price, description, quantity);
@@ -223,7 +223,7 @@ public class ManagerController {
         return departmentService.getAllManagersForDepartment(departmentId);
     }
 
-    //метод створення нової категорії товарів
+    //метод створення нової категорії товарів TESTED!
     @PostMapping("/manager/category-product/create")
     public ProductCategory createProductCategory(@RequestParam String categoryName) {
         return productCategoryService.createProductCategory(categoryName);
@@ -235,20 +235,20 @@ public class ManagerController {
         productCategoryService.removeProductCategoryById(categoryId);
     }
 
-    //метод призначення певного товару на певну категорію
+    //метод призначення певного товару на певну категорію TESTED!
     @PostMapping("/manager/category-product/assign-to-product")
     public void assignProductToCategory(@RequestParam String productId, @RequestParam String categoryId) {
         productCategoryService.assignProductToCategory(productId, categoryId);
     }
 
     //метод для додавання та оновлення url зображення для продукту
-    @PostMapping("/manager/product/set-image_(non used!)")
+    @PostMapping("/manager/product/set-image")
     public void addImageUrlToProduct(@RequestParam String productId, @RequestParam String url) {
         productService.addImageUrlToProduct(productId, url);
     }
 
     // метод для видалення url зображення для продукту
-    @PostMapping("/manager/product/delete-image_(non used!)")
+    @PostMapping("/manager/product/delete-image")
     public void deleteImageForProduct(@RequestParam String productId) {
         productService.deleteImageForProduct(productId);
     }

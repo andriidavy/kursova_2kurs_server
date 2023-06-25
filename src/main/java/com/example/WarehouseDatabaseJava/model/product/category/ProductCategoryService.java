@@ -6,7 +6,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,7 +15,7 @@ public class ProductCategoryService {
     @Autowired
     ProductRepository productRepository;
 
-    // метод створення нової категорії продуктів
+    // метод створення нової категорії продуктів (TESTED!)
     public ProductCategory createProductCategory(String categoryName) {
         if (productCategoryRepository.existsByCategoryName(categoryName)) {
             throw new IllegalArgumentException("ProductCategory with the name " + categoryName + " already exists");
@@ -40,7 +39,7 @@ public class ProductCategoryService {
         return productCategoryRepository.findAll();
     }
 
-    // метод призначення певному продукту певної категорії
+    // метод призначення певному продукту певної категорії (TESTED!)
     public void assignProductToCategory(String productId, String categoryId) {
 
         if (!productRepository.existsById(productId)) {

@@ -12,7 +12,7 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    //TESTED
+    //(TESTED!)
     public Employee save(String name, String surname, String email, String password) {
         if (employeeRepository.existsByEmail(email)) {
             throw new RuntimeException("Employee with email: " + email + " already exists");

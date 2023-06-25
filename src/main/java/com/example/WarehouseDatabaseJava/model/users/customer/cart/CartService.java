@@ -2,7 +2,6 @@ package com.example.WarehouseDatabaseJava.model.users.customer.cart;
 
 import com.example.WarehouseDatabaseJava.model.product.Product;
 import com.example.WarehouseDatabaseJava.model.product.ProductRepository;
-import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -125,7 +124,7 @@ public class CartService {
         }
 
         cart.getCartProductList().clear();
-        cartRepository.deleteAllCartProductsByCart(cart);
+        cartProductRepository.deleteAllByCart(cart);
         //установка новой цены корзины
         cart.setPrice(0);
         cartRepository.save(cart);
@@ -148,13 +147,12 @@ public class CartService {
 
         for (CartProduct cartProduct : cart.getCartProductList()) {
             Product product = cartProduct.getProduct();
-            int quantity = cartProduct.getQuantity();
 
             CartProductDTO cartProductDTO = new CartProductDTO();
             cartProductDTO.setProductId(product.getId());
             cartProductDTO.setProductName(product.getName());
             cartProductDTO.setProductPrice(product.getPrice());
-            cartProductDTO.setQuantity(quantity);
+            cartProductDTO.setQuantity(cartProduct.getQuantity());
 
             cartProductDTOS.add(cartProductDTO);
         }

@@ -35,7 +35,7 @@ public class ProductService {
         return productRepository.save(existingProduct);
     }
 
-    //метод збереження нового товару
+    //метод збереження нового товару (TESTED!)
     public Product saveProduct(long barcode, String name, double price, String description, int quantity) {
         if (barcode < 0) {
             throw new IllegalArgumentException("Invalid barcode");
@@ -105,15 +105,7 @@ public class ProductService {
         List<Product> productList = productRepository.findAll();
         List<ProductDTO> productDTOList = new ArrayList<>();
         for (Product product : productList) {
-            ProductDTO productDTO = new ProductDTO();
-            productDTO.setId(product.getId());
-            productDTO.setBarcode(product.getBarcode());
-            productDTO.setName(productDTO.getName());
-            productDTO.setPrice(product.getPrice());
-            productDTO.setDescription(product.getDescription());
-            productDTO.setQuantity(product.getQuantity());
-            productDTO.setImageUrl(product.getImageUrl());
-            productDTO.setCategory(product.getProductCategory().getCategoryName());
+            ProductDTO productDTO = setProductDTO(product);
             productDTOList.add(productDTO);
         }
         return productDTOList;
@@ -133,17 +125,7 @@ public class ProductService {
 
         Product product = productRepository.getReferenceByBarcode(barcode);
 
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setId(product.getId());
-        productDTO.setBarcode(product.getBarcode());
-        productDTO.setName(productDTO.getName());
-        productDTO.setPrice(product.getPrice());
-        productDTO.setDescription(product.getDescription());
-        productDTO.setQuantity(product.getQuantity());
-        productDTO.setImageUrl(product.getImageUrl());
-        productDTO.setCategory(product.getProductCategory().getCategoryName());
-
-        return productDTO;
+        return setProductDTO(product);
     }
 
     //метод отримання списку продуктів по співпадінню найменування продукту та введеної строки ігноруючи реєстр
@@ -165,6 +147,20 @@ public class ProductService {
         }
 
         return productRepository.findAllByNameContainingIgnoreCaseAndProductCategory_Id(searchName, categoryId);
+    }
+
+    //внутрішній метод для встановлення інфи про певний продукт
+    private ProductDTO setProductDTO(Product product) {
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(product.getId());
+        productDTO.setBarcode(product.getBarcode());
+        productDTO.setName(productDTO.getName());
+        productDTO.setPrice(product.getPrice());
+        productDTO.setDescription(product.getDescription());
+        productDTO.setQuantity(product.getQuantity());
+        productDTO.setImageUrl(product.getImageUrl());
+        productDTO.setCategory(product.getProductCategory().getCategoryName());
+        return productDTO;
     }
 }
 
