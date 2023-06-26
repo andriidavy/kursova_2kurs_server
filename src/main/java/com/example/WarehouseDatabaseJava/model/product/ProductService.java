@@ -15,12 +15,12 @@ public class ProductService {
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
 
-    //метод перевірки наявності товару з даним barcode
+    //метод перевірки наявності товару з даним barcode (TESTED!)
     public boolean checkBarcode(long barcode) {
         return productRepository.existsByBarcode(barcode);
     }
 
-    //метод додавання кількості уже наявного товару
+    //метод додавання кількості уже наявного товару (TESTED!)
     public Product addProductQuantity(long barcode, int quantity) {
         if (!productRepository.existsByBarcode(barcode)) {
             throw new EntityNotFoundException("Product with barcode " + barcode + " not found");
@@ -60,7 +60,7 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    //метод для додавання та оновлення url зображення для продукту
+    //метод для додавання та оновлення url зображення для продукту (TESTED!)
     public void addImageUrlToProduct(String productId, String url) {
         if (!productRepository.existsById(productId)) {
             throw new EntityNotFoundException("Product with id: " + productId + " not found");
@@ -78,7 +78,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    // метод для видалення url зображення для продукту
+    // метод для видалення url зображення для продукту (TESTED!)
     public void deleteImageForProduct(String productId) {
         if (!productRepository.existsById(productId)) {
             throw new EntityNotFoundException("Product with id: " + productId + " not found");

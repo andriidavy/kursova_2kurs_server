@@ -37,7 +37,7 @@ public class CustomService {
     @Autowired
     private ManagerRepository managerRepository;
 
-    //Створення замовлення покупцем TESTED
+    //Створення замовлення покупцем (TESTED!)
     //ОБНОВА!!!
     @Transactional
     public String createCustom(String customerId) {

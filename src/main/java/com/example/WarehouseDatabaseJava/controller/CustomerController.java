@@ -57,25 +57,25 @@ public class CustomerController {
         return customerService.save(name, surname, email, password);
     }
 
-    // додати продукт до корзини конкретним покупцем TESTED
+    // додати продукт до корзини конкретним покупцем TESTED!
     @PostMapping("/customer/cart/add-product-to-cart")
     public void addProductToCart(@RequestParam String customerId, @RequestParam String productId, @RequestParam int quantity) {
         cartService.addProductToCart(customerId, productId, quantity);
     }
 
-    //видалити продукт з корзини для конкретного покупця TESTED
+    //видалити продукт з корзини для конкретного покупця TESTED!
     @DeleteMapping("/customer/cart/remove-product-by-id")
     public void removeProductFromCart(@RequestParam String customerId, @RequestParam String productId) {
         cartService.removeProductFromCart(customerId, productId);
     }
 
-    //очистити корзину для конкретного покупця
+    //очистити корзину для конкретного покупця TESTED!
     @PostMapping("/customer/cart/clear")
     public void clearCart(@RequestParam String customerId) {
         cartService.clearCart(customerId);
     }
 
-    //створення замовлення конкретним покупцем TESTED
+    //створення замовлення конкретним покупцем TESTED!
     @PostMapping("/customer/create-custom")
     public String createCustom(@RequestParam String customerId) {
         return customService.createCustom(customerId);

@@ -89,7 +89,7 @@ public class ManagerService {
         return new ManagerProfileDTO(name, surname, email, departmentsString.toString());
     }
 
-    //метод призначення певному менеджеру певний етап
+    //метод призначення певному менеджеру певний етап (TESTED!)
     public void assignDepartmentToManager(String managerId, String departmentId) {
         if (!managerRepository.existsById(managerId)) {
             throw new EntityNotFoundException("Manager not found with id: " + managerId);

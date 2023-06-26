@@ -23,7 +23,7 @@ public class CartService {
     @Autowired
     private CartProductRepository cartProductRepository;
 
-    //додавання продукту в кошик покупцем TESTED
+    //додавання продукту в кошик покупцем (TESTED!)
     public void addProductToCart(String customerId, String productId, int quantity) {
         if (!customerRepository.existsById(customerId)) {
             throw new EntityNotFoundException("Customer not found with id: " + customerId);
@@ -82,7 +82,7 @@ public class CartService {
         return null;
     }
 
-    // видалення продукту з кошика покупцем
+    // видалення продукту з кошика покупцем (TESTED!)
     public void removeProductFromCart(String customerId, String productId) {
         if (!customerRepository.existsById(customerId)) {
             throw new EntityNotFoundException("Customer not found with id: " + customerId);
@@ -110,7 +110,7 @@ public class CartService {
                 });
     }
 
-    // очищення кошика покупцем
+    // очищення кошика покупцем (TESTED!)
     @Transactional
     public void clearCart(String customerId) {
         if (!customerRepository.existsById(customerId)) {

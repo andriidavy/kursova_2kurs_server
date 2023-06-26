@@ -132,9 +132,9 @@ public class ManagerController {
         return productService.searchProductByBarcode(searchBarcode);
     }
 
-    //перевірити наявність продукту по barcode
+    //перевірити наявність продукту по barcode TESTED!
     @GetMapping("/manager/product/check-barcode")
-    public boolean checkBarcode(long barcode) {
+    public boolean checkBarcode(@RequestParam long barcode) {
         return productService.checkBarcode(barcode);
     }
 
@@ -144,7 +144,7 @@ public class ManagerController {
         return productService.saveProduct(barcode, name, price, description, quantity);
     }
 
-    //збільшити кількість наявного продукту
+    //збільшити кількість наявного продукту TESTED!
     @PostMapping("/manager/product/add-count")
     public Product addProductQuantity(@RequestParam long barcode, @RequestParam int quantity) {
         return productService.addProductQuantity(barcode, quantity);
@@ -193,7 +193,7 @@ public class ManagerController {
         return departmentService.getAllDepartments();
     }
 
-    //призначити відділ на менеджера TESTED
+    //призначити відділ на менеджера TESTED!
     @PostMapping("/manager/department/assign-department-to-manager")
     public void assignDepartmentToManager(@RequestParam String managerId, @RequestParam String departmentId) {
         managerService.assignDepartmentToManager(managerId, departmentId);
@@ -241,13 +241,13 @@ public class ManagerController {
         productCategoryService.assignProductToCategory(productId, categoryId);
     }
 
-    //метод для додавання та оновлення url зображення для продукту
+    //метод для додавання та оновлення url зображення для продукту TESTED!
     @PostMapping("/manager/product/set-image")
     public void addImageUrlToProduct(@RequestParam String productId, @RequestParam String url) {
         productService.addImageUrlToProduct(productId, url);
     }
 
-    // метод для видалення url зображення для продукту
+    // метод для видалення url зображення для продукту TESTED!
     @PostMapping("/manager/product/delete-image")
     public void deleteImageForProduct(@RequestParam String productId) {
         productService.deleteImageForProduct(productId);
