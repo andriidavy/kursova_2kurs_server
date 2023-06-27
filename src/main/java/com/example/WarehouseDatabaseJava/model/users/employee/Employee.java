@@ -17,8 +17,8 @@ public class Employee {
     private String email;
     private String password;
 
-    //One-to-Many relation with EmployeeCustom
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
+    //One-to-Many relation with Custom
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, mappedBy = "employee")
     @JsonIgnore
     private List<Custom> customList = new ArrayList<>();
 

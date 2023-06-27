@@ -96,7 +96,7 @@ public class ManagerController {
     }
 
     //призначити конкретного робітника на виконання конкретного замовлення TESTED
-    @PostMapping("/manager/custom/assign-employee/")
+    @PostMapping("/manager/custom/assign-employee")
     public void assignEmployeeToCustom(@RequestParam String customId, @RequestParam String employeeId) {
         customService.assignEmployeeToCustom(customId, employeeId);
     }
@@ -163,13 +163,13 @@ public class ManagerController {
         reportService.setReportAccepted(reportId);
     }
 
-    //відхилити звіт TESTED
+    //відхилити звіт TESTED!
     @PostMapping("/manager/custom/report/reject")
     public void setReportRejected(@RequestParam String reportId) {
         reportService.setReportRejected(reportId);
     }
 
-    //додати зворотнє повідомлення для відхиленого звіту
+    //додати зворотнє повідомлення для відхиленого звіту TESTED!
     @PostMapping("/manager/custom/report/set-callback")
     public void setReportCallback(@RequestParam String reportId, @RequestParam String callbackText) {
         reportService.setReportCallback(reportId, callbackText);

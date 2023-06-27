@@ -19,7 +19,7 @@ public class DepartmentService {
     @Autowired
     CustomRepository customRepository;
 
-    // збереження нового відділу
+    // збереження нового відділу (TESTED!)
     public Department save(String departmentName) {
         if (departmentRepository.existsByDepartmentName(departmentName)) {
             throw new RuntimeException("Department with name: " + departmentName + " already exists");
@@ -74,20 +74,20 @@ public class DepartmentService {
         return managerProfiles;
     }
 
-    //метод призначення конкретному замовленню конкретного відділу доставки
-    //ОНОВЛЕНО!!!
-    public void assignDepartmentToCustom(String customId, String departmentId) {
-        if (!customRepository.existsById(customId)) {
-            throw new IllegalArgumentException("Custom not found with id: " + customId);
-        }
-        if (!departmentRepository.existsById(departmentId)) {
-            throw new EntityNotFoundException("Department not found with id: " + departmentId);
-        }
-
-        Custom custom = customRepository.getReferenceById(customId);
-        Department department = departmentRepository.getReferenceById(departmentId);
-
-        custom.setDepartment(department);
-        customRepository.save(custom);
-    }
+//    //метод призначення конкретному замовленню конкретного відділу доставки (TESTED!)
+//    //ОНОВЛЕНО!!!
+//    public void assignDepartmentToCustom(String customId, String departmentId) {
+//        if (!customRepository.existsById(customId)) {
+//            throw new IllegalArgumentException("Custom not found with id: " + customId);
+//        }
+//        if (!departmentRepository.existsById(departmentId)) {
+//            throw new EntityNotFoundException("Department not found with id: " + departmentId);
+//        }
+//
+//        Custom custom = customRepository.getReferenceById(customId);
+//        Department department = departmentRepository.getReferenceById(departmentId);
+//
+//        custom.setDepartment(department);
+//        customRepository.save(custom);
+//    }
 }

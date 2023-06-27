@@ -75,10 +75,10 @@ public class CustomerController {
         cartService.clearCart(customerId);
     }
 
-    //створення замовлення конкретним покупцем TESTED!
+    //створення замовлення конкретним покупцем TESTED! (upd: department assign into this fun(non tested!))
     @PostMapping("/customer/create-custom")
-    public String createCustom(@RequestParam String customerId) {
-        return customService.createCustom(customerId);
+    public String createCustom(@RequestParam String customerId, String departmentId) {
+        return customService.createCustom(customerId, departmentId);
     }
 
     //отримати список всіх замовлень для конкретного покупця TESTED
@@ -117,11 +117,11 @@ public class CustomerController {
         return productService.searchProductsByNameWithCategory(searchName, categoryId);
     }
 
-    //призначити конкретний відділ для конкретного замовлення TESTED
-    @PostMapping("/customer/custom/assign-department")
-    public void assignDepartmentToCustom(@RequestParam String customId, @RequestParam String departmentId) {
-        departmentService.assignDepartmentToCustom(customId, departmentId);
-    }
+//    //призначити конкретний відділ для конкретного замовлення TESTED!
+//    @PostMapping("/customer/custom/assign-department")
+//    public void assignDepartmentToCustom(@RequestParam String customId, @RequestParam String departmentId) {
+//        departmentService.assignDepartmentToCustom(customId, departmentId);
+//    }
 
     //отримати список всіх відділів TESTED
     @GetMapping("/customer/department/get-all")

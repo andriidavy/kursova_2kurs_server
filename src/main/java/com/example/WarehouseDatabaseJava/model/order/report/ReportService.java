@@ -29,7 +29,7 @@ public class ReportService {
     @Autowired
     CustomService customService;
 
-    // метод створення звіту робітником для конкретного замовлення TESTED
+    // метод створення звіту робітником для конкретного замовлення (TESTED!)
     //ОБНОВА!!!
     @Transactional
     public void createReport(String employeeId, String customId, String reportText) {
@@ -97,11 +97,7 @@ public class ReportService {
             Department department = custom.getDepartment();
 
             if (managerDepartments.contains(department)) {
-                ReportDTO reportDTO = new ReportDTO();
-                reportDTO.setReportId(report.getId());
-                reportDTO.setCustomId(custom.getId());
-                reportDTO.setReportText(report.getReportText());
-                reportDTO.setStatus(report.getStatus().toString());
+                ReportDTO reportDTO = setReportDTO(report, custom);
 
                 reportsDTO.add(reportDTO);
             }
@@ -124,11 +120,7 @@ public class ReportService {
         for (Custom custom : employee.getCustomList()) {
             Report report = custom.getReport();
             if (report != null && report.getStatus() == Report.Status.WAITING) {
-                ReportDTO reportDTO = new ReportDTO();
-                reportDTO.setReportId(report.getId());
-                reportDTO.setCustomId(custom.getId());
-                reportDTO.setReportText(report.getReportText());
-                reportDTO.setStatus(report.getStatus().toString());
+                ReportDTO reportDTO = setReportDTO(report, custom);
 
                 reportsDTO.add(reportDTO);
             }
@@ -151,11 +143,7 @@ public class ReportService {
         for (Custom custom : employee.getCustomList()) {
             Report report = custom.getReport();
             if (report != null && report.getStatus() == Report.Status.ACCEPTED) {
-                ReportDTO reportDTO = new ReportDTO();
-                reportDTO.setReportId(report.getId());
-                reportDTO.setCustomId(custom.getId());
-                reportDTO.setReportText(report.getReportText());
-                reportDTO.setStatus(report.getStatus().toString());
+                ReportDTO reportDTO = setReportDTO(report, custom);
 
                 reportsDTO.add(reportDTO);
             }
@@ -178,11 +166,8 @@ public class ReportService {
         for (Custom custom : employee.getCustomList()) {
             Report report = custom.getReport();
             if (report != null && report.getStatus() == Report.Status.REJECTED) {
-                ReportDTO reportDTO = new ReportDTO();
-                reportDTO.setReportId(report.getId());
-                reportDTO.setCustomId(custom.getId());
-                reportDTO.setReportText(report.getReportText());
-                reportDTO.setStatus(report.getStatus().toString());
+                ReportDTO reportDTO = setReportDTO(report, custom);
+                reportDTO.setCallbackText(report.getCallbackText());
 
                 reportsDTO.add(reportDTO);
             }
@@ -210,7 +195,7 @@ public class ReportService {
         customService.setCustomProcessed(report.getCustom().getId());
     }
 
-    // метод для встановлення конкретному звіту статусу REJECTED TESTED
+    // метод для встановлення конкретному звіту статусу REJECTED (TESTED!)
     @Transactional
     public void setReportRejected(String reportId) {
         if (!reportRepository.existsById(reportId)) {
@@ -224,7 +209,7 @@ public class ReportService {
         customService.setCustomInProcessing(report.getCustom().getId());
     }
 
-    //метод для встановлення зворотнього повідомлення callback для відхиленого звіту
+    //метод для встановлення зворотнього повідомлення callback для відхиленого звіту (TESTED!)
     public void setReportCallback(String reportId, String callbackText) {
         if (!reportRepository.existsById(reportId)) {
             throw new EntityNotFoundException("Report not found with id:" + reportId);
@@ -238,5 +223,15 @@ public class ReportService {
 
         report.setCallbackText(callbackText);
         reportRepository.save(report);
+    }
+
+    //внутрішній метод встановлення інфи про звіт для замовлення
+    private ReportDTO setReportDTO(Report report, Custom custom) {
+        ReportDTO reportDTO = new ReportDTO();
+        reportDTO.setReportId(report.getId());
+        reportDTO.setCustomId(custom.getId());
+        reportDTO.setReportText(report.getReportText());
+        reportDTO.setStatus(report.getStatus().toString());
+        return reportDTO;
     }
 }

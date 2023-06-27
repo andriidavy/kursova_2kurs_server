@@ -15,7 +15,8 @@ public class Department {
 
     private String departmentName;
 
-    public Department(){}
+    public Department() {
+    }
 
     public Department(String departmentName) {
         this.departmentName = departmentName;
@@ -30,7 +31,7 @@ public class Department {
     private List<Manager> managerList;
 
     // зв'язок One-to-Many з Custom
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "department")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, mappedBy = "department")
     private List<Custom> customList = new ArrayList<>();
 
     public String getId() {

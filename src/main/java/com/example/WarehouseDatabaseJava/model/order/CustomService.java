@@ -11,6 +11,7 @@ import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeRepository
 import com.example.WarehouseDatabaseJava.model.users.manager.Manager;
 import com.example.WarehouseDatabaseJava.model.users.manager.ManagerRepository;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.Department;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +37,22 @@ public class CustomService {
     private CartProductRepository cartProductRepository;
     @Autowired
     private ManagerRepository managerRepository;
+    @Autowired
+    private DepartmentRepository departmentRepository;
 
     //Створення замовлення покупцем (TESTED!)
     //ОБНОВА!!!
     @Transactional
-    public String createCustom(String customerId) {
+    public String createCustom(String customerId, String departmentId) {
         if (!customerRepository.existsById(customerId)) {
             throw new EntityNotFoundException("Customer not found with id:" + customerId);
         }
+        if (!departmentRepository.existsById(departmentId)) {
+            throw new EntityNotFoundException("Department not found with id:" + departmentId);
+        }
 
         Customer customer = customerRepository.getReferenceById(customerId);
+        Department department = departmentRepository.getReferenceById(departmentId);
 
         if (customer.getCart() == null) {
             throw new NullPointerException("Cart for customer with id " + customerId + " is not be created");
@@ -63,8 +70,9 @@ public class CustomService {
             }
             Custom custom = new Custom();
             custom.setStatus(Custom.Status.CREATED);
-            custom.setCustomer(customer); // Установить связь с заказчиком для заказа
-            custom.getCustomer().getCustomList().add(custom); // Добавить заказ в список заказов заказчика
+            custom.setDepartment(department);
+            custom.setCustomer(customer); // Установить связь с заказчиком для заказа (обратка неявная бо каскад all)
+
             for (CartProduct cartProduct : customer.getCart().getCartProductList()) {
                 Product product = cartProduct.getProduct();
                 int quantityInCart = cartProduct.getQuantity();
