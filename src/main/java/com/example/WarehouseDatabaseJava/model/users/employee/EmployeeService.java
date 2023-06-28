@@ -1,5 +1,8 @@
 package com.example.WarehouseDatabaseJava.model.users.employee;
 
+import com.example.WarehouseDatabaseJava.model.order.Custom;
+import com.example.WarehouseDatabaseJava.model.order.CustomRepository;
+import com.example.WarehouseDatabaseJava.model.product.Product;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +14,9 @@ import java.util.List;
 public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private CustomRepository customRepository;
 
     //(TESTED!)
     public Employee save(String name, String surname, String email, String password) {
@@ -28,6 +34,13 @@ public class EmployeeService {
         if (!employeeRepository.existsById(employeeId)) {
             throw new EntityNotFoundException("Employee not found with id: " + employeeId);
         }
+        List<Custom> customList = customRepository.findAllByEmployeeId(employeeId);
+        for (Custom custom : customList) {
+            custom.setEmployee(null);
+
+            customRepository.save(custom);
+        }
+
         employeeRepository.deleteById(employeeId);
     }
 

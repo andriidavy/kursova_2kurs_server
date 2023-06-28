@@ -12,4 +12,8 @@ public interface CustomRepository extends JpaRepository<Custom, String> {
     List<Custom> findAllByStatus(Custom.Status status);
 
     List<Custom> findAllByCreationTime(Date creatingTime);
+
+    List<Custom> findAllByDepartmentId(String departmentId);
+
+    List<Custom> findAllByEmployeeId(String employeeId);
 }

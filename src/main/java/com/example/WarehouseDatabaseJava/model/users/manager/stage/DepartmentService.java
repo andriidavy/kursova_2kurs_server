@@ -34,6 +34,16 @@ public class DepartmentService {
             throw new EntityNotFoundException("Department not found with id: " + departmentId);
         }
 
+        // Найти все связанные объекты Custom по departmentId
+        List<Custom> customList = customRepository.findAllByDepartmentId(departmentId);
+
+        // Обновить свойство department в каждом объекте Custom на null
+        for (Custom custom : customList) {
+            custom.setDepartment(null);
+            // Сохранить обновленный объект Custom
+            customRepository.save(custom);
+        }
+
         departmentRepository.deleteById(departmentId);
     }
 

@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.model.product.category;
 
+import com.example.WarehouseDatabaseJava.model.order.Custom;
 import com.example.WarehouseDatabaseJava.model.product.Product;
 import com.example.WarehouseDatabaseJava.model.product.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -29,6 +30,14 @@ public class ProductCategoryService {
     public void removeProductCategoryById(String categoryId) {
         if (!productCategoryRepository.existsById(categoryId)) {
             throw new EntityNotFoundException("Category with id " + categoryId + " not found");
+        }
+
+        List<Product> productList = productRepository.findAllByProductCategory_Id(categoryId);
+
+        for (Product product : productList) {
+            product.setProductCategory(null);
+
+            productRepository.save(product);
         }
 
         productCategoryRepository.deleteById(categoryId);
