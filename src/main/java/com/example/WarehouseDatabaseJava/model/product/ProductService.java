@@ -91,7 +91,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    //метод повернення списку продуктів для певної категорії (для покупця)
+    //метод повернення списку продуктів для певної категорії (для покупця) (TESTED!)
     public List<Product> getAllProductsByCategoryId(String categoryId) {
         if (!productRepository.existsByProductCategory_Id(categoryId)) {
             throw new EntityNotFoundException("Product category with id: " + categoryId + " not found");

@@ -26,7 +26,7 @@ public class ProductCategoryService {
         return productCategoryRepository.save(productCategory);
     }
 
-    //видалити категорію по її id
+    //видалити категорію по її id (TESTED!)
     public void removeProductCategoryById(String categoryId) {
         if (!productCategoryRepository.existsById(categoryId)) {
             throw new EntityNotFoundException("Category with id " + categoryId + " not found");

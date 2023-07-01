@@ -99,7 +99,7 @@ public class CustomerController {
         return cartService.getCartPriceByCustomerId(customerId);
     }
 
-    //отримати список всіх продуктів для певної категорії
+    //отримати список всіх продуктів для певної категорії TESTED!
     @GetMapping("/customer/category/product/get-all")
     public List<Product> getAllProductsByCategoryId(@RequestParam String categoryId) {
         return productService.getAllProductsByCategoryId(categoryId);

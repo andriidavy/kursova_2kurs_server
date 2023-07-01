@@ -229,7 +229,7 @@ public class ManagerController {
         return productCategoryService.createProductCategory(categoryName);
     }
 
-    //метод видалення категорії товарів
+    //метод видалення категорії товарів TESTED!
     @DeleteMapping("/manager/category-product/delete")
     public void removeProductCategoryById(@RequestParam String categoryId) {
         productCategoryService.removeProductCategoryById(categoryId);
