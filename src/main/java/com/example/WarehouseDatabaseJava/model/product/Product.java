@@ -2,6 +2,7 @@ package com.example.WarehouseDatabaseJava.model.product;
 
 import com.example.WarehouseDatabaseJava.model.order.CustomProduct;
 import com.example.WarehouseDatabaseJava.model.product.category.ProductCategory;
+import com.example.WarehouseDatabaseJava.model.product.image.ProductImage;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProduct;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -19,12 +20,11 @@ public class Product {
     private double price;
     private String description;
     private int quantity;
-    private String imageUrl;
 
-    // One-to-One relation with ProductImage (SAVING IMAGE TO DATABASE(not used now))
-//    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    ProductImage productImage;
+    // One-to-One relation with ProductImage (SAVING IMAGE TO DATABASE)
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    ProductImage productImage;
 
     // One-to-Many relation with CartProduct
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
@@ -120,22 +120,14 @@ public class Product {
         this.quantity = quantity;
     }
 
-//    public ProductImage getProductImage() {
-//        return productImage;
-//    }
-//
-//    public void setProductImage(ProductImage productImage) {
-//        this.productImage = productImage;
-//    }
-
-
-    public String getImageUrl() {
-        return imageUrl;
+    public ProductImage getProductImage() {
+        return productImage;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setProductImage(ProductImage productImage) {
+        this.productImage = productImage;
     }
+
 
     public ProductCategory getProductCategory() {
         return productCategory;

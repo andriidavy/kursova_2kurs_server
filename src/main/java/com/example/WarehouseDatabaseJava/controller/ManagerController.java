@@ -9,6 +9,7 @@ import com.example.WarehouseDatabaseJava.model.product.ProductDTO;
 import com.example.WarehouseDatabaseJava.model.product.ProductService;
 import com.example.WarehouseDatabaseJava.model.product.category.ProductCategory;
 import com.example.WarehouseDatabaseJava.model.product.category.ProductCategoryService;
+import com.example.WarehouseDatabaseJava.model.product.image.ProductImageService;
 import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeProfileDTO;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeService;
@@ -21,6 +22,8 @@ import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +43,8 @@ public class ManagerController {
     DepartmentService departmentService;
     @Autowired
     ProductCategoryService productCategoryService;
+    @Autowired
+    ProductImageService productImageService;
 
     //зберегти нового менеджера TESTED!
     @PostMapping("/manager/save")
@@ -241,16 +246,16 @@ public class ManagerController {
         productCategoryService.assignProductToCategory(productId, categoryId);
     }
 
-    //метод для додавання та оновлення url зображення для продукту TESTED!
+    //метод для додавання та оновлення url зображення для продукту
     @PostMapping("/manager/product/set-image")
-    public void addImageUrlToProduct(@RequestParam String productId, @RequestParam String url) {
-        productService.addImageUrlToProduct(productId, url);
+    public void addImageUrlToProduct(@RequestParam String productId, @RequestParam String imagePath) throws IOException, SQLException {
+        productImageService.addImageToProduct(productId, imagePath);
     }
 
-    // метод для видалення url зображення для продукту TESTED!
-    @PostMapping("/manager/product/delete-image")
+    // метод для видалення url зображення для продукту
+    @DeleteMapping("/manager/product/delete-image")
     public void deleteImageForProduct(@RequestParam String productId) {
-        productService.deleteImageForProduct(productId);
+        productImageService.deleteImageForProduct(productId);
     }
 
 }

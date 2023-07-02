@@ -60,37 +60,6 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    //метод для додавання та оновлення url зображення для продукту (TESTED!)
-    public void addImageUrlToProduct(String productId, String url) {
-        if (!productRepository.existsById(productId)) {
-            throw new EntityNotFoundException("Product with id: " + productId + " not found");
-        }
-        if (url == null) {
-            throw new NullPointerException("url is null");
-        }
-
-        // Получаем продукт по его идентификатору
-        Product product = productRepository.getReferenceById(productId);
-
-        // Устанавливаем новое url изображения
-        product.setImageUrl(url);
-
-        productRepository.save(product);
-    }
-
-    // метод для видалення url зображення для продукту (TESTED!)
-    public void deleteImageForProduct(String productId) {
-        if (!productRepository.existsById(productId)) {
-            throw new EntityNotFoundException("Product with id: " + productId + " not found");
-        }
-
-        // Получаем продукт по его идентификатору
-        Product product = productRepository.getReferenceById(productId);
-
-        product.setImageUrl(null);
-        productRepository.save(product);
-    }
-
     //метод повернення списку продуктів для певної категорії (для покупця) (TESTED!)
     public List<Product> getAllProductsByCategoryId(String categoryId) {
         if (!productRepository.existsByProductCategory_Id(categoryId)) {
@@ -158,7 +127,7 @@ public class ProductService {
         productDTO.setPrice(product.getPrice());
         productDTO.setDescription(product.getDescription());
         productDTO.setQuantity(product.getQuantity());
-        productDTO.setImageUrl(product.getImageUrl());
+        productDTO.setImage(product.getProductImage());
         productDTO.setCategory(product.getProductCategory().getCategoryName());
         return productDTO;
     }
