@@ -1,10 +1,15 @@
 package com.example.WarehouseDatabaseJava.model.product;
 
 import com.example.WarehouseDatabaseJava.model.product.category.ProductCategoryRepository;
+import com.example.WarehouseDatabaseJava.model.product.image.ProductImageRepository;
+import com.example.WarehouseDatabaseJava.model.product.image.ProductImageService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +19,8 @@ public class ProductService {
     private ProductRepository productRepository;
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
+    @Autowired
+    private ProductImageService productImageService;
 
     //метод перевірки наявності товару з даним barcode (TESTED!)
     public boolean checkBarcode(long barcode) {
@@ -60,28 +67,24 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    //метод повернення списку продуктів для певної категорії (для покупця) (TESTED!)
-    public List<Product> getAllProductsByCategoryId(String categoryId) {
+    //метод повернення списку продуктів для певної категорії (для покупця)
+    public List<ProductDTO> getAllProductsByCategoryId(String categoryId) throws SQLException, IOException {
         if (!productRepository.existsByProductCategory_Id(categoryId)) {
             throw new EntityNotFoundException("Product category with id: " + categoryId + " not found");
         }
 
-        return productRepository.findAllByProductCategory_Id(categoryId);
+        List<Product> productList = productRepository.findAllByProductCategory_Id(categoryId);
+        return setProductDTOList(productList);
     }
 
     //метод повернення списку всіх продуктів (DTO!) (для менеджера)
-    public List<ProductDTO> getAllProductsDTO() {
+    public List<ProductDTO> getAllProductsDTO() throws SQLException, IOException {
         List<Product> productList = productRepository.findAll();
-        List<ProductDTO> productDTOList = new ArrayList<>();
-        for (Product product : productList) {
-            ProductDTO productDTO = setProductDTO(product);
-            productDTOList.add(productDTO);
-        }
-        return productDTOList;
+        return setProductDTOList(productList);
     }
 
     //метод отримання продукту по баркоду (DTO!)
-    public ProductDTO searchProductByBarcode(String searchBarcode) {
+    public ProductDTO searchProductByBarcode(String searchBarcode) throws SQLException, IOException {
         if (!searchBarcode.matches("\\d+")) {
             throw new IllegalArgumentException("Argument: " + searchBarcode + " is not number");
         }
@@ -98,16 +101,18 @@ public class ProductService {
     }
 
     //метод отримання списку продуктів по співпадінню найменування продукту та введеної строки ігноруючи реєстр
-    public List<Product> searchProductsByName(String searchName) {
+    public List<ProductDTO> searchProductsByName(String searchName) throws SQLException, IOException {
         if (searchName == null) {
             throw new NullPointerException("searchName is null");
         }
-        return productRepository.findAllByNameContainingIgnoreCase(searchName);
+
+        List<Product> productList = productRepository.findAllByNameContainingIgnoreCase(searchName);
+        return setProductDTOList(productList);
     }
 
     //метод отримання списку продуктів по співпадінню найменування продукту та введеної строки ігноруючи реєстр
     //враховуючи категорію продукту
-    public List<Product> searchProductsByNameWithCategory(String searchName, String categoryId) {
+    public List<ProductDTO> searchProductsByNameWithCategory(String searchName, String categoryId) throws SQLException, IOException {
         if (searchName == null) {
             throw new NullPointerException("searchName is null");
         }
@@ -115,21 +120,40 @@ public class ProductService {
             throw new EntityNotFoundException("Category with id: " + categoryId + " not found");
         }
 
-        return productRepository.findAllByNameContainingIgnoreCaseAndProductCategory_Id(searchName, categoryId);
+        List<Product> productList = productRepository.findAllByNameContainingIgnoreCaseAndProductCategory_Id(searchName, categoryId);
+        return setProductDTOList(productList);
     }
 
     //внутрішній метод для встановлення інфи про певний продукт
-    private ProductDTO setProductDTO(Product product) {
+    private ProductDTO setProductDTO(Product product) throws SQLException, IOException {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setId(product.getId());
         productDTO.setBarcode(product.getBarcode());
-        productDTO.setName(productDTO.getName());
+        productDTO.setName(product.getName());
         productDTO.setPrice(product.getPrice());
         productDTO.setDescription(product.getDescription());
         productDTO.setQuantity(product.getQuantity());
-        productDTO.setImage(product.getProductImage());
-        productDTO.setCategory(product.getProductCategory().getCategoryName());
+        if (product.getProductCategory() != null) {
+            productDTO.setCategory(product.getProductCategory().getCategoryName());
+        }
+        //set image how bytes array
+        if (product.getProductImage() != null) {
+            Blob image = product.getProductImage().getImage();
+            byte[] imageBytes = productImageService.convertBlobToByteArray(image);
+            productDTO.setImage(imageBytes);
+        }
+
         return productDTO;
+    }
+
+    //внутрішній метод для встановлення інфи про певний список продуктів
+    private List<ProductDTO> setProductDTOList(List<Product> productList) throws SQLException, IOException {
+        List<ProductDTO> productDTOList = new ArrayList<>();
+        for (Product product : productList) {
+            ProductDTO productDTO = setProductDTO(product);
+            productDTOList.add(productDTO);
+        }
+        return productDTOList;
     }
 }
 

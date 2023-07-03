@@ -24,21 +24,21 @@ public class Product {
     // One-to-One relation with ProductImage (SAVING IMAGE TO DATABASE)
     @OneToOne
     @JoinColumn(name = "image_id")
-    ProductImage productImage;
+    private ProductImage productImage;
 
     // One-to-Many relation with CartProduct
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonIgnore
-    List<CartProduct> cartProductList = new ArrayList<>();
+    private List<CartProduct> cartProductList = new ArrayList<>();
 
     // One-to-Many relation with CustomProduct
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonIgnore
-    List<CustomProduct> customProductList = new ArrayList<>();
+    private List<CustomProduct> customProductList = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    ProductCategory productCategory;
+    private ProductCategory productCategory;
 
     public Product() {
     }

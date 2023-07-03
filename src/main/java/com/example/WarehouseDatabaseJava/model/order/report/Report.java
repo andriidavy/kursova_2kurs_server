@@ -32,7 +32,7 @@ public class Report {
     //One-to-One relation with Custom
     @OneToOne
     @JoinColumn(name = "custom_id")
-    Custom custom;
+    private Custom custom;
 
     public Report.Status getStatus() {
         return status;

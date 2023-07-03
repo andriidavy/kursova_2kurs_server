@@ -127,13 +127,13 @@ public class ManagerController {
 
     //отримати список всіх продуктів (DTO!)
     @GetMapping("/manager/product/get-all")
-    public List<ProductDTO> getAllProducts() {
+    public List<ProductDTO> getAllProducts() throws SQLException, IOException {
         return productService.getAllProductsDTO();
     }
 
     //пошук продукта по баркоду (DTO!)
     @GetMapping("/manager/product/search-by-barcode")
-    public ProductDTO searchProductByBarcode(@RequestParam String searchBarcode) {
+    public ProductDTO searchProductByBarcode(@RequestParam String searchBarcode) throws SQLException, IOException {
         return productService.searchProductByBarcode(searchBarcode);
     }
 
@@ -246,13 +246,13 @@ public class ManagerController {
         productCategoryService.assignProductToCategory(productId, categoryId);
     }
 
-    //метод для додавання та оновлення url зображення для продукту
+    //метод для додавання та оновлення url зображення для продукту TESTED!
     @PostMapping("/manager/product/set-image")
     public void addImageUrlToProduct(@RequestParam String productId, @RequestParam String imagePath) throws IOException, SQLException {
         productImageService.addImageToProduct(productId, imagePath);
     }
 
-    // метод для видалення url зображення для продукту
+    // метод для видалення url зображення для продукту TESTED!
     @DeleteMapping("/manager/product/delete-image")
     public void deleteImageForProduct(@RequestParam String productId) {
         productImageService.deleteImageForProduct(productId);

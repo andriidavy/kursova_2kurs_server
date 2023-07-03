@@ -3,6 +3,7 @@ package com.example.WarehouseDatabaseJava.controller;
 import com.example.WarehouseDatabaseJava.model.order.CustomDTO;
 import com.example.WarehouseDatabaseJava.model.order.CustomService;
 import com.example.WarehouseDatabaseJava.model.product.Product;
+import com.example.WarehouseDatabaseJava.model.product.ProductDTO;
 import com.example.WarehouseDatabaseJava.model.product.ProductService;
 import com.example.WarehouseDatabaseJava.model.product.category.ProductCategory;
 import com.example.WarehouseDatabaseJava.model.product.category.ProductCategoryService;
@@ -16,6 +17,8 @@ import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -101,19 +104,19 @@ public class CustomerController {
 
     //отримати список всіх продуктів для певної категорії TESTED!
     @GetMapping("/customer/category/product/get-all")
-    public List<Product> getAllProductsByCategoryId(@RequestParam String categoryId) {
+    public List<ProductDTO> getAllProductsByCategoryId(@RequestParam String categoryId) throws SQLException, IOException {
         return productService.getAllProductsByCategoryId(categoryId);
     }
 
     //пошук продуктів по найменуванню
     @GetMapping("/customer/product/search-by-name")
-    public List<Product> searchProductsByName(@RequestParam String searchName) {
+    public List<ProductDTO> searchProductsByName(@RequestParam String searchName) throws SQLException, IOException {
         return productService.searchProductsByName(searchName);
     }
 
     //пошук продуктів по найменуванню враховуючи категорію
     @GetMapping("/customer/category/product/search-by-name")
-    public List<Product> searchProductsByNameWithCategory(@RequestParam String searchName, @RequestParam String categoryId) {
+    public List<ProductDTO> searchProductsByNameWithCategory(@RequestParam String searchName, @RequestParam String categoryId) throws SQLException, IOException {
         return productService.searchProductsByNameWithCategory(searchName, categoryId);
     }
 

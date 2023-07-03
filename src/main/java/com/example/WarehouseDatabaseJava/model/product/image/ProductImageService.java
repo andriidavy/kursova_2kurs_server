@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.sql.rowset.serial.SerialBlob;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.sql.Blob;
 import java.sql.SQLException;
 
@@ -21,9 +18,9 @@ public class ProductImageService {
     @Autowired
     private ProductImageRepository productImageRepository;
 
-    //метод для додавання та оновлення зображення для продукту
-    public void addImageToProduct(String productId, String imagePath)throws IOException, SQLException {
-        if(!productRepository.existsById(productId)){
+    //метод для додавання та оновлення зображення для продукту (TESTED!)
+    public void addImageToProduct(String productId, String imagePath) throws IOException, SQLException {
+        if (!productRepository.existsById(productId)) {
             throw new EntityNotFoundException("Product not found with ID: " + productId);
         }
 
@@ -46,9 +43,9 @@ public class ProductImageService {
         productImageRepository.save(productImage);
     }
 
-    // метод для видалення зображення для продукту
+    // метод для видалення зображення для продукту (TESTED!)
     public void deleteImageForProduct(String productId) {
-        if(!productRepository.existsById(productId)){
+        if (!productRepository.existsById(productId)) {
             throw new EntityNotFoundException("Product not found with ID: " + productId);
         }
         // Получаем продукт по его идентификатору
@@ -66,7 +63,7 @@ public class ProductImageService {
         productImageRepository.delete(productImage);
     }
 
-    //внутрішній метод перетворення зображення в масив байтів через посилання
+    //внутрішній метод перетворення зображення в Blob через посилання
     private Blob readImageFile(String imagePath) throws IOException, SQLException {
         File file = new File(imagePath);
         byte[] imageBytes = new byte[(int) file.length()];
@@ -80,4 +77,39 @@ public class ProductImageService {
 
         return new SerialBlob(imageBytes);
     }
+
+    //внутрішній метод перетворення Blob в масив байтів (часткове, поетапне зчитування байтів)
+    public byte[] convertBlobToByteArray(Blob blob) throws SQLException, IOException {
+        try (InputStream inputStream = blob.getBinaryStream();
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            return outputStream.toByteArray();
+
+//            // Encode the byte array to Base64 (encoded bytes to string not using!)
+//            return Base64.getEncoder().encodeToString(outputStream.toByteArray());
+        }
+    }
+
+    //метод перетворення Blob в рядок Base64 (реалізація 2 - повне зчитування байтів і подальше перетворення в строку)
+//    public static String convertBlobToBase64(Blob blob) throws SQLException, IOException {
+//        // Get the length of the Blob
+//        long blobLength = blob.length();
+//
+//        // Retrieve the bytes from the Blob using an InputStream
+//        InputStream inputStream = blob.getBinaryStream();
+//        byte[] blobBytes = new byte[(int) blobLength];
+//        inputStream.read(blobBytes);
+//
+//        // Encode the byte array to Base64
+//        String base64String = Base64.getEncoder().encodeToString(blobBytes);
+//
+//        // Close the InputStream
+//        inputStream.close();
+//
+//        return base64String;
 }

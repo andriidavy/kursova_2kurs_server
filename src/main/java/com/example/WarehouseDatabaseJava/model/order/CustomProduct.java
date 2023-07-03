@@ -13,12 +13,12 @@ public class CustomProduct {
     // Many-to-One relation with Custom
     @ManyToOne
     @JoinColumn(name = "custom_id")
-    Custom custom;
+    private Custom custom;
 
     // Many-to-One relation with Product
     @ManyToOne
     @JoinColumn(name = "product_id")
-    Product product;
+    private Product product;
 
     public String getId() {
         return id;

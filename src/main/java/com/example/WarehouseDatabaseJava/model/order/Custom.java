@@ -40,12 +40,12 @@ public class Custom {
     // One-to-Many relation with CustomProduct
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "custom")
     @JsonIgnore
-    List<CustomProduct> customProductList = new ArrayList<>();
+    private List<CustomProduct> customProductList = new ArrayList<>();
 
     //One-to-One relation with Report
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "custom")
     @JsonIgnore
-    Report report;
+    private Report report;
 
     public enum Status{
         CREATED(1),

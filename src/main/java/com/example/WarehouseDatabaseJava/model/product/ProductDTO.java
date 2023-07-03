@@ -1,6 +1,5 @@
 package com.example.WarehouseDatabaseJava.model.product;
 
-import com.example.WarehouseDatabaseJava.model.product.image.ProductImage;
 
 public class ProductDTO {
     private String id;
@@ -10,7 +9,7 @@ public class ProductDTO {
     private String description;
     private int quantity;
     private String category;
-    private ProductImage image;
+    private byte[] image;
 
     public String getId() {
         return id;
@@ -68,11 +67,11 @@ public class ProductDTO {
         this.category = category;
     }
 
-    public ProductImage getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(ProductImage image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 }

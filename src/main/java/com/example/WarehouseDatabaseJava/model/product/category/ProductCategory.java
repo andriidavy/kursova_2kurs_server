@@ -17,7 +17,7 @@ public class ProductCategory {
     //One-To-Many relation with Product
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, mappedBy = "productCategory")
     @JsonIgnore
-    List<Product> productList = new ArrayList<>();
+    private List<Product> productList = new ArrayList<>();
 
     public ProductCategory() {
     }

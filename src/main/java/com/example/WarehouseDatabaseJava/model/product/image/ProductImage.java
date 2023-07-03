@@ -11,13 +11,13 @@ import java.sql.Blob;
 public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
-    Blob image;
+    private String id;
+    private Blob image;
 
     // One-to-One relation with ProductImage
     @OneToOne(mappedBy = "productImage", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JsonIgnore
-    Product product;
+    private Product product;
 
     public String getId() {
         return id;
