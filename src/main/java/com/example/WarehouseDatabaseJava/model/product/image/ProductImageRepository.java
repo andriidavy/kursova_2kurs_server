@@ -5,4 +5,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductImageRepository extends JpaRepository<ProductImage, String> {
+    boolean existsByProductId(String productId);
+
+    ProductImage getReferenceByProductId(String productId);
 }

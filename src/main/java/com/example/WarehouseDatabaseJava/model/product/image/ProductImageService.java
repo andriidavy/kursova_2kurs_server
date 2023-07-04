@@ -27,13 +27,15 @@ public class ProductImageService {
         // Получаем продукт по его идентификатору
         Product product = productRepository.getReferenceById(productId);
 
-        // Проверяем наличие изображения, если еще нет, то создаем новую запись
-        ProductImage productImage = product.getProductImage();
-        if (productImage == null) {
-            productImage = new ProductImage();
+        ProductImage productImage;
 
+        // Проверяем наличие изображения, если еще нет, то создаем новую запись
+        if (productImageRepository.existsByProductId(productId)) {
+            productImage = productImageRepository.getReferenceByProductId(productId);
+        } else {
+            productImage = new ProductImage();
             // Связываем продукт с изображением
-            product.setProductImage(productImage);
+            productImage.setProduct(product);
         }
 
         // Устанавливаем новое изображение
@@ -48,16 +50,17 @@ public class ProductImageService {
         if (!productRepository.existsById(productId)) {
             throw new EntityNotFoundException("Product not found with ID: " + productId);
         }
-        // Получаем продукт по его идентификатору
+        if (!productImageRepository.existsByProductId(productId)) {
+            throw new EntityNotFoundException("Image for product with ID: " + productId + " not found");
+        }
+        //Получаем значения продукта
         Product product = productRepository.getReferenceById(productId);
 
         // Получаем текущее изображение продукта
-        ProductImage productImage = product.getProductImage();
-        if (productImage == null) {
-            throw new EntityNotFoundException("Product does not have an associated image.");
-        }
+        ProductImage productImage = productImageRepository.getReferenceByProductId(productId);
+
+        // Удаляем ссылку на изображение из объекта продукта
         product.setProductImage(null);
-        productRepository.save(product);
 
         // Удаляем изображение продукта из базы данных
         productImageRepository.delete(productImage);

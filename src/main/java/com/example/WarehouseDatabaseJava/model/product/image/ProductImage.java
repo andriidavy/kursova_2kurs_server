@@ -15,8 +15,8 @@ public class ProductImage {
     private Blob image;
 
     // One-to-One relation with ProductImage
-    @OneToOne(mappedBy = "productImage", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "product_id")
     private Product product;
 
     public String getId() {

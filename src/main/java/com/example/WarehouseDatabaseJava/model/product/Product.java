@@ -22,8 +22,8 @@ public class Product {
     private int quantity;
 
     // One-to-One relation with ProductImage (SAVING IMAGE TO DATABASE)
-    @OneToOne
-    @JoinColumn(name = "image_id")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnore
     private ProductImage productImage;
 
     // One-to-Many relation with CartProduct
