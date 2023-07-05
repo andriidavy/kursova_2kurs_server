@@ -5,12 +5,14 @@ import com.example.WarehouseDatabaseJava.model.product.image.ProductImageReposit
 import com.example.WarehouseDatabaseJava.model.product.image.ProductImageService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -73,7 +75,21 @@ public class ProductService {
             throw new EntityNotFoundException("Product category with id: " + categoryId + " not found");
         }
 
-        List<Product> productList = productRepository.findAllByProductCategory_Id(categoryId);
+        List<Product> productList = getAllProductsByCategory(categoryId);
+        return setProductDTOList(productList);
+    }
+
+    //метод повернення списку продуктів для певної категорії, відсортовані по новизні продукту (для покупця)
+    public List<ProductDTO> getAllProductsByCategoryIdSortByCreateTime(String categoryId) throws SQLException, IOException {
+        if (!productRepository.existsByProductCategory_Id(categoryId)) {
+            throw new EntityNotFoundException("Product category with id: " + categoryId + " not found");
+        }
+
+        List<Product> productList = getAllProductsByCategory(categoryId);
+
+        //сортировка по времени создания записи продукта в базу
+        productList.sort(Comparator.comparing(Product::getCreationTime).reversed());
+
         return setProductDTOList(productList);
     }
 
@@ -154,6 +170,13 @@ public class ProductService {
             productDTOList.add(productDTO);
         }
         return productDTOList;
+    }
+
+    //внутрішній метод для отримання всіх продуктів для певної категорії
+    //NEEDED CACHING SETTINGS!!!
+    @Cacheable("allProductsListCache")
+    private List<Product> getAllProductsByCategory(String categoryId) {
+        return productRepository.findAllByProductCategory_Id(categoryId);
     }
 }
 

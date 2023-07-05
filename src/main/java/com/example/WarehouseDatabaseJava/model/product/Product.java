@@ -6,8 +6,10 @@ import com.example.WarehouseDatabaseJava.model.product.image.ProductImage;
 import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartProduct;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,6 +22,9 @@ public class Product {
     private double price;
     private String description;
     private int quantity;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationTime;
 
     // One-to-One relation with ProductImage (SAVING IMAGE TO DATABASE)
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
@@ -135,5 +140,13 @@ public class Product {
 
     public void setProductCategory(ProductCategory productCategory) {
         this.productCategory = productCategory;
+    }
+
+    public Date getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(Date creationTime) {
+        this.creationTime = creationTime;
     }
 }

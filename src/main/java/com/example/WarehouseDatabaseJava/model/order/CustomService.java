@@ -87,7 +87,6 @@ public class CustomService {
                 customProductRepository.save(customProduct);
             }
             custom.setPrice(customer.getCart().getPrice());
-            custom.setCreationTime(new Date()); // Зарегистрировать текущее время создания
             customRepository.save(custom);
 
             cartProductRepository.deleteAll(customer.getCart().getCartProductList());

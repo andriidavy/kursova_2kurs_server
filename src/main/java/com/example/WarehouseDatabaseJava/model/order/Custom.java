@@ -6,6 +6,7 @@ import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.Department;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,6 +20,7 @@ public class Custom {
 
     private double price;
 
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationTime;
 
