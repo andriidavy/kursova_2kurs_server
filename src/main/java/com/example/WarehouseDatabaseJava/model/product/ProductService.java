@@ -6,6 +6,7 @@ import com.example.WarehouseDatabaseJava.model.product.image.ProductImageService
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -75,7 +76,7 @@ public class ProductService {
             throw new EntityNotFoundException("Product category with id: " + categoryId + " not found");
         }
 
-        List<Product> productList = getAllProductsByCategory(categoryId);
+        List<Product> productList = productRepository.findAllByProductCategory_Id(categoryId);
         return setProductDTOList(productList);
     }
 
@@ -85,10 +86,9 @@ public class ProductService {
             throw new EntityNotFoundException("Product category with id: " + categoryId + " not found");
         }
 
-        List<Product> productList = getAllProductsByCategory(categoryId);
-
         //сортировка по времени создания записи продукта в базу
-        productList.sort(Comparator.comparing(Product::getCreationTime).reversed());
+        Sort sort = Sort.by(Sort.Direction.DESC, "createTime");
+        List<Product> productList = productRepository.findAllByProductCategory_Id(categoryId, sort);
 
         return setProductDTOList(productList);
     }
@@ -172,12 +172,6 @@ public class ProductService {
         return productDTOList;
     }
 
-    //внутрішній метод для отримання всіх продуктів для певної категорії
-    //NEEDED CACHING SETTINGS!!!
-    @Cacheable("allProductsListCache")
-    private List<Product> getAllProductsByCategory(String categoryId) {
-        return productRepository.findAllByProductCategory_Id(categoryId);
-    }
 }
 
 
