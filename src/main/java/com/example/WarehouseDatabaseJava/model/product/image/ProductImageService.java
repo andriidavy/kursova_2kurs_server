@@ -4,6 +4,8 @@ import com.example.WarehouseDatabaseJava.model.product.Product;
 import com.example.WarehouseDatabaseJava.model.product.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -19,6 +21,7 @@ public class ProductImageService {
     private ProductImageRepository productImageRepository;
 
     //метод для додавання та оновлення зображення для продукту (TESTED!)
+    @CachePut(value = "productImages", key = "#productId")
     public void addImageToProduct(String productId, String imagePath) throws IOException, SQLException {
         if (!productRepository.existsById(productId)) {
             throw new EntityNotFoundException("Product not found with ID: " + productId);
@@ -46,6 +49,7 @@ public class ProductImageService {
     }
 
     // метод для видалення зображення для продукту (TESTED!)
+    @CacheEvict(value = "productImages", key = "#product.id")
     public void deleteImageForProduct(String productId) {
         if (!productRepository.existsById(productId)) {
             throw new EntityNotFoundException("Product not found with ID: " + productId);

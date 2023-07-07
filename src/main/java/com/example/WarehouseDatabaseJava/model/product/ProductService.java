@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.model.product;
 
+import com.example.WarehouseDatabaseJava.model.order.CustomProduct;
 import com.example.WarehouseDatabaseJava.model.product.category.ProductCategoryRepository;
 import com.example.WarehouseDatabaseJava.model.product.image.ProductImageRepository;
 import com.example.WarehouseDatabaseJava.model.product.image.ProductImageService;
@@ -12,9 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ProductService {
@@ -93,6 +92,54 @@ public class ProductService {
         return setProductDTOList(productList);
     }
 
+    //метод повернення списку продуктів для певної категорії, відсортовані по популярності продукту (для покупця)
+    //*популярність - кількість входжень продукту в замовлення за останні два тижні
+    public List<ProductDTO> getAllProductsByCategoryIdSortByPopularity(String categoryId) throws SQLException, IOException {
+        if (!productRepository.existsByProductCategory_Id(categoryId)) {
+            throw new EntityNotFoundException("Product category with id: " + categoryId + " not found");
+        }
+
+        // Calculate the date two weeks ago
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.WEEK_OF_YEAR, -2);
+        Date twoWeeksAgo = calendar.getTime();
+
+        List<Product> productList = productRepository.findAllByProductCategory_Id(categoryId);
+        productList.sort((p1, p2) -> {
+            int occurrencesP1 = getProductOccurrencesWithinTwoWeeks(p1, twoWeeksAgo);
+            int occurrencesP2 = getProductOccurrencesWithinTwoWeeks(p2, twoWeeksAgo);
+            return Integer.compare(occurrencesP2, occurrencesP1); // Sort in descending order of popularity
+        });
+
+        return setProductDTOList(productList);
+    }
+
+    //внутрішній метод отримання кількості входжень продукту в замовлення за останні два тижні (тут факт входження)
+    private int getProductOccurrencesWithinTwoWeeks(Product product, Date twoWeeksAgo) {
+        int count = 0;
+        List<CustomProduct> customProducts = product.getCustomProductList();
+        for (CustomProduct customProduct : customProducts) {
+            Date customCreationTime = customProduct.getCustom().getCreationTime();
+            if (customCreationTime != null && customCreationTime.after(twoWeeksAgo)) {
+                count ++;
+            }
+        }
+        return count;
+    }
+
+    //внутрішній метод отримання числа всіх входжень продукту в замовлення за останні два тижні (тут сумма входжень)
+    private int getProductOccurrencesNumberWithinTwoWeeks(Product product, Date twoWeeksAgo) {
+        int count = 0;
+        List<CustomProduct> customProducts = product.getCustomProductList();
+        for (CustomProduct customProduct : customProducts) {
+            Date customCreationTime = customProduct.getCustom().getCreationTime();
+            if (customCreationTime != null && customCreationTime.after(twoWeeksAgo)) {
+                count += customProduct.getQuantity();
+            }
+        }
+        return count;
+    }
+
     //метод повернення списку всіх продуктів (DTO!) (для менеджера)
     public List<ProductDTO> getAllProductsDTO() throws SQLException, IOException {
         List<Product> productList = productRepository.findAll();
@@ -140,7 +187,7 @@ public class ProductService {
         return setProductDTOList(productList);
     }
 
-    //внутрішній метод для встановлення інфи про певний продукт
+    //внутрішній метод для отримання інфи про певний продукт
     private ProductDTO setProductDTO(Product product) throws SQLException, IOException {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setId(product.getId());
@@ -152,17 +199,25 @@ public class ProductService {
         if (product.getProductCategory() != null) {
             productDTO.setCategory(product.getProductCategory().getCategoryName());
         }
+
         //set image how bytes array
-        if (product.getProductImage() != null) {
-            Blob image = product.getProductImage().getImage();
-            byte[] imageBytes = productImageService.convertBlobToByteArray(image);
-            productDTO.setImage(imageBytes);
-        }
+        productDTO.setImage(setImg(product));
 
         return productDTO;
     }
 
-    //внутрішній метод для встановлення інфи про певний список продуктів
+    //внутрішній метод отримання зображення для відображення продукта
+    @Cacheable(value = "productImages", key = "#product.id")
+    private byte[] setImg(Product product) throws SQLException, IOException {
+        if (product.getProductImage() == null) {
+            throw new NullPointerException("Image for product not exist");
+        }
+
+        Blob image = product.getProductImage().getImage();
+        return productImageService.convertBlobToByteArray(image);
+    }
+
+    //внутрішній метод для отримання інфи про певний список продуктів
     private List<ProductDTO> setProductDTOList(List<Product> productList) throws SQLException, IOException {
         List<ProductDTO> productDTOList = new ArrayList<>();
         for (Product product : productList) {
