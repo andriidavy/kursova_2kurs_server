@@ -92,9 +92,36 @@ public class ProductService {
         return setProductDTOList(productList);
     }
 
+    //метод повернення списку продуктів для певної категорії, відсортовані від дешевих до дорогих (для покупця)
+    public List<ProductDTO> getAllProductsByCategoryIdSortByPriceASC(String categoryId) throws SQLException, IOException {
+        if (!productRepository.existsByProductCategory_Id(categoryId)) {
+            throw new EntityNotFoundException("Product category with id: " + categoryId + " not found");
+        }
+
+        //сортировка от дешевых к дорогим
+        Sort sort = Sort.by(Sort.Direction.ASC, "price");
+        List<Product> productList = productRepository.findAllByProductCategory_Id(categoryId, sort);
+
+        return setProductDTOList(productList);
+    }
+
+    //метод повернення списку продуктів для певної категорії, відсортовані від дорогих до дешевих (для покупця)
+    public List<ProductDTO> getAllProductsByCategoryIdSortByPriceDESC(String categoryId) throws SQLException, IOException {
+        if (!productRepository.existsByProductCategory_Id(categoryId)) {
+            throw new EntityNotFoundException("Product category with id: " + categoryId + " not found");
+        }
+
+        //сортировка от дешевых к дорогим
+        Sort sort = Sort.by(Sort.Direction.DESC, "price");
+        List<Product> productList = productRepository.findAllByProductCategory_Id(categoryId, sort);
+
+        return setProductDTOList(productList);
+    }
+
     //метод повернення списку продуктів для певної категорії, відсортовані по популярності продукту (для покупця)
     //*популярність - кількість входжень продукту в замовлення за останні два тижні
-    public List<ProductDTO> getAllProductsByCategoryIdSortByPopularity(String categoryId) throws SQLException, IOException {
+    public List<ProductDTO> getAllProductsByCategoryIdSortByPopularity(String categoryId) throws
+            SQLException, IOException {
         if (!productRepository.existsByProductCategory_Id(categoryId)) {
             throw new EntityNotFoundException("Product category with id: " + categoryId + " not found");
         }
@@ -106,38 +133,35 @@ public class ProductService {
 
         List<Product> productList = productRepository.findAllByProductCategory_Id(categoryId);
         productList.sort((p1, p2) -> {
-            int occurrencesP1 = getProductOccurrencesWithinTwoWeeks(p1, twoWeeksAgo);
-            int occurrencesP2 = getProductOccurrencesWithinTwoWeeks(p2, twoWeeksAgo);
+            int occurrencesP1 = productRepository.getProductOccurrencesWithinTwoWeeks(p1, twoWeeksAgo);
+            int occurrencesP2 = productRepository.getProductOccurrencesWithinTwoWeeks(p2, twoWeeksAgo);
             return Integer.compare(occurrencesP2, occurrencesP1); // Sort in descending order of popularity
         });
 
         return setProductDTOList(productList);
     }
 
-    //внутрішній метод отримання кількості входжень продукту в замовлення за останні два тижні (тут факт входження)
-    private int getProductOccurrencesWithinTwoWeeks(Product product, Date twoWeeksAgo) {
-        int count = 0;
-        List<CustomProduct> customProducts = product.getCustomProductList();
-        for (CustomProduct customProduct : customProducts) {
-            Date customCreationTime = customProduct.getCustom().getCreationTime();
-            if (customCreationTime != null && customCreationTime.after(twoWeeksAgo)) {
-                count ++;
-            }
+    //метод повернення списку продуктів для певної категорії, відсортовані за топом продаж продукту (для покупця)
+    //*топ продаж - сумма входжень продукту в замовлення за останні два тижні
+    public List<ProductDTO> getAllProductsByCategoryIdSortByTopSales(String categoryId) throws
+            SQLException, IOException {
+        if (!productRepository.existsByProductCategory_Id(categoryId)) {
+            throw new EntityNotFoundException("Product category with id: " + categoryId + " not found");
         }
-        return count;
-    }
 
-    //внутрішній метод отримання числа всіх входжень продукту в замовлення за останні два тижні (тут сумма входжень)
-    private int getProductOccurrencesNumberWithinTwoWeeks(Product product, Date twoWeeksAgo) {
-        int count = 0;
-        List<CustomProduct> customProducts = product.getCustomProductList();
-        for (CustomProduct customProduct : customProducts) {
-            Date customCreationTime = customProduct.getCustom().getCreationTime();
-            if (customCreationTime != null && customCreationTime.after(twoWeeksAgo)) {
-                count += customProduct.getQuantity();
-            }
-        }
-        return count;
+        // Calculate the date two weeks ago
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.WEEK_OF_YEAR, -2);
+        Date twoWeeksAgo = calendar.getTime();
+
+        List<Product> productList = productRepository.findAllByProductCategory_Id(categoryId);
+        productList.sort((p1, p2) -> {
+            int occurrencesP1 = productRepository.getProductOccurrencesNumberWithinTwoWeeks(p1, twoWeeksAgo);
+            int occurrencesP2 = productRepository.getProductOccurrencesNumberWithinTwoWeeks(p2, twoWeeksAgo);
+            return Integer.compare(occurrencesP2, occurrencesP1); // Sort in descending order of popularity
+        });
+
+        return setProductDTOList(productList);
     }
 
     //метод повернення списку всіх продуктів (DTO!) (для менеджера)
@@ -175,7 +199,8 @@ public class ProductService {
 
     //метод отримання списку продуктів по співпадінню найменування продукту та введеної строки ігноруючи реєстр
     //враховуючи категорію продукту
-    public List<ProductDTO> searchProductsByNameWithCategory(String searchName, String categoryId) throws SQLException, IOException {
+    public List<ProductDTO> searchProductsByNameWithCategory(String searchName, String categoryId) throws
+            SQLException, IOException {
         if (searchName == null) {
             throw new NullPointerException("searchName is null");
         }
@@ -226,7 +251,6 @@ public class ProductService {
         }
         return productDTOList;
     }
-
 }
 
 
