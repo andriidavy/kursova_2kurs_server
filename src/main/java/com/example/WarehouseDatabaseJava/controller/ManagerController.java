@@ -1,15 +1,11 @@
 package com.example.WarehouseDatabaseJava.controller;
 
-import com.example.WarehouseDatabaseJava.model.order.Custom;
 import com.example.WarehouseDatabaseJava.model.order.CustomDTO;
-import com.example.WarehouseDatabaseJava.model.order.CustomProductDTO;
 import com.example.WarehouseDatabaseJava.model.order.CustomService;
-import com.example.WarehouseDatabaseJava.model.order.report.Report;
 import com.example.WarehouseDatabaseJava.model.order.report.ReportDTO;
 import com.example.WarehouseDatabaseJava.model.order.report.ReportService;
 import com.example.WarehouseDatabaseJava.model.product.Product;
 import com.example.WarehouseDatabaseJava.model.product.ProductService;
-import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.employee.Employee;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeProfileDTO;
 import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeService;

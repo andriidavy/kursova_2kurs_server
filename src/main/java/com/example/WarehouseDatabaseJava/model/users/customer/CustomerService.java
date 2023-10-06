@@ -59,10 +59,11 @@ public class CustomerService {
         if (customer == null) {
             throw new RuntimeException("Customer not found with id: " + customerId);
         }
+        int id = customer.getId();
         String name = customer.getName();
         String surname = customer.getSurname();
         String email = customer.getEmail();
 
-        return new CustomerProfileDTO(name, surname, email);
+        return new CustomerProfileDTO(id, name, surname, email);
     }
 }

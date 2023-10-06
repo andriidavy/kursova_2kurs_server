@@ -2,9 +2,7 @@ package com.example.WarehouseDatabaseJava;
 
 import com.example.WarehouseDatabaseJava.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.model.users.customer.CustomerService;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 

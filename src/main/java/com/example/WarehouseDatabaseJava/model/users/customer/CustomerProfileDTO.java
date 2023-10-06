@@ -1,14 +1,24 @@
 package com.example.WarehouseDatabaseJava.model.users.customer;
 
 public class CustomerProfileDTO {
-    String name;
-    String surname;
-    String email;
+    private int id;
+    private String name;
+    private String surname;
+    private String email;
 
-    public CustomerProfileDTO(String name, String surname, String email) {
+    public CustomerProfileDTO(int id, String name, String surname, String email) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
