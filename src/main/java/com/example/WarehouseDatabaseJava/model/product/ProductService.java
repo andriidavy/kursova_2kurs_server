@@ -28,7 +28,7 @@ public class ProductService {
     public ProductService() {
         // Инициализация подключения к базе данных
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/warehouse_database", "root", "root");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/warehouse_database_innodb", "root", "root");
         } catch (SQLException e) {
             e.printStackTrace();
         }
