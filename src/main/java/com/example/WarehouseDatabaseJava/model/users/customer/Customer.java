@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
     @Entity
+    @Table(catalog = "warehouse_database_innodb")
     public class Customer {
-
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int id;

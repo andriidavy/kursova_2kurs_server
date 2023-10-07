@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(catalog = "warehouse_database_innodb")
 public class Manager {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

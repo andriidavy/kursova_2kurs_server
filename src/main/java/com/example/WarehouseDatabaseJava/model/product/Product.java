@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(catalog = "warehouse_database_innodb")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

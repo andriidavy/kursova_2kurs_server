@@ -4,12 +4,13 @@ import com.example.WarehouseDatabaseJava.model.product.Product;
 import jakarta.persistence.*;
 
 @Entity
+@Table(catalog = "warehouse_database_innodb")
 public class CustomProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     private int quantity;
+
     // Many-to-One relation with Custom
     @ManyToOne
     @JoinColumn(name = "custom_id")

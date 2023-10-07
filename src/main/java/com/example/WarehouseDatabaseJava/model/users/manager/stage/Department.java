@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(catalog = "warehouse_database_innodb")
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +16,8 @@ public class Department {
 
     private String departmentName;
 
-    public Department(){}
+    public Department() {
+    }
 
     public Department(String departmentName) {
         this.departmentName = departmentName;
@@ -23,7 +25,7 @@ public class Department {
 
     //зв'язок Many-to-Many з Manager
     @ManyToMany
-    @JoinTable(name = "manager_department",
+    @JoinTable(name = "manager_department", catalog = "warehouse_database_innodb",
             joinColumns = @JoinColumn(name = "department_id"),
             inverseJoinColumns = @JoinColumn(name = "manager_id")
     )

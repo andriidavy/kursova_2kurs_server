@@ -4,6 +4,7 @@ import com.example.WarehouseDatabaseJava.model.order.Custom;
 import jakarta.persistence.*;
 
 @Entity
+@Table(catalog = "warehouse_database_innodb")
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 //Join class for Cart-Product 1-to-many relationship
 @Entity
+@Table(catalog = "warehouse_database_innodb")
 public class CartProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
