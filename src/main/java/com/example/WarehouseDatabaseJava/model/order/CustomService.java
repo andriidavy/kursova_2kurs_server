@@ -11,6 +11,8 @@ import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeRepository
 import com.example.WarehouseDatabaseJava.model.users.manager.Manager;
 import com.example.WarehouseDatabaseJava.model.users.manager.ManagerRepository;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.Department;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentRepository;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.ManagerDepartmentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,10 @@ public class CustomService {
     private CartProductRepository cartProductRepository;
     @Autowired
     private ManagerRepository managerRepository;
+    @Autowired
+    private DepartmentRepository departmentRepository;
+    @Autowired
+    private ManagerDepartmentRepository managerDepartmentRepository;
 
     //Створення замовлення покупцем TESTED
     // ПОТРЕБУЄ ЗМІНИ В ЗВ'ЯЗКУ CUSTOMER-CUSTOM
@@ -207,39 +213,38 @@ public class CustomService {
     //+ враховує відділ замовлення і відділи менеджера TESTED
     //ОБНОВА!!!
     public List<CustomDTO> getAllCreatedCustoms(int managerId) {
-        Manager manager = managerRepository.getReferenceById(managerId);
-        List<Department> managerDepartments = manager.getDepartmentList();
-
-        List<Custom> allCreatedCustoms = customRepository.findAllByStatus(Custom.Status.CREATED);
-        List<CustomDTO> customDTOs = new ArrayList<>();
-
-        for (Custom custom : allCreatedCustoms) {
-            Department department = custom.getDepartment();
-            if (department != null && managerDepartments.contains(department)) {
-                CustomDTO customDTO = new CustomDTO();
-                customDTO.setCustomId(custom.getId());
-                customDTO.setStatus(custom.getStatus().toString());
-                customDTO.setDepartment(department.getDepartmentName());
-
-                List<CustomProductDTO> customProductDTOs = new ArrayList<>();
-                for (CustomProduct customProduct : custom.getCustomProductList()) {
-                    Product product = customProduct.getProduct();
-                    int quantity = customProduct.getQuantity();
-
-                    CustomProductDTO customProductDTO = new CustomProductDTO();
-                    customProductDTO.setProductId(product.getId());
-                    customProductDTO.setProductName(product.getName());
-                    customProductDTO.setQuantity(quantity);
-
-                    customProductDTOs.add(customProductDTO);
-                }
-
-                customDTO.setCustomProductDTOList(customProductDTOs);
-                customDTOs.add(customDTO);
-            }
+        if (!managerRepository.existsById(managerId)) {
+            throw new RuntimeException("Manager not found with id: " + managerId);
         }
 
-        return customDTOs;
+        List<Custom> allCreatedCustomsForManager = customRepository.findAllByStatusAndManagerId(Custom.Status.CREATED, managerId);
+        List<CustomDTO> customDTOList = new ArrayList<>();
+
+        for (Custom custom : allCreatedCustomsForManager) {
+            Department department = custom.getDepartment();
+            CustomDTO customDTO = new CustomDTO();
+            customDTO.setCustomId(custom.getId());
+            customDTO.setStatus(custom.getStatus().toString());
+            customDTO.setDepartment(department.getDepartmentName());
+
+            List<CustomProductDTO> customProductDTOList = new ArrayList<>();
+            for (CustomProduct customProduct : custom.getCustomProductList()) {
+                Product product = customProduct.getProduct();
+                int quantity = customProduct.getQuantity();
+
+                CustomProductDTO customProductDTO = new CustomProductDTO();
+                customProductDTO.setProductId(product.getId());
+                customProductDTO.setProductName(product.getName());
+                customProductDTO.setQuantity(quantity);
+
+                customProductDTOList.add(customProductDTO);
+            }
+
+            customDTO.setCustomProductDTOList(customProductDTOList);
+            customDTOList.add(customDTO);
+        }
+
+        return customDTOList;
     }
 
     // Отримання всіх замовлень з повним переліком данних про покупця і робітника що стосуються данного замовлення(Для Manager`a)

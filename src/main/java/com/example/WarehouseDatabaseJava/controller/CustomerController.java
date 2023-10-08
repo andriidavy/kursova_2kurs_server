@@ -26,9 +26,9 @@ public class CustomerController {
     @Autowired
     private CustomService customService;
     @Autowired
-    ProductService productService;
+    private ProductService productService;
     @Autowired
-    DepartmentService departmentService;
+    private DepartmentService departmentService;
 
     //отримати список всіх покупців TESTED
     @GetMapping("/customer/get-all")

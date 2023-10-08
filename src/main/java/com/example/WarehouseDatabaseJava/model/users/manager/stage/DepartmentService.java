@@ -49,23 +49,23 @@ public class DepartmentService {
     }
 
     //метод отримання всіх менеджерів, призначених на певний етап NOT USING IN CLIENT NOW!
-    public List<ManagerProfileDTO> getAllManagersForDepartment(int departmentId) {
-        Department department = departmentRepository.getReferenceById(departmentId);
-        List<ManagerProfileDTO> managerProfiles = new ArrayList<>();
-        if (department != null) {
-            List<Manager> managers = department.getManagerList();
-
-            for (Manager manager : managers) {
-                ManagerProfileDTO managerProfileDTO = new ManagerProfileDTO(
-                        manager.getName(),
-                        manager.getSurname(),
-                        manager.getEmail()
-                );
-                managerProfiles.add(managerProfileDTO);
-            }
-        }
-        return managerProfiles;
-    }
+//    public List<ManagerProfileDTO> getAllManagersForDepartment(int departmentId) {
+//        Department department = departmentRepository.getReferenceById(departmentId);
+//        List<ManagerProfileDTO> managerProfiles = new ArrayList<>();
+//        if (department != null) {
+//            List<Manager> managers = department.getManagerList();
+//
+//            for (Manager manager : managers) {
+//                ManagerProfileDTO managerProfileDTO = new ManagerProfileDTO(
+//                        manager.getName(),
+//                        manager.getSurname(),
+//                        manager.getEmail()
+//                );
+//                managerProfiles.add(managerProfileDTO);
+//            }
+//        }
+//        return managerProfiles;
+//    }
 
     //метод призначення конкретному замовленню конкретного відділу доставки
     //ОНОВЛЕНО!!!

@@ -15,6 +15,7 @@ import com.example.WarehouseDatabaseJava.model.users.manager.ManagerService;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.Department;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentDTO;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentService;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.ManagerDepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,13 +28,15 @@ public class ManagerController {
     @Autowired
     private CustomService customService;
     @Autowired
-    EmployeeService employeeService;
+    private ManagerDepartmentService managerDepartmentService;
     @Autowired
-    ProductService productService;
+    private EmployeeService employeeService;
     @Autowired
-    ReportService reportService;
+    private ProductService productService;
     @Autowired
-    DepartmentService departmentService;
+    private ReportService reportService;
+    @Autowired
+    private DepartmentService departmentService;
 
     //зберегти нового менеджера TESTED
     @PostMapping("/manager/save")
@@ -160,30 +163,30 @@ public class ManagerController {
     //призначити відділ на менеджера TESTED
     @PostMapping("/manager/department/assign-department-to-manager")
     public void assignDepartmentToManager(@RequestParam int managerId, @RequestParam int departmentId) {
-        managerService.assignDepartmentToManager(managerId, departmentId);
+        managerDepartmentService.assignDepartmentToManager(managerId, departmentId);
     }
 
     //прибрати призначений відділ у менеджера TESTED
     @PostMapping("/manager/department/remove-department-from-manager")
     public void removeDepartmentFromManager(@RequestParam int managerId, @RequestParam int departmentId) {
-        managerService.removeDepartmentFromManager(managerId, departmentId);
+        managerDepartmentService.removeDepartmentFromManager(managerId, departmentId);
     }
 
     //метод отримання всіх етапів, на які призначений певний менеджер TESTED
     @GetMapping("/manager/department/get-departments-for-manager")
     public List<DepartmentDTO> getAllDepartmentsForManager(@RequestParam int managerId) {
-        return managerService.getAllDepartmentsForManager(managerId);
+        return managerDepartmentService.getAllDepartmentsForManager(managerId);
     }
 
     //метод отримання всіх етапів, на які певний менеджер НЕ призначений TESTED
     @GetMapping("/manager/department/get-departments-non-for-manager")
     public List<DepartmentDTO> getDepartmentsWithoutManager(@RequestParam int managerId) {
-        return managerService.getDepartmentsWithoutManager(managerId);
+        return managerDepartmentService.getDepartmentsWithoutManager(managerId);
     }
 
     //метод отримання всіх менеджерів, призначених на певний етап TESTED
-    @GetMapping("/manager/department/get-managers-for-department")
-    public List<ManagerProfileDTO> getAllManagersForDepartment(@RequestParam int departmentId) {
-        return departmentService.getAllManagersForDepartment(departmentId);
-    }
+//    @GetMapping("/manager/department/get-managers-for-department")
+//    public List<ManagerProfileDTO> getAllManagersForDepartment(@RequestParam int departmentId) {
+//        return departmentService.getAllManagersForDepartment(departmentId);
+//    }
 }

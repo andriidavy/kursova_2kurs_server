@@ -23,13 +23,9 @@ public class Department {
         this.departmentName = departmentName;
     }
 
-    //зв'язок Many-to-Many з Manager
-    @ManyToMany
-    @JoinTable(name = "manager_department", catalog = "warehouse_database_innodb",
-            joinColumns = @JoinColumn(name = "department_id"),
-            inverseJoinColumns = @JoinColumn(name = "manager_id")
-    )
-    private List<Manager> managerList;
+    //зв'язок One-to-Many з ManagerDepartment
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "department")
+    private List<ManagerDepartment> managerDepartmentList = new ArrayList<>();
 
     // зв'язок One-to-Many з Custom
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "department")
@@ -51,12 +47,12 @@ public class Department {
         this.departmentName = departmentName;
     }
 
-    public List<Manager> getManagerList() {
-        return managerList;
+    public List<ManagerDepartment> getManagerDepartmentList() {
+        return managerDepartmentList;
     }
 
-    public void setManagerList(List<Manager> managerList) {
-        this.managerList = managerList;
+    public void setManagerDepartmentList(List<ManagerDepartment> managerDepartmentList) {
+        this.managerDepartmentList = managerDepartmentList;
     }
 
     public List<Custom> getCustomList() {

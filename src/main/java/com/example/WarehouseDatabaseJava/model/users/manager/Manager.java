@@ -1,9 +1,11 @@
 package com.example.WarehouseDatabaseJava.model.users.manager;
 
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.Department;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.ManagerDepartment;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,9 +20,9 @@ public class Manager {
     private String password;
 
     //зв'зок багато до багатьох з етапом
-    @ManyToMany (cascade = CascadeType.ALL, mappedBy = "managerList")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "manager")
     @JsonIgnore
-    private List<Department> departmentList;
+    private List<ManagerDepartment> managerDepartmentList = new ArrayList<>();
 
     public Manager() {
     }
@@ -72,12 +74,11 @@ public class Manager {
         this.password = password;
     }
 
-    public List<Department> getDepartmentList() {
-        return departmentList;
+    public List<ManagerDepartment> getManagerDepartmentList() {
+        return managerDepartmentList;
     }
 
-    public void setDepartmentList(List<Department> departmentList) {
-        this.departmentList = departmentList;
+    public void setManagerDepartmentList(List<ManagerDepartment> managerDepartmentList) {
+        this.managerDepartmentList = managerDepartmentList;
     }
-
 }

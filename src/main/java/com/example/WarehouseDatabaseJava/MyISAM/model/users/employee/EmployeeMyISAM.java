@@ -1,10 +1,10 @@
-package com.example.WarehouseDatabaseJava.MyISAM.model.users.customer;
+package com.example.WarehouseDatabaseJava.MyISAM.model.users.employee;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(catalog = "warehouse_database_myisam")
-public class CustomerMyISAM {
+public class EmployeeMyISAM {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -13,10 +13,10 @@ public class CustomerMyISAM {
     private String email;
     private String password;
 
-    public CustomerMyISAM() {
+    public EmployeeMyISAM() {
     }
 
-    public CustomerMyISAM(int id, String name, String surname, String email, String password) {
+    public EmployeeMyISAM(int id, String name, String surname, String email, String password) {
         this.id = id;
         this.name = name;
         this.surname = surname;

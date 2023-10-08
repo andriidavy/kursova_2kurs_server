@@ -8,6 +8,7 @@ import com.example.WarehouseDatabaseJava.model.users.employee.EmployeeRepository
 import com.example.WarehouseDatabaseJava.model.users.manager.Manager;
 import com.example.WarehouseDatabaseJava.model.users.manager.ManagerRepository;
 import com.example.WarehouseDatabaseJava.model.users.manager.stage.Department;
+import com.example.WarehouseDatabaseJava.model.users.manager.stage.DepartmentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +20,17 @@ import java.util.List;
 @Service
 public class ReportService {
     @Autowired
-    ReportRepository reportRepository;
+    private ReportRepository reportRepository;
     @Autowired
-    EmployeeRepository employeeRepository;
+    private EmployeeRepository employeeRepository;
     @Autowired
-    ManagerRepository managerRepository;
+    private ManagerRepository managerRepository;
     @Autowired
-    CustomRepository customRepository;
+    private CustomRepository customRepository;
     @Autowired
-    CustomService customService;
+    private DepartmentRepository departmentRepository;
+    @Autowired
+    private CustomService customService;
 
     // метод створення звіту робітником для конкретного замовлення TESTED
     //ОБНОВА!!!
@@ -73,9 +76,11 @@ public class ReportService {
     //ОБНОВА!!!
 
     public List<ReportDTO> getAllWaitingReportsForManager(int managerId) {
-        Manager manager = managerRepository.getReferenceById(managerId);
-        List<Department> managerDepartments = manager.getDepartmentList();
+        if (!managerRepository.existsById(managerId)) {
+            throw new RuntimeException("Manager not found with id: " + managerId);
+        }
 
+        List<Department> managerDepartmentList = departmentRepository.findAllByManagerId(managerId);
         List<Report> allReports = reportRepository.findAllByStatus(Report.Status.WAITING);
         List<ReportDTO> reportsDTO = new ArrayList<>();
 
@@ -83,7 +88,7 @@ public class ReportService {
             Custom custom = report.getCustom();
             Department department = custom.getDepartment();
 
-            if (managerDepartments.contains(department)) {
+            if (managerDepartmentList.contains(department)) {
                 ReportDTO reportDTO = new ReportDTO();
                 reportDTO.setReportId(report.getId());
                 reportDTO.setCustomId(custom.getId());
