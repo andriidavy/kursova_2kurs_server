@@ -28,6 +28,7 @@ public class ReportMyISAM {
     //enumerated вказує на те як буде відображатися значення статусу, в данному випадку це буде рядкове значення
     @Enumerated(EnumType.STRING)
     private Report.Status status;
+    private int customId;
 
     public int getId() {
         return id;
@@ -51,5 +52,13 @@ public class ReportMyISAM {
 
     public void setStatus(Report.Status status) {
         this.status = status;
+    }
+
+    public int getCustomId() {
+        return customId;
+    }
+
+    public void setCustomId(int customId) {
+        this.customId = customId;
     }
 }

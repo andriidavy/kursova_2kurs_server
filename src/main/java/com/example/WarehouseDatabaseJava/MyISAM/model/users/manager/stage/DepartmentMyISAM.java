@@ -8,7 +8,6 @@ public class DepartmentMyISAM {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     private String departmentName;
 
     public int getId() {

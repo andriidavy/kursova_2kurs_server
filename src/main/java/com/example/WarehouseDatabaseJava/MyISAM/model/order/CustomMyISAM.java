@@ -30,6 +30,10 @@ public class CustomMyISAM {
     @Enumerated(EnumType.STRING)
     private Custom.Status status;
 
+    private int customerId;
+    private int departmentId;
+    private int employeeId;
+
     public int getId() {
         return id;
     }
@@ -44,5 +48,29 @@ public class CustomMyISAM {
 
     public void setStatus(Custom.Status status) {
         this.status = status;
+    }
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
+    public int getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public int getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
     }
 }
