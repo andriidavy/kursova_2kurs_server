@@ -1,34 +1,32 @@
-package com.example.WarehouseDatabaseJava.MyISAM.model.users.customer;
+package com.example.WarehouseDatabaseJava.InnoDB.model.users.manager;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(catalog = "warehouse_database_myisam", name = "customer_myisam")
-public class CustomerMyISAM {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ManagerProfileDTO {
     private int id;
     private String name;
     private String surname;
     private String email;
-    private String password;
 
-    public CustomerMyISAM() {
-    }
+    private String departmentDTOstring;
 
-    public CustomerMyISAM(int id, String name, String surname, String email, String password) {
+    public ManagerProfileDTO(String name, String surname, String email, String departmentDTOstring) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.password = password;
+        this.departmentDTOstring = departmentDTOstring;
     }
 
-    public CustomerMyISAM(String name, String surname, String email, String password) {
+    public ManagerProfileDTO(int id, String name, String surname, String email) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.password = password;
+    }
+
+    public ManagerProfileDTO(String name, String surname, String email) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
     }
 
     public int getId() {
@@ -63,11 +61,11 @@ public class CustomerMyISAM {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getDepartmentDTOstring() {
+        return departmentDTOstring;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setDepartmentDTOstring(String departmentDTOstring) {
+        this.departmentDTOstring = departmentDTOstring;
     }
 }

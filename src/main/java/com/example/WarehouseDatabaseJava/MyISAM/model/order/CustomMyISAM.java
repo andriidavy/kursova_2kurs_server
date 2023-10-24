@@ -1,10 +1,10 @@
 package com.example.WarehouseDatabaseJava.MyISAM.model.order;
 
-import com.example.WarehouseDatabaseJava.model.order.Custom;
+import com.example.WarehouseDatabaseJava.InnoDB.model.order.Custom;
 import jakarta.persistence.*;
 
 @Entity
-@Table(catalog = "warehouse_database_myisam")
+@Table(catalog = "warehouse_database_myisam", name = "custom_myisam")
 public class CustomMyISAM {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

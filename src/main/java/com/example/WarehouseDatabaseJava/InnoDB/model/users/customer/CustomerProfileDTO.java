@@ -1,27 +1,16 @@
-package com.example.WarehouseDatabaseJava.MyISAM.model.users.manager;
+package com.example.WarehouseDatabaseJava.InnoDB.model.users.customer;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(catalog = "warehouse_database_myisam", name = "manager_myisam")
-public class ManagerMyISAM {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CustomerProfileDTO {
     private int id;
     private String name;
     private String surname;
     private String email;
-    private String password;
 
-    public ManagerMyISAM() {
-    }
-
-    public ManagerMyISAM(int id, String name, String surname, String email, String password) {
+    public CustomerProfileDTO(int id, String name, String surname, String email) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.password = password;
     }
 
     public int getId() {
@@ -54,13 +43,5 @@ public class ManagerMyISAM {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

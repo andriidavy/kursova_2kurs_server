@@ -1,11 +1,11 @@
-package com.example.WarehouseDatabaseJava.MyISAM.model.order.report;
+package com.example.WarehouseDatabaseJava.InnoDB.model.order.report;
 
-import com.example.WarehouseDatabaseJava.InnoDB.model.order.report.Report;
+import com.example.WarehouseDatabaseJava.InnoDB.model.order.Custom;
 import jakarta.persistence.*;
 
 @Entity
-@Table(catalog = "warehouse_database_myisam", name = "report_myisam")
-public class ReportMyISAM {
+@Table(catalog = "warehouse_database_innodb")
+public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -28,7 +28,19 @@ public class ReportMyISAM {
     //enumerated вказує на те як буде відображатися значення статусу, в данному випадку це буде рядкове значення
     @Enumerated(EnumType.STRING)
     private Report.Status status;
-    private int customId;
+
+    //One-to-One relation with Custom
+    @OneToOne
+    @JoinColumn(name = "custom_id")
+    Custom custom;
+
+    public Report.Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Report.Status status) {
+        this.status = status;
+    }
 
     public int getId() {
         return id;
@@ -46,19 +58,11 @@ public class ReportMyISAM {
         this.reportText = reportText;
     }
 
-    public Report.Status getStatus() {
-        return status;
+    public Custom getCustom() {
+        return custom;
     }
 
-    public void setStatus(Report.Status status) {
-        this.status = status;
-    }
-
-    public int getCustomId() {
-        return customId;
-    }
-
-    public void setCustomId(int customId) {
-        this.customId = customId;
+    public void setCustom(Custom custom) {
+        this.custom = custom;
     }
 }

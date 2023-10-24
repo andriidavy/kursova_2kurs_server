@@ -3,7 +3,7 @@ package com.example.WarehouseDatabaseJava.MyISAM.model.product;
 import jakarta.persistence.*;
 
 @Entity
-@Table(catalog = "warehouse_database_myisam")
+@Table(catalog = "warehouse_database_myisam", name = "product_myisam")
 public class ProductMyISAM {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

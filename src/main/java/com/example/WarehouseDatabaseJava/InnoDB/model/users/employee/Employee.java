@@ -1,10 +1,15 @@
-package com.example.WarehouseDatabaseJava.MyISAM.model.users.customer;
+package com.example.WarehouseDatabaseJava.InnoDB.model.users.employee;
 
+import com.example.WarehouseDatabaseJava.InnoDB.model.order.Custom;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-@Table(catalog = "warehouse_database_myisam", name = "customer_myisam")
-public class CustomerMyISAM {
+@Table(catalog = "warehouse_database_innodb")
+public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -13,18 +18,15 @@ public class CustomerMyISAM {
     private String email;
     private String password;
 
-    public CustomerMyISAM() {
+    //One-to-Many relation with EmployeeCustom
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
+    @JsonIgnore
+    private List<Custom> customList = new ArrayList<>();
+
+    public Employee() {
     }
 
-    public CustomerMyISAM(int id, String name, String surname, String email, String password) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.password = password;
-    }
-
-    public CustomerMyISAM(String name, String surname, String email, String password) {
+    public Employee(String name, String surname, String email, String password) {
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -69,5 +71,13 @@ public class CustomerMyISAM {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Custom> getCustomList() {
+        return customList;
+    }
+
+    public void setCustomList(List<Custom> customList) {
+        this.customList = customList;
     }
 }

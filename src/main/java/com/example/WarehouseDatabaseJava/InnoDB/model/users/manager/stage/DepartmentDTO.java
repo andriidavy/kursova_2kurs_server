@@ -1,14 +1,17 @@
-package com.example.WarehouseDatabaseJava.MyISAM.model.users.manager.stage;
+package com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.stage;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(catalog = "warehouse_database_myisam", name = "department_myisam")
-public class DepartmentMyISAM {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class DepartmentDTO {
     private int id;
+
     private String departmentName;
+
+    public DepartmentDTO() {
+    }
+
+    public DepartmentDTO(int id, String departmentName) {
+        this.id = id;
+        this.departmentName = departmentName;
+    }
 
     public int getId() {
         return id;
