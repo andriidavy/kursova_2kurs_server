@@ -3,7 +3,7 @@ package com.example.WarehouseDatabaseJava.InnoDB.model.order;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.InnoDB.model.order.report.Report;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.employee.Employee;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.stage.Department;
+import com.example.WarehouseDatabaseJava.InnoDB.model.department.Department;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 

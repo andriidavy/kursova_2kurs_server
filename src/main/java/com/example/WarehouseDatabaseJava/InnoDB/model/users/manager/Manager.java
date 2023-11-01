@@ -1,6 +1,6 @@
 package com.example.WarehouseDatabaseJava.InnoDB.model.users.manager;
 
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.stage.ManagerDepartment;
+import com.example.WarehouseDatabaseJava.InnoDB.model.department.ManagerDepartment;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 

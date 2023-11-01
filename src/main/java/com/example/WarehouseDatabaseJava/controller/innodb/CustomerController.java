@@ -1,16 +1,16 @@
 package com.example.WarehouseDatabaseJava.controller.innodb;
 
-import com.example.WarehouseDatabaseJava.InnoDB.model.order.CustomDTO;
+import com.example.WarehouseDatabaseJava.dto.custom.CustomDTO;
 import com.example.WarehouseDatabaseJava.InnoDB.model.order.CustomService;
 import com.example.WarehouseDatabaseJava.InnoDB.model.product.Product;
 import com.example.WarehouseDatabaseJava.InnoDB.model.product.ProductService;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.Customer;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.CustomerProfileDTO;
+import com.example.WarehouseDatabaseJava.dto.users.CustomerProfileDTO;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.CustomerService;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.cart.CartProductDTO;
+import com.example.WarehouseDatabaseJava.dto.cart.CartProductDTO;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.cart.CartService;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.stage.DepartmentDTO;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.stage.DepartmentService;
+import com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO;
+import com.example.WarehouseDatabaseJava.InnoDB.model.department.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-package com.example.WarehouseDatabaseJava.InnoDB.model.order;
+package com.example.WarehouseDatabaseJava.dto.custom;
 
 import java.util.List;
 

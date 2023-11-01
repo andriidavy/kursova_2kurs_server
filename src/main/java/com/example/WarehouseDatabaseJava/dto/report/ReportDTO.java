@@ -1,4 +1,4 @@
-package com.example.WarehouseDatabaseJava.InnoDB.model.order.report;
+package com.example.WarehouseDatabaseJava.dto.report;
 
 public class ReportDTO {
     private int reportId;

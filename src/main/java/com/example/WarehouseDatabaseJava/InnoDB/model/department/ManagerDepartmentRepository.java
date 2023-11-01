@@ -1,4 +1,4 @@
-package com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.stage;
+package com.example.WarehouseDatabaseJava.InnoDB.model.department;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

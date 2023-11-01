@@ -1,6 +1,6 @@
-package com.example.WarehouseDatabaseJava.InnoDB.model.order;
+package com.example.WarehouseDatabaseJava.dto.cart;
 
-public class CustomProductDTO {
+public class CartProductDTO {
     private int productId;
     private String productName;
     private int quantity;
@@ -28,5 +28,4 @@ public class CustomProductDTO {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
 }

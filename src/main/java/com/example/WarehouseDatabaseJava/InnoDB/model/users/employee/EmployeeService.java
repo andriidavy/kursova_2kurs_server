@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.InnoDB.model.users.employee;
 
+import com.example.WarehouseDatabaseJava.dto.users.EmployeeProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

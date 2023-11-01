@@ -28,11 +28,14 @@ public class CustomMyISAM {
 
     //enumerated вказує на те як буде відображатися значення статусу, в данному випадку це буде рядкове значення
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private Custom.Status status;
-
+    @Column(name = "customer_id")
     private int customerId;
+    @Column(name = "department_id")
     private int departmentId;
-    private int employeeId;
+    @Column(name = "employee_id")
+    private Integer employeeId;
 
     public int getId() {
         return id;
@@ -66,11 +69,11 @@ public class CustomMyISAM {
         this.departmentId = departmentId;
     }
 
-    public int getEmployeeId() {
+    public Integer getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(int employeeId) {
+    public void setEmployeeId(Integer employeeId) {
         this.employeeId = employeeId;
     }
 }

@@ -1,8 +1,9 @@
 package com.example.WarehouseDatabaseJava.InnoDB.model.users.manager;
 
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.stage.Department;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.stage.DepartmentRepository;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.stage.ManagerDepartmentRepository;
+import com.example.WarehouseDatabaseJava.InnoDB.model.department.Department;
+import com.example.WarehouseDatabaseJava.InnoDB.model.department.DepartmentRepository;
+import com.example.WarehouseDatabaseJava.InnoDB.model.department.ManagerDepartmentRepository;
+import com.example.WarehouseDatabaseJava.dto.users.ManagerProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

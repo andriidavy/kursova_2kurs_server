@@ -1,11 +1,11 @@
 package com.example.WarehouseDatabaseJava.controller.innodb;
 
-import com.example.WarehouseDatabaseJava.InnoDB.model.order.CustomDTO;
+import com.example.WarehouseDatabaseJava.dto.custom.CustomDTO;
 import com.example.WarehouseDatabaseJava.InnoDB.model.order.CustomService;
-import com.example.WarehouseDatabaseJava.InnoDB.model.order.report.ReportDTO;
+import com.example.WarehouseDatabaseJava.dto.report.ReportDTO;
 import com.example.WarehouseDatabaseJava.InnoDB.model.order.report.ReportService;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.employee.Employee;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.employee.EmployeeProfileDTO;
+import com.example.WarehouseDatabaseJava.dto.users.EmployeeProfileDTO;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.employee.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

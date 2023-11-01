@@ -9,9 +9,11 @@ import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.cart.CartPr
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.employee.Employee;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.employee.EmployeeRepository;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.ManagerRepository;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.stage.Department;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.stage.DepartmentRepository;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.stage.ManagerDepartmentRepository;
+import com.example.WarehouseDatabaseJava.InnoDB.model.department.Department;
+import com.example.WarehouseDatabaseJava.InnoDB.model.department.DepartmentRepository;
+import com.example.WarehouseDatabaseJava.InnoDB.model.department.ManagerDepartmentRepository;
+import com.example.WarehouseDatabaseJava.dto.custom.CustomDTO;
+import com.example.WarehouseDatabaseJava.dto.custom.CustomProductDTO;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

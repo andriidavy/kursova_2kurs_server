@@ -2,6 +2,7 @@ package com.example.WarehouseDatabaseJava.InnoDB.model.users.customer;
 
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.cart.Cart;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.cart.CartRepository;
+import com.example.WarehouseDatabaseJava.dto.users.CustomerProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

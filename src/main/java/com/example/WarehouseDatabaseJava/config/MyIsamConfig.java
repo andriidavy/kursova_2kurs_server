@@ -23,7 +23,6 @@ public class MyIsamConfig {
     @Autowired
     private Environment env;
     @Bean
-    @Primary
     public LocalContainerEntityManagerFactoryBean db2EntityManager() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(db2Datasource());
@@ -40,7 +39,6 @@ public class MyIsamConfig {
         return em;
     }
 
-    @Primary
     @Bean
     public DataSource db2Datasource() {
 
@@ -55,7 +53,6 @@ public class MyIsamConfig {
         return dataSource;
     }
 
-    @Primary
     @Bean
     public PlatformTransactionManager db2TransactionManager() {
 

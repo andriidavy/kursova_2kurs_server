@@ -1,4 +1,4 @@
-package com.example.WarehouseDatabaseJava.InnoDB.model.users.customer;
+package com.example.WarehouseDatabaseJava.dto.users;
 
 public class CustomerProfileDTO {
     private int id;

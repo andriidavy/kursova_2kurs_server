@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.controller.myisam;
 
+import com.example.WarehouseDatabaseJava.dto.users.CustomerProfileDTO;
 import com.example.WarehouseDatabaseJava.MyISAM.model.users.customer.CustomerMyISAM;
 import com.example.WarehouseDatabaseJava.MyISAM.model.users.customer.CustomerMyIsamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CustomerControllerMI {
     @Autowired
-    private CustomerMyIsamService customerService;
+    private CustomerMyIsamService customerMyIsamService;
 //    @Autowired
 //    private CartService cartService;
 //    @Autowired
@@ -24,22 +25,22 @@ public class CustomerControllerMI {
 //        return customerService.getAllCustomers();
 //    }
 //
-//    //метод для логіну
-//    @PostMapping("/customer/login")
-//    public Customer loginCustomer(@RequestParam String email, @RequestParam String password) {
-//        return customerService.loginCustomer(email, password);
-//    }
+    //метод для логіну
+    @GetMapping("/mi/customer/login")
+    public CustomerMyISAM loginCustomer(@RequestParam String email, @RequestParam String password) {
+        return customerMyIsamService.loginCustomer(email, password);
+    }
 
     //отримати покупця по його id
-//    @GetMapping("/customer/get-customer-by-id")
-//    public CustomerProfileDTO getCustomerProfile(@RequestParam int customerId) {
-//        return customerService.getCustomerProfile(customerId);
-//    }
+    @GetMapping("/mi/customer/get-customer-by-id")
+    public CustomerProfileDTO getCustomerProfile(@RequestParam int customerId) {
+        return customerMyIsamService.getCustomerProfile(customerId);
+    }
 
     //зберегти покупця TESTED
-    @PostMapping("/mi/customer/save")
-    public CustomerMyISAM saveCustomer(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
-        return customerService.saveCustomer(name, surname, email, password);
+    @PostMapping("/mi/customer/insert")
+    public CustomerMyISAM insertCustomer(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
+        return customerMyIsamService.insertCustomer(name, surname, email, password);
     }
 
     // додати продукт до корзини конкретним покупцем TESTED

@@ -4,6 +4,7 @@ import com.example.WarehouseDatabaseJava.InnoDB.model.product.Product;
 import com.example.WarehouseDatabaseJava.InnoDB.model.product.ProductRepository;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.Customer;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.CustomerRepository;
+import com.example.WarehouseDatabaseJava.dto.cart.CartProductDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

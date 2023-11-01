@@ -1,4 +1,4 @@
-package com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.stage;
+package com.example.WarehouseDatabaseJava.InnoDB.model.department;
 
 import com.example.WarehouseDatabaseJava.InnoDB.model.order.Custom;
 import jakarta.persistence.*;

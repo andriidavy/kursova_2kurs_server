@@ -1,4 +1,4 @@
-package com.example.WarehouseDatabaseJava.MyISAM.model.users.manager.stage;
+package com.example.WarehouseDatabaseJava.MyISAM.model.department;
 
 import jakarta.persistence.*;
 

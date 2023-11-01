@@ -8,8 +8,11 @@ public class CustomProductMyISAM {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "quantity")
     private int quantity;
+    @Column(name = "custom_id")
     private int customId;
+    @Column(name = "product_id")
     private int productId;
 
     public int getId() {
