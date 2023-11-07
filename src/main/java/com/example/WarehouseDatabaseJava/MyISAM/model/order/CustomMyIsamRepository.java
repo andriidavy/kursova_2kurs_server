@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -17,8 +18,17 @@ public interface CustomMyIsamRepository extends JpaRepository <CustomMyISAM, Int
     @Query(value = "SELECT * FROM custom_myisam", nativeQuery = true)
     List<CustomMyISAM> getAllCustoms();
 
-    @Query(value = "UPDATE custom_myisam AS c SET c.employee_id = :employee_id WHERE c.id = :custom_id", nativeQuery = true)
+    @Procedure("create_custom")
     @Modifying
-    @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
-    void assignEmployeeToCustom(@Param("employee_id") int employeeId, @Param("custom_id") int customId);
+    int createCustom(@Param("new_customer_id") int customerId, @Param("new_department_id") int departmentId);
+
+
+    @Procedure("assign_employee_to_custom")
+    @Modifying
+    void assignEmployeeToCustom(@Param("new_employee_id") int employeeId, @Param("new_custom_id") int customId);
+
+    @Procedure("set_custom_sent")
+    @Modifying
+    void setCustomSent(@Param("custom_id") int customId);
+
 }

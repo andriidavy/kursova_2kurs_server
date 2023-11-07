@@ -1,5 +1,8 @@
 package com.example.WarehouseDatabaseJava.controller.myisam;
 
+import com.example.WarehouseDatabaseJava.MyISAM.model.department.DepartmentMyIsamService;
+import com.example.WarehouseDatabaseJava.MyISAM.model.department.ManagerDepartmentMyIsamService;
+import com.example.WarehouseDatabaseJava.MyISAM.model.order.report.ReportMyIsamService;
 import com.example.WarehouseDatabaseJava.dto.custom.CustomDTO;
 import com.example.WarehouseDatabaseJava.dto.users.ManagerProfileDTO;
 import com.example.WarehouseDatabaseJava.MyISAM.model.order.CustomMyIsamService;
@@ -8,10 +11,7 @@ import com.example.WarehouseDatabaseJava.MyISAM.model.product.ProductMyIsamServi
 import com.example.WarehouseDatabaseJava.MyISAM.model.users.manager.ManagerMyISAM;
 import com.example.WarehouseDatabaseJava.MyISAM.model.users.manager.ManagerMyIsamService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +23,12 @@ public class ManagerControllerMI {
     ProductMyIsamService productMyIsamService;
     @Autowired
     CustomMyIsamService customMyIsamService;
+    @Autowired
+    ReportMyIsamService reportMyIsamService;
+    @Autowired
+    DepartmentMyIsamService departmentMyIsamService;
+    @Autowired
+    ManagerDepartmentMyIsamService managerDepartmentMyIsamService;
 
     //зберегти менеджера TESTED
     @PostMapping("/mi/manager/insert")
@@ -65,4 +71,44 @@ public class ManagerControllerMI {
     public List<CustomDTO> getAllCustoms() {
         return customMyIsamService.getAllCustoms();
     }
+
+    //призначити робітника на замовлення
+    @PostMapping("/mi/manager/assign-employee-to-custom")
+    public void assignEmployeeToCustom(@RequestParam int employeeId, @RequestParam int customId) {
+        customMyIsamService.assignEmployeeToCustom(employeeId, customId);
+    }
+
+    //прийняти звіт
+    @PostMapping("/mi/manager/set-report-accepted")
+    public void setReportAccepted(@RequestParam int reportId) {
+        reportMyIsamService.setReportAccepted(reportId);
+    }
+
+    //відхилити звіт
+    @PostMapping("/mi/manager/set-report-rejected")
+    public void setReportRejected(@RequestParam int reportId) {
+        reportMyIsamService.setReportRejected(reportId);
+    }
+
+
+    //----------------------------------------admin--function------------------------------------------------------//
+
+    //додати відділ доставки
+    @PostMapping("/mi/manager/insert-department")
+    public void insertDepartment(@RequestParam String departName) {
+        departmentMyIsamService.insertDepartment(departName);
+    }
+
+    //призначити менеджера на відділ
+    @PostMapping("/mi/manager/assign-manager-to-department")
+    public void assignManagerToDepartment(@RequestParam int managerId, @RequestParam int departmentId) {
+        managerDepartmentMyIsamService.assignManagerToDepartment(managerId, departmentId);
+    }
+
+    //скасувати призначення менеджера на відділ
+    @DeleteMapping("/mi/manager/remove-department-for-manager")
+    public void removeDepartmentForManager(@RequestParam int managerId, @RequestParam int departmentId) {
+        managerDepartmentMyIsamService.removeDepartmentForManager(managerId, departmentId);
+    }
+
 }

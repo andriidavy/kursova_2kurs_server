@@ -1,6 +1,5 @@
 package com.example.WarehouseDatabaseJava.MyISAM.model.product;
 
-import com.example.WarehouseDatabaseJava.MyISAM.model.users.customer.CustomerMyIsamService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @Service
 public class ProductMyIsamService {
-    private static final Logger logger = LoggerFactory.getLogger(CustomerMyIsamService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductMyIsamService.class);
     @Autowired
     ProductMyIsamRepository productMyIsamRepository;
 

@@ -1,6 +1,7 @@
 package com.example.WarehouseDatabaseJava.MyISAM.model.department;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -14,4 +15,8 @@ public interface DepartmentMyIsamRepository extends JpaRepository<DepartmentMyIS
 
     @Query(value = "SELECT department_name FROM department_myisam AS d WHERE d.id = :department_id", nativeQuery = true)
     String getDepartmentNameById(@Param("department_id") int departmentId);
+
+    @Query(value = "INSERT INTO department_myisam (department_name) VALUES (:depart_name)", nativeQuery = true)
+    @Modifying
+    void insertDepartment(@Param("depart_name") String name);
 }

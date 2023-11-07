@@ -18,7 +18,6 @@ public class DepartmentService {
     CustomRepository customRepository;
 
     // збереження нового відділу
-    @Transactional
     public Department save(String departmentName) {
         Department existingDepartment = departmentRepository.findByDepartmentName(departmentName);
         if (existingDepartment != null) {
@@ -29,13 +28,11 @@ public class DepartmentService {
     }
 
     //видалити відділ по його id
-    @Transactional
     public void removeDepartmentById(int departmentId){
         departmentRepository.deleteById(departmentId);
     }
 
     // отримання всіх відділів (DTO!)
-    @Transactional
     public List<DepartmentDTO> getAllDepartments() {
         List<Department> departments = departmentRepository.findAll();
         List<DepartmentDTO> departmentDTOs = new ArrayList<>();
