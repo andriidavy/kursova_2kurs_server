@@ -50,7 +50,6 @@ public class ManagerService {
         return managerRepository.getReferenceByEmailAndPassword(email, password);
     }
 
-
     //отримати список всіх профілів менеджерів
     @Transactional
     public List<ManagerProfileDTO> getAllManagersProfileDTO() {
@@ -77,6 +76,7 @@ public class ManagerService {
 
         Manager manager = managerRepository.getReferenceById(managerId);
 
+        int id = manager.getId();
         String name = manager.getName();
         String surname = manager.getSurname();
         String email = manager.getEmail();
@@ -92,7 +92,7 @@ public class ManagerService {
             }
         }
 
-        return new ManagerProfileDTO(name, surname, email, departmentsString.toString());
+        return new ManagerProfileDTO(id, name, surname, email, departmentsString.toString());
     }
 }
 

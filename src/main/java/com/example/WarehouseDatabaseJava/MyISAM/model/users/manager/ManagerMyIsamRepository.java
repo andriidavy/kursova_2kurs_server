@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ManagerMyIsamRepository extends JpaRepository <ManagerMyISAM, Integer>{
+public interface ManagerMyIsamRepository extends JpaRepository<ManagerMyISAM, Integer> {
     @Query(value = "INSERT INTO manager_myisam (name, surname, email, password) VALUES (:name, :surname, :email, :password)", nativeQuery = true)
     @Modifying
     @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
@@ -19,12 +19,17 @@ public interface ManagerMyIsamRepository extends JpaRepository <ManagerMyISAM, I
                        @Param("email") String email,
                        @Param("password") String password);
 
+    @Query(value = "DELETE m FROM manager_myisam AS m WHERE m.id = :manager_id", nativeQuery = true)
+    @Modifying
+    @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
+    void deleteManagerById(@Param("manager_id") int managerId);
+
     @Query(value = "SELECT * FROM manager_myisam AS m WHERE m.id = LAST_INSERT_ID() AND m.email = :email", nativeQuery = true)
-    ManagerMyISAM getLastInsertedManager(@Param ("email") String email);
+    ManagerMyISAM getLastInsertedManager(@Param("email") String email);
 
     @Query(value = "SELECT * FROM manager_myisam AS m WHERE m.email = :email AND m.password = :password", nativeQuery = true)
     ManagerMyISAM loginManager(@Param("email") String email, @Param("password") String password);
 
     @Query(value = "SELECT * FROM manager_myisam AS m WHERE m.id = :manager_id", nativeQuery = true)
-    ManagerMyISAM getManagerById(@Param("manager_id") int manager_id);
+    ManagerMyISAM getManagerById(@Param("manager_id") int managerId);
 }

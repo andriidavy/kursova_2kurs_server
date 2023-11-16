@@ -5,6 +5,15 @@ public class CartProductDTO {
     private String productName;
     private int quantity;
 
+    public CartProductDTO() {
+    }
+
+    public CartProductDTO(int productId, String productName, int quantity) {
+        this.productId = productId;
+        this.productName = productName;
+        this.quantity = quantity;
+    }
+
     public int getProductId() {
         return productId;
     }

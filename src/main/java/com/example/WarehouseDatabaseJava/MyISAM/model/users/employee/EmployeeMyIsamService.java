@@ -25,6 +25,16 @@ public class EmployeeMyIsamService {
         }
     }
 
+    @Transactional(value = "db2TransactionManager")
+    public void deleteEmployeeById(int employeeId) {
+        try {
+            employeeMyIsamRepository.deleteEmployeeById(employeeId);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     public EmployeeMyISAM loginEmployee(String email, String password) {
         try {
             return employeeMyIsamRepository.loginEmployee(email, password);

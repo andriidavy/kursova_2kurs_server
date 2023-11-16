@@ -8,7 +8,9 @@ public class ManagerDepartmentMyISAM {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "department_id")
     private int departmentId;
+    @Column(name = "manager_id")
     private int managerId;
 
     public int getId() {

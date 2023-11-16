@@ -30,44 +30,62 @@ public class CustomMyIsamService {
     @Autowired
     DepartmentMyIsamRepository departmentMyIsamRepository;
 
-    public List<CustomDTO> getAllCustoms() {
+    //for customer
+    public List<CustomDTO> getCustomsForCustomer(int customerId) {
         try {
-            List<CustomMyISAM> allCustoms = customMyIsamRepository.getAllCustoms();
-            List<CustomDTO> allCustomsDTOs = new ArrayList<>();
-
-            for (CustomMyISAM custom : allCustoms) {
-                CustomDTO customDTO = new CustomDTO();
-
-                customDTO.setCustomId(custom.getId());
-
-                CustomerMyISAM customer = customerMyIsamRepository.getCustomerById(custom.getCustomerId());
-                customDTO.setCustomerId(customer.getId());
-                customDTO.setCustomerName(customer.getName());
-                customDTO.setCustomerSurname(customer.getSurname());
-
-                if (custom.getEmployeeId() != null) {
-                    EmployeeMyISAM employee = employeeMyIsamRepository.getEmployeeById(custom.getEmployeeId());
-                    customDTO.setEmployeeId(employee.getId());
-                    customDTO.setEmployeeName(employee.getName());
-                    customDTO.setEmployeeSurname(employee.getSurname());
-                }
-
-                customDTO.setStatus(custom.getStatus().toString());
-                customDTO.setDepartment(departmentMyIsamRepository.getDepartmentNameById(custom.getDepartmentId()));
-                customDTO.setCustomProductDTOList(customProductMyIsamRepository.getCustomProductDTOListByCustomId(custom.getId()));
-
-                allCustomsDTOs.add(customDTO);
-            }
-            return allCustomsDTOs;
+            List<CustomMyISAM> customs = customMyIsamRepository.getCustomsForCustomer(customerId);
+            return convertCustomToDTO(customs, false);
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public int createCustom(int customerId, int departmentId){
+    //for manager
+    public List<CustomDTO> getAllCustoms() {
         try {
-           return customMyIsamRepository.createCustom(customerId, departmentId);
+            List<CustomMyISAM> allCustoms = customMyIsamRepository.getAllCustoms();
+            return convertCustomToDTO(allCustoms, true);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public List<CustomDTO> getAllCustomsWithoutAssignEmployee(int managerId) {
+        try {
+            List<CustomMyISAM> customs = customMyIsamRepository.getAllCustomsWithoutAssignEmployee(managerId);
+            return convertCustomToDTO(customs, true);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    //for employee
+    public List<CustomDTO> getProcessingCustomsForEmployee(int employeeId) {
+        try {
+            List<CustomMyISAM> customs = customMyIsamRepository.getProcessingCustomsForEmployee(employeeId);
+            return convertCustomToDTO(customs, false);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public List<CustomDTO> getProcessedCustomsForEmployee(int employeeId) {
+        try {
+            List<CustomMyISAM> customs = customMyIsamRepository.getProcessedCustomsForEmployee(employeeId);
+            return convertCustomToDTO(customs, false);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public int createCustom(int customerId, int departmentId) {
+        try {
+            return customMyIsamRepository.createCustom(customerId, departmentId);
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;
@@ -84,7 +102,7 @@ public class CustomMyIsamService {
         }
     }
 
-    public void setCustomSent(int customId){
+    public void setCustomSent(int customId) {
         try {
             customMyIsamRepository.setCustomSent(customId);
         } catch (DataAccessException e) {
@@ -93,4 +111,32 @@ public class CustomMyIsamService {
         }
     }
 
+    private List<CustomDTO> convertCustomToDTO(List<CustomMyISAM> customs, boolean workerSetup) {
+        List<CustomDTO> customDTOList = new ArrayList<>();
+
+        for (CustomMyISAM custom : customs) {
+            CustomDTO customDTO = new CustomDTO();
+
+            customDTO.setCustomId(custom.getId());
+
+            CustomerMyISAM customer = customerMyIsamRepository.getCustomerById(custom.getCustomerId());
+            customDTO.setCustomerId(customer.getId());
+            customDTO.setCustomerName(customer.getName());
+            customDTO.setCustomerSurname(customer.getSurname());
+
+            if (custom.getEmployeeId() != null && workerSetup) {
+                EmployeeMyISAM employee = employeeMyIsamRepository.getEmployeeById(custom.getEmployeeId());
+                customDTO.setEmployeeId(employee.getId());
+                customDTO.setEmployeeName(employee.getName());
+                customDTO.setEmployeeSurname(employee.getSurname());
+            }
+
+            customDTO.setStatus(custom.getStatus().toString());
+            customDTO.setDepartment(departmentMyIsamRepository.getDepartmentNameById(custom.getDepartmentId()));
+            customDTO.setCustomProductDTOList(customProductMyIsamRepository.getCustomProductDTOListByCustomId(custom.getId()));
+
+            customDTOList.add(customDTO);
+        }
+        return customDTOList;
+    }
 }

@@ -1,12 +1,20 @@
 package com.example.WarehouseDatabaseJava.controller.myisam;
 
+import com.example.WarehouseDatabaseJava.MyISAM.model.department.DepartmentMyIsamService;
 import com.example.WarehouseDatabaseJava.MyISAM.model.order.CustomMyIsamService;
-import com.example.WarehouseDatabaseJava.MyISAM.model.users.customer.cart.CartMyIsamService;
-import com.example.WarehouseDatabaseJava.dto.users.CustomerProfileDTO;
+import com.example.WarehouseDatabaseJava.MyISAM.model.product.ProductMyISAM;
+import com.example.WarehouseDatabaseJava.MyISAM.model.product.ProductMyIsamService;
 import com.example.WarehouseDatabaseJava.MyISAM.model.users.customer.CustomerMyISAM;
 import com.example.WarehouseDatabaseJava.MyISAM.model.users.customer.CustomerMyIsamService;
+import com.example.WarehouseDatabaseJava.MyISAM.model.users.customer.cart.CartMyIsamService;
+import com.example.WarehouseDatabaseJava.dto.cart.CartProductDTO;
+import com.example.WarehouseDatabaseJava.dto.custom.CustomDTO;
+import com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO;
+import com.example.WarehouseDatabaseJava.dto.users.CustomerProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class CustomerControllerMI {
@@ -16,18 +24,20 @@ public class CustomerControllerMI {
     private CartMyIsamService cartMyIsamService;
     @Autowired
     private CustomMyIsamService customMyIsamService;
-//    @Autowired
-//    private ProductService productService;
-//    @Autowired
-//    private DepartmentService departmentService;
+    @Autowired
+    private ProductMyIsamService productMyIsamService;
+    @Autowired
+    private DepartmentMyIsamService departmentMyIsamService;
 
-    //метод для логіну
+    //CUSTOMER SIDE
+
+    //метод для логіну TESTED
     @GetMapping("/mi/customer/login")
     public CustomerMyISAM loginCustomer(@RequestParam String email, @RequestParam String password) {
         return customerMyIsamService.loginCustomer(email, password);
     }
 
-    //отримати покупця по його id
+    //отримати покупця по його id TESTED
     @GetMapping("/mi/customer/get-customer-by-id")
     public CustomerProfileDTO getCustomerProfile(@RequestParam int customerId) {
         return customerMyIsamService.getCustomerProfile(customerId);
@@ -38,6 +48,8 @@ public class CustomerControllerMI {
     public CustomerMyISAM insertCustomer(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
         return customerMyIsamService.insertCustomer(name, surname, email, password);
     }
+
+    //CART SIDE
 
     //додати продукт до корзини конкретним покупцем TESTED
     @PostMapping("/mi/customer/cart/add-product-to-cart")
@@ -51,45 +63,41 @@ public class CustomerControllerMI {
         cartMyIsamService.deleteProductFromCart(customerId, productId);
     }
 
-    //очистити корзину для конкретного покупця
-    @PostMapping("/customer/cart/clear")
+    //очистити корзину для конкретного покупця TESTED
+    @DeleteMapping("/mi/customer/cart/clear")
     public void clearCart(@RequestParam int customerId) {
         cartMyIsamService.clearCart(customerId);
     }
+
+    //CUSTOM SIDE
 
     //створення замовлення конкретним покупцем TESTED
     @PostMapping("/mi/customer/create-custom")
     public int createCustom(@RequestParam int customerId, @RequestParam int departmentId) {
         return customMyIsamService.createCustom(customerId, departmentId);
     }
-//
-//    //отримати список всіх замовлень для конкретного покупця TESTED
-//    @GetMapping("/customer/get-customs")
-//    public List<CustomDTO> getCustomsForCustomer(@RequestParam int customerId) {
-//        return customService.getCustomsForCustomer(customerId);
-//    }
-//
-//    //отримати список товарів в корзині для конкретного покупця TESTED
-//    @GetMapping("/customer/get-cart")
-//    public List<CartProductDTO> getCartProductsByCustomerId(@RequestParam int customerId) {
-//        return cartService.getCartProductsByCustomerId(customerId);
-//    }
-//
-//    //отримати список всіх продуктів TESTED
-//    @GetMapping("/customer/product/get-all")
-//    public List<Product> getAllProducts() {
-//        return productService.getAllProducts();
-//    }
-//
-//    //призначити конкретний відділ для конкретного замовлення TESTED
-//    @PostMapping("/customer/custom/assign-department")
-//    public void assignDepartmentToCustom(@RequestParam int customId, @RequestParam int departmentId) {
-//        departmentService.assignDepartmentToCustom(customId, departmentId);
-//    }
-//
-//    //отримати список всіх відділів TESTED
-//    @GetMapping("/customer/department/get-all")
-//    public List<DepartmentDTO> getAllDepartments() {
-//        return departmentService.getAllDepartments();
-//    }
+
+    //отримати список всіх замовлень для конкретного покупця TESTED
+    @GetMapping("/mi/customer/get-customs")
+    public List<CustomDTO> getCustomsForCustomer(@RequestParam int customerId) {
+        return customMyIsamService.getCustomsForCustomer(customerId);
+    }
+
+    //отримати список товарів в корзині для конкретного покупця TESTED
+    @GetMapping("/mi/customer/get-cart")
+    public List<CartProductDTO> getCartProductsByCustomerId(@RequestParam int customerId) {
+        return cartMyIsamService.getCartProductsByCustomerId(customerId);
+    }
+
+    //отримати список всіх продуктів TESTED
+    @GetMapping("/mi/customer/product/get-all")
+    public List<ProductMyISAM> getAllProducts() {
+        return productMyIsamService.getAllProducts();
+    }
+
+    //отримати список всіх відділів TESTED
+    @GetMapping("/mi/customer/department/get-all")
+    public List<DepartmentDTO> getAllDepartments() {
+        return departmentMyIsamService.getAllDepartments();
+    }
 }

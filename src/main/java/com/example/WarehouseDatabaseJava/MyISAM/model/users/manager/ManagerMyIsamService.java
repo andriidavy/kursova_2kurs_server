@@ -30,6 +30,16 @@ public class ManagerMyIsamService {
         }
     }
 
+    @Transactional(value = "db2TransactionManager")
+    public void deleteManagerById(int managerId) {
+        try {
+            managerMyIsamRepository.deleteManagerById(managerId);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     public ManagerMyISAM loginManager(String email, String password) {
         try {
             return managerMyIsamRepository.loginManager(email, password);
@@ -43,6 +53,7 @@ public class ManagerMyIsamService {
         try {
             ManagerMyISAM manager = managerMyIsamRepository.getManagerById(managerId);
 
+            int id = manager.getId();
             String name = manager.getName();
             String surname = manager.getSurname();
             String email = manager.getEmail();
@@ -57,7 +68,7 @@ public class ManagerMyIsamService {
                     departmentsString.append(", ");
                 }
             }
-            return new ManagerProfileDTO(name, surname, email, departmentsString.toString());
+            return new ManagerProfileDTO(id, name, surname, email, departmentsString.toString());
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;

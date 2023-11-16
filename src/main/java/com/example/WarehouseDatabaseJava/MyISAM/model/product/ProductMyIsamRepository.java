@@ -17,7 +17,7 @@ public interface ProductMyIsamRepository extends JpaRepository <ProductMyISAM, I
     @Query(value = "SELECT check_product_exist_by_name(:product_name) AS result", nativeQuery = true)
     Boolean isProductExistByName(@Param("product_name") String productName);
 
-    @Query (value = "INSERT INTO product_myisam (name, quantity) VALUES (:product_name, :quantity)", nativeQuery = true)
+    @Procedure("insert_product")
     @Modifying
     @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
     int insertProduct(@Param("product_name") String productName, @Param("quantity") int quantity);

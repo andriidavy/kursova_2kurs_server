@@ -8,8 +8,11 @@ public class CartProductMyISAM {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "quantity")
     private int quantity;
+    @Column(name = "cart_id")
     private int cartId;
+    @Column(name = "product_id")
     private int productId;
 
     public int getId() {

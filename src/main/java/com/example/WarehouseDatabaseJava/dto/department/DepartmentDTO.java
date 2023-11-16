@@ -2,7 +2,6 @@ package com.example.WarehouseDatabaseJava.dto.department;
 
 public class DepartmentDTO {
     private int id;
-
     private String departmentName;
 
     public DepartmentDTO() {

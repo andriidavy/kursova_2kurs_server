@@ -19,6 +19,11 @@ public interface EmployeeMyIsamRepository extends JpaRepository<EmployeeMyISAM, 
                       @Param("email") String email,
                       @Param("password") String password);
 
+    @Query(value = "DELETE FROM employee_myisam AS e WHERE e.id = :employee_id", nativeQuery = true)
+    @Modifying
+    @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
+    void deleteEmployeeById(@Param("employee_id") int employeeId);
+
     @Query(value = "SELECT * FROM employee_myisam AS e WHERE e.id = LAST_INSERT_ID() AND e.email = :email", nativeQuery = true)
     EmployeeMyISAM getLastInsertedEmployee(@Param ("email") String email);
 

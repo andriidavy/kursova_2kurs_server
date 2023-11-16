@@ -8,7 +8,7 @@ public class CartMyISAM {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
+    @Column(name = "customer_id")
     private int customerId;
 
     public int getId() {

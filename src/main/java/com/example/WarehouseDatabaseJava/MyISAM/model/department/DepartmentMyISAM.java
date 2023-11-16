@@ -8,6 +8,7 @@ public class DepartmentMyISAM {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "department_name")
     private String departmentName;
 
     public int getId() {
