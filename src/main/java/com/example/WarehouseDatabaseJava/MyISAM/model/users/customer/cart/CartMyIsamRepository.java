@@ -21,12 +21,12 @@ public interface CartMyIsamRepository extends JpaRepository<CartMyISAM, Integer>
     @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
     void addProductToCart(@Param("new_customer_id") int customerId, @Param("new_product_id") int productId, @Param("quantity") int quantity);
 
-    @Query(value = "DELETE cp FROM cart_product_myisam AS cp JOIN cart_myisam AS c ON c.id = cp.cart_id WHERE c.customer_id = :customer_id AND cp.product_id = :product_id", nativeQuery = true)
+    @Procedure("remove_from_cart_product")
     @Modifying
     @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
     void deleteProductFromCart(@Param("customer_id") int customerId, @Param("product_id") int productId);
 
-    @Query(value = "DELETE cp FROM cart_product_myisam AS cp JOIN cart_myisam AS c ON c.id = cp.cart_id WHERE c.customer_id = :customer_id", nativeQuery = true)
+    @Procedure("clear_cart")
     @Modifying
     @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
     void clearCart(@Param("customer_id") int customerId);

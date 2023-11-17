@@ -10,6 +10,8 @@ public class CartProductMyISAM {
     private int id;
     @Column(name = "quantity")
     private int quantity;
+    @Column(name = "price")
+    private int price;
     @Column(name = "cart_id")
     private int cartId;
     @Column(name = "product_id")
@@ -29,6 +31,14 @@ public class CartProductMyISAM {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public int getCartId() {

@@ -10,6 +10,8 @@ public class CustomProductMyISAM {
     private int id;
     @Column(name = "quantity")
     private int quantity;
+    @Column(name = "price")
+    private int price;
     @Column(name = "custom_id")
     private int customId;
     @Column(name = "product_id")

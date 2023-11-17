@@ -64,7 +64,7 @@ public class CustomerControllerMI {
     }
 
     //очистити корзину для конкретного покупця TESTED
-    @DeleteMapping("/mi/customer/cart/clear")
+        @DeleteMapping("/mi/customer/cart/clear")
     public void clearCart(@RequestParam int customerId) {
         cartMyIsamService.clearCart(customerId);
     }

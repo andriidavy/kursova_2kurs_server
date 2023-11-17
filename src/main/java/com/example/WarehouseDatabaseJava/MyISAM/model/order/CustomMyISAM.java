@@ -30,6 +30,8 @@ public class CustomMyISAM {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Custom.Status status;
+    @Column(name = "price")
+    private int price;
     @Column(name = "customer_id")
     private int customerId;
     @Column(name = "department_id")
@@ -51,6 +53,14 @@ public class CustomMyISAM {
 
     public void setStatus(Custom.Status status) {
         this.status = status;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public int getCustomerId() {

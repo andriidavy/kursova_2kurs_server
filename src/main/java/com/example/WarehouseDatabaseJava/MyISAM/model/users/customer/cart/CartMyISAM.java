@@ -10,6 +10,8 @@ public class CartMyISAM {
     private int id;
     @Column(name = "customer_id")
     private int customerId;
+    @Column(name = "price")
+    private int price;
 
     public int getId() {
         return id;
@@ -25,5 +27,13 @@ public class CartMyISAM {
 
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 }
