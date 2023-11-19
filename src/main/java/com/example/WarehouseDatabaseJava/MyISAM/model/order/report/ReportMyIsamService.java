@@ -16,9 +16,9 @@ public class ReportMyIsamService {
     @Autowired
     ReportMyIsamRepository reportMyIsamRepository;
 
-    public void provideReport(int customId, String reportText) {
+    public void provideReport(int employeeId, int customId, String reportText) {
         try {
-            reportMyIsamRepository.provideReport(customId, reportText);
+            reportMyIsamRepository.provideReport(employeeId, customId, reportText);
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;
@@ -81,7 +81,7 @@ public class ReportMyIsamService {
 
     public List<ReportDTO> convertReportToDTO(List<ReportMyISAM> reports) {
         return reports.stream()
-                .map(report -> new ReportDTO(report.getId(), report.getCustomId(), report.getReportText(), report.getStatus()))
+                .map(report -> new ReportDTO(report.getId(), report.getCustomId(), report.getReportText(), report.getStatus().toString()))
                 .collect(Collectors.toList());
     }
 }

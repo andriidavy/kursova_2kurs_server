@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(catalog = "warehouse_database_innodb")
+@Table(catalog = "warehouse_database_innodb", name = "custom")
 public class Custom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,13 +32,16 @@ public class Custom {
     @JoinColumn(name = "department_id")
     private Department department;
 
+    @Column(name = "price")
+    private double price;
+
     // One-to-Many relation with CustomProduct
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "custom")
+    @OneToMany(mappedBy = "custom")
     @JsonIgnore
     List<CustomProduct> customProductList = new ArrayList<>();
 
     //One-to-One relation with Report
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "custom")
+    @OneToOne(mappedBy = "custom")
     @JsonIgnore
     Report report;
 
@@ -60,6 +63,7 @@ public class Custom {
 
     //enumerated вказує на те як буде відображатися значення статусу, в данному випадку це буде рядкове значення
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private Status status;
 
     public Status getStatus() {
@@ -116,5 +120,13 @@ public class Custom {
 
     public void setDepartment(Department department) {
         this.department = department;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

@@ -7,27 +7,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(catalog = "warehouse_database_innodb")
+@Table(catalog = "warehouse_database_innodb", name = "department")
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
+    @Column(name = "department_name")
     private String departmentName;
 
-    public Department() {
-    }
-
-    public Department(String departmentName) {
-        this.departmentName = departmentName;
-    }
-
     //зв'язок One-to-Many з ManagerDepartment
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "department")
+    @OneToMany(mappedBy = "department")
     private List<ManagerDepartment> managerDepartmentList = new ArrayList<>();
 
     // зв'язок One-to-Many з Custom
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "department")
+    @OneToMany(mappedBy = "department")
     private List<Custom> customList = new ArrayList<>();
 
     public int getId() {

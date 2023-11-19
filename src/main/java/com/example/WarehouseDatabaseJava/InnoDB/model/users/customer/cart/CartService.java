@@ -1,117 +1,57 @@
 package com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.cart;
 
-import com.example.WarehouseDatabaseJava.InnoDB.model.product.Product;
-import com.example.WarehouseDatabaseJava.InnoDB.model.product.ProductRepository;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.Customer;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.CustomerRepository;
 import com.example.WarehouseDatabaseJava.dto.cart.CartProductDTO;
-import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CartService {
+    private static final Logger logger = LoggerFactory.getLogger(CartService.class);
     @Autowired
-    private CartRepository cartRepository;
-    @Autowired
-    private CustomerRepository customerRepository;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private CartProductRepository cartProductRepository;
+    CartRepository cartRepository;
 
-    //додавання продукту в кошик покупцем TESTED
-    public void addProductToCart(int customerId, int productId, int quantity) {
-        Customer customer = customerRepository.getReferenceById(customerId);
-        Product product = productRepository.getReferenceById(productId);
-        Cart cart = customer.getCart();
-        if (cart == null) {
-            cart = new Cart();
-            cart.setCustomer(customer);
-            customer.setCart(cart);
-        }
-        // Проверяем наличие достаточного количества продукта в базе данных
-        if (product.getQuantity() < quantity) {
-            throw new RuntimeException("Not enough stock for product: " + product.getName());
-        }
-        CartProduct cartProduct = findCartProductByProduct(customer.getCart(), product);
-        if (cartProduct == null) {
-            cartProduct = new CartProduct();
-            cartProduct.setProduct(product);
-            cartProduct.setQuantity(quantity);
-            cartProduct.setCart(customer.getCart());
-            cart.getCartProductList().add(cartProduct);
-            cartProductRepository.save(cartProduct);
-            cartRepository.save(cart);
-        } else {
-            if (product.getQuantity() < cartProduct.getQuantity() + quantity) {
-                throw new RuntimeException("Not enough stock for product: " + product.getName());
-            }
-            cartProduct.setQuantity(cartProduct.getQuantity() + quantity);
-            cartProductRepository.save(cartProduct);
-            cartRepository.save(cart);
+    @Transactional
+    public void addProductToCart(int customerId, int product_id, int quantity) {
+        try {
+            cartRepository.addProductToCart(customerId, product_id, quantity);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
         }
     }
 
-    //пошук співпадінь між продуктами які є в кошику і продуктом який хочемо додати в кошик TESTED
-    private CartProduct findCartProductByProduct(Cart cart, Product product) {
-        for (CartProduct cartProduct : cart.getCartProductList()) {
-            if (cartProduct.getProduct().getId() == product.getId()) {
-                return cartProduct;
-            }
+    @Transactional
+    public void deleteProductFromCart(int customerId, int productId) {
+        try {
+            cartRepository.deleteProductFromCart(customerId, productId);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
         }
-        return null;
     }
 
-    // видалення продукту з кошика покупцем
-    public void removeProductFromCart(int customerId, int productId) {
-        Customer customer = customerRepository.getReferenceById(customerId);
-        List<CartProduct> cartProductList = customer.getCart().getCartProductList();
-        cartProductList.stream()
-                .filter(cartProduct -> cartProduct.getProduct().getId() == productId)
-                .findFirst()
-                .ifPresent(cartProduct -> {
-                    customer.getCart().getCartProductList().remove(cartProduct);
-                    cartProductRepository.delete(cartProduct);
-                });
-    }
-
-    // очищення кошика покупцем
     @Transactional
     public void clearCart(int customerId) {
-        Customer customer = customerRepository.getReferenceById(customerId);
-        if (customer != null) {
-            Cart cart = customer.getCart();
-            if (cart != null) {
-                cart.getCartProductList().clear();
-                cartRepository.deleteAllCartProductsByCart(cart);
-            }
+        try {
+            cartRepository.clearCart(customerId);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
         }
     }
 
-    // отримати список товарів у корзині для певного покупця
-    // (повертає список об'єктів класу що містить назву, кількість і id продукту що є в корзині) TESTED
     public List<CartProductDTO> getCartProductsByCustomerId(int customerId) {
-        Customer customer = customerRepository.getReferenceById(customerId);
-
-        Cart cart = customer.getCart();
-        List<CartProductDTO> cartProductDTOS = new ArrayList<>();
-
-        for (CartProduct cartProduct : cart.getCartProductList()) {
-            Product product = cartProduct.getProduct();
-            int quantity = cartProduct.getQuantity();
-
-            CartProductDTO cartProductDTO = new CartProductDTO();
-            cartProductDTO.setProductId(product.getId());
-            cartProductDTO.setProductName(product.getName());
-            cartProductDTO.setQuantity(quantity);
-
-            cartProductDTOS.add(cartProductDTO);
+        try {
+            return cartRepository.getCartProductByCustomerId(customerId);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
         }
-
-        return cartProductDTOS;
     }
 }

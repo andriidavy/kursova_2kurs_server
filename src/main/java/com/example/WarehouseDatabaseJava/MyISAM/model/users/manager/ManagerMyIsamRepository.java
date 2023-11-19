@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.MyISAM.model.users.manager;
 
+import com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.Manager;
 import jakarta.persistence.QueryHint;
 import org.hibernate.jpa.AvailableHints;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface ManagerMyIsamRepository extends JpaRepository<ManagerMyISAM, Integer> {
@@ -32,4 +35,7 @@ public interface ManagerMyIsamRepository extends JpaRepository<ManagerMyISAM, In
 
     @Query(value = "SELECT * FROM manager_myisam AS m WHERE m.id = :manager_id", nativeQuery = true)
     ManagerMyISAM getManagerById(@Param("manager_id") int managerId);
+
+    @Query(value = "SELECT (m.id, m.name, m.surname, m.email) FROM ManagerMyISAM AS m", nativeQuery = true)
+    List<ManagerMyISAM> getAllManagers();
 }

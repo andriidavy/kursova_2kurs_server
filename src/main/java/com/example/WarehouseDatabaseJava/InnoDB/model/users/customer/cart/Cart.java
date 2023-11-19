@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(catalog = "warehouse_database_innodb")
+@Table(catalog = "warehouse_database_innodb", name = "cart")
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,8 +18,11 @@ public class Cart {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @Column(name = "price")
+    private int price;
+
     //One-to-Many relation with CartProduct
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cart")
     private List<CartProduct> cartProductList = new ArrayList<>();
 
     public Customer getCustomer() {
@@ -36,6 +39,14 @@ public class Cart {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public List<CartProduct> getCartProductList() {

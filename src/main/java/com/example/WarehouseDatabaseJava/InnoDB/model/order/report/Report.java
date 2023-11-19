@@ -4,11 +4,12 @@ import com.example.WarehouseDatabaseJava.InnoDB.model.order.Custom;
 import jakarta.persistence.*;
 
 @Entity
-@Table(catalog = "warehouse_database_innodb")
+@Table(catalog = "warehouse_database_innodb", name = "report")
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "report_text")
     private String reportText;
 
     public enum Status{
@@ -27,6 +28,7 @@ public class Report {
 
     //enumerated вказує на те як буде відображатися значення статусу, в данному випадку це буде рядкове значення
     @Enumerated(EnumType.STRING)
+    @Column(name = "report")
     private Report.Status status;
 
     //One-to-One relation with Custom

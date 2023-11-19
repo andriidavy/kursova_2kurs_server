@@ -11,24 +11,24 @@ public class ReportMyISAM {
     @Column(name = "report_text")
     private String reportText;
 
-//    public enum Status{
-//        WAITING(1),
-//        ACCEPTED(2),
-//        REJECTED(3);
-//        private final int value;
-//        Status(int value){
-//            this.value=value;
-//        }
-//
-//        public int getValue() {
-//            return value;
-//        }
-//    }
+    public enum Status{
+        WAITING(1),
+        ACCEPTED(2),
+        REJECTED(3);
+        private final int value;
+        Status(int value){
+            this.value=value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
 
     //enumerated вказує на те як буде відображатися значення статусу, в данному випадку це буде рядкове значення
-//    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private ReportMyISAM.Status status;
     @Column(name = "custom_id")
     private int customId;
 
@@ -48,11 +48,11 @@ public class ReportMyISAM {
         this.reportText = reportText;
     }
 
-    public String getStatus() {
+    public ReportMyISAM.Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ReportMyISAM.Status status) {
         this.status = status;
     }
 

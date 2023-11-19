@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ManagerMyIsamService {
@@ -69,6 +70,17 @@ public class ManagerMyIsamService {
                 }
             }
             return new ManagerProfileDTO(id, name, surname, email, departmentsString.toString());
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public List<ManagerProfileDTO> getAllManagers() {
+        try {
+            return managerMyIsamRepository.getAllManagers().stream()
+                    .map(manager -> new ManagerProfileDTO(manager.getId(), manager.getName(), manager.getSurname(), manager.getEmail()))
+                    .collect(Collectors.toList());
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;

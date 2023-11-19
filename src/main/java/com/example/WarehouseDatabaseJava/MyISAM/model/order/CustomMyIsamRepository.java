@@ -11,6 +11,17 @@ import java.util.List;
 
 @Repository
 public interface CustomMyIsamRepository extends JpaRepository <CustomMyISAM, Integer> {
+    @Procedure("create_custom")
+    @Modifying
+    int createCustom(@Param("new_customer_id") int customerId, @Param("new_department_id") int departmentId);
+
+    @Procedure("assign_employee_to_custom")
+    @Modifying
+    void assignEmployeeToCustom(@Param("new_employee_id") int employeeId, @Param("new_custom_id") int customId);
+
+    @Procedure("set_custom_sent")
+    @Modifying
+    void setCustomSent(@Param("custom_id") int customId);
 
     @Query(value = "SELECT * FROM custom_myisam", nativeQuery = true)
     List<CustomMyISAM> getAllCustoms();
@@ -26,16 +37,4 @@ public interface CustomMyIsamRepository extends JpaRepository <CustomMyISAM, Int
 
     @Query(value = "SELECT * FROM custom_myisam AS c WHERE c.employee_id = :employee_id AND c.status = 'PROCESSED'", nativeQuery = true)
     List<CustomMyISAM> getProcessedCustomsForEmployee(@Param("employee_id") int employeeId);
-
-    @Procedure("create_custom")
-    @Modifying
-    int createCustom(@Param("new_customer_id") int customerId, @Param("new_department_id") int departmentId);
-
-    @Procedure("assign_employee_to_custom")
-    @Modifying
-    void assignEmployeeToCustom(@Param("new_employee_id") int employeeId, @Param("new_custom_id") int customId);
-
-    @Procedure("set_custom_sent")
-    @Modifying
-    void setCustomSent(@Param("custom_id") int customId);
 }

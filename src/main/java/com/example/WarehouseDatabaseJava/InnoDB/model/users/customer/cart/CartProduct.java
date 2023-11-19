@@ -3,14 +3,16 @@ package com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.cart;
 import com.example.WarehouseDatabaseJava.InnoDB.model.product.Product;
 import jakarta.persistence.*;
 
-//Join class for Cart-Product 1-to-many relationship
 @Entity
-@Table(catalog = "warehouse_database_innodb")
+@Table(catalog = "warehouse_database_innodb", name = "cart_product")
 public class CartProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "quantity")
     private int quantity;
+    @Column(name = "price")
+    private int price;
 
     //Many-to-One relation with Cart
     @ManyToOne
@@ -53,5 +55,13 @@ public class CartProduct {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 }

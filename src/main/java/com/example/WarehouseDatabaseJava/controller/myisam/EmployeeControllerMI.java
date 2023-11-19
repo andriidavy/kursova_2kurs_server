@@ -62,8 +62,8 @@ public class EmployeeControllerMI {
 
     //відправити звіт TESTED
     @PostMapping("/mi/employee/provide-report")
-    public void provideReport(@RequestParam int customId, @RequestParam String reportText){
-        reportMyIsamService.provideReport(customId, reportText);
+    public void provideReport(@RequestParam int employeeId, @RequestParam int customId, @RequestParam String reportText) {
+        reportMyIsamService.provideReport(employeeId, customId, reportText);
     }
 
     //отримати список звітів, що очікують відповідь, для робітника TESTED

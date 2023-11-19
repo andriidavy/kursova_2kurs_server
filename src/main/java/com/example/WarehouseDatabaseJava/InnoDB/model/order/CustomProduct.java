@@ -4,12 +4,15 @@ import com.example.WarehouseDatabaseJava.InnoDB.model.product.Product;
 import jakarta.persistence.*;
 
 @Entity
-@Table(catalog = "warehouse_database_innodb")
+@Table(catalog = "warehouse_database_innodb", name = "custom_product")
 public class CustomProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "quantity")
     private int quantity;
+    @Column(name = "price")
+    private double price;
 
     // Many-to-One relation with Custom
     @ManyToOne
@@ -53,4 +56,11 @@ public class CustomProduct {
         this.product = product;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 }

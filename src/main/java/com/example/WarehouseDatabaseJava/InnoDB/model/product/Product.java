@@ -9,23 +9,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(catalog = "warehouse_database_innodb")
+@Table(catalog = "warehouse_database_innodb", name = "product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "description")
     private String description;
+    @Column(name = "quantity")
     private int quantity;
+    @Column(name = "price")
+    private int price;
+
 
     // One-to-Many relation with CartProduct
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product")
     @JsonIgnore
     List<CartProduct> cartProductList = new ArrayList<>();
 
     // One-to-Many relation with CustomProduct
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product")
     @JsonIgnore
     List<CustomProduct> customProductList = new ArrayList<>();
 
@@ -89,5 +95,13 @@ public class Product {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 }

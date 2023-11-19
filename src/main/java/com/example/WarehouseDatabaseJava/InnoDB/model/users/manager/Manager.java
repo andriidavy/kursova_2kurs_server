@@ -8,25 +8,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(catalog = "warehouse_database_innodb")
+@Table(catalog = "warehouse_database_innodb", name = "manager")
 public class Manager {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "surname")
     private String surname;
+    @Column(name = "email")
     private String email;
+    @Column(name = "password")
     private String password;
 
     //зв'зок багато до багатьох з етапом
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "manager")
+    @OneToMany(mappedBy = "manager")
     @JsonIgnore
     private List<ManagerDepartment> managerDepartmentList = new ArrayList<>();
 
     public Manager() {
     }
 
-    public Manager(String name, String surname, String email, String password) {
+    public Manager(int id, String name, String surname, String email, String password) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;

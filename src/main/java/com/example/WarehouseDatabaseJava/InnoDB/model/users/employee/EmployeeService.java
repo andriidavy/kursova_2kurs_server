@@ -1,74 +1,71 @@
 package com.example.WarehouseDatabaseJava.InnoDB.model.users.employee;
 
 import com.example.WarehouseDatabaseJava.dto.users.EmployeeProfileDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
+    private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
     @Autowired
-    private EmployeeRepository employeeRepository;
+    EmployeeRepository employeeRepository;
 
-    //TESTED
-    public Employee save(String name, String surname, String email, String password) {
-        Employee existingEmployee = employeeRepository.findByEmail(email);
-        if (existingEmployee != null) {
-            throw new IllegalArgumentException("Employee with the same email already exists");
+    @Transactional
+    public Employee insertEmployee(String name, String surname, String email, String password) {
+        try {
+            employeeRepository.insertEmployee(name, surname, email, password);
+            return employeeRepository.getLastInsertedEmployee(email);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
         }
-
-        Employee employee = new Employee(name, surname, email, password);
-        employeeRepository.save(employee);
-
-        return employee;
     }
 
-    public void deleteId(int employeeId) {
-        employeeRepository.deleteById(employeeId);
-    }
-
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    @Transactional
+    public void deleteEmployeeById(int employeeId) {
+        try {
+            employeeRepository.deleteEmployeeById(employeeId);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
     public Employee loginEmployee(String email, String password) {
-        List<Employee> employees = employeeRepository.findAll();
-        for (Employee employee : employees) {
-            if (employee.getEmail().equals(email) && employee.getPassword().equals(password)) {
-                return employee;
-            }
+        try {
+            return employeeRepository.loginEmployee(email, password);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
         }
-        throw new RuntimeException("Invalid email or password");
-    }
-
-    public List<EmployeeProfileDTO> getAllEmployeesProfile() {
-        List<Employee> employees = employeeRepository.findAll();
-        List<EmployeeProfileDTO> employeeProfiles = new ArrayList<>();
-
-        for (Employee employee : employees) {
-            int id = employee.getId();
-            String name = employee.getName();
-            String surname = employee.getSurname();
-            String email = employee.getEmail();
-
-            EmployeeProfileDTO profile = new EmployeeProfileDTO(id, name, surname, email);
-            employeeProfiles.add(profile);
-        }
-
-        return employeeProfiles;
     }
 
     public EmployeeProfileDTO getEmployeeProfile(int employeeId) {
-        Employee employee = employeeRepository.getReferenceById(employeeId);
-        if (employee == null) {
-            throw new RuntimeException("Manager not found with id: " + employeeId);
-        }
-        String name = employee.getName();
-        String surname = employee.getSurname();
-        String email = employee.getEmail();
+        try {
+            Employee employee = employeeRepository.getEmployeeById(employeeId);
 
-        return new EmployeeProfileDTO(name, surname, email);
+            return new EmployeeProfileDTO(employee.getId(), employee.getName(), employee.getSurname(), employee.getEmail());
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public List<EmployeeProfileDTO> getAllEmployees() {
+        try {
+            return employeeRepository.getAllEmployees().stream()
+                    .map(employee -> new EmployeeProfileDTO(employee.getId(), employee.getName(), employee.getSurname(), employee.getEmail()))
+                    .collect(Collectors.toList());
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 }

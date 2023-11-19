@@ -8,6 +8,7 @@ import com.example.WarehouseDatabaseJava.MyISAM.model.users.employee.EmployeeMyI
 import com.example.WarehouseDatabaseJava.dto.custom.CustomDTO;
 import com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO;
 import com.example.WarehouseDatabaseJava.dto.report.ReportDTO;
+import com.example.WarehouseDatabaseJava.dto.users.EmployeeProfileDTO;
 import com.example.WarehouseDatabaseJava.dto.users.ManagerProfileDTO;
 import com.example.WarehouseDatabaseJava.MyISAM.model.order.CustomMyIsamService;
 import com.example.WarehouseDatabaseJava.MyISAM.model.product.ProductMyISAM;
@@ -104,6 +105,12 @@ public class ManagerControllerMI {
         customMyIsamService.assignEmployeeToCustom(employeeId, customId);
     }
 
+    //отримати список всіх профілів робітників
+    @GetMapping("/manager/employee/profile/get-all")
+    public List<EmployeeProfileDTO> getAllEmployeesProfileDTO() {
+        return employeeMyIsamService.getAllEmployees();
+    }
+
     //REPORT SIDE
 
     //прийняти звіт TESTED
@@ -140,6 +147,12 @@ public class ManagerControllerMI {
         managerMyIsamService.deleteManagerById(managerId);
     }
 
+    //отримати список профілів всіх менеджерів
+    @GetMapping("/manager/profile/get-all")
+    public List<ManagerProfileDTO> getAllManagersProfileDTO() {
+        return managerMyIsamService.getAllManagers();
+    }
+
     //DEPARTMENT SIDE
 
     //додати відділ доставки TESTED
@@ -158,6 +171,12 @@ public class ManagerControllerMI {
     @DeleteMapping("/mi/manager/remove-department-for-manager")
     public void removeDepartmentForManager(@RequestParam int managerId, @RequestParam int departmentId) {
         managerDepartmentMyIsamService.removeDepartmentForManager(managerId, departmentId);
+    }
+
+    //отримати список всіх відділів
+    @GetMapping("/mi/manager/department/get-all")
+    public List<DepartmentDTO> getAllDepartments() {
+        return departmentMyIsamService.getAllDepartments();
     }
 
     //отримати список всіх відділів призначених для менеджера TESTED

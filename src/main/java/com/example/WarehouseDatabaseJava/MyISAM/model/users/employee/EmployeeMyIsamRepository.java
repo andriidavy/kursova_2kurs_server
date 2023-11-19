@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface EmployeeMyIsamRepository extends JpaRepository<EmployeeMyISAM, Integer> {
     @Query(value = "INSERT INTO employee_myisam (name, surname, email, password) VALUES (:name, :surname, :email, :password)", nativeQuery = true)
@@ -32,4 +34,7 @@ public interface EmployeeMyIsamRepository extends JpaRepository<EmployeeMyISAM, 
 
     @Query(value = "SELECT * FROM employee_myisam AS e WHERE e.id = :employee_id", nativeQuery = true)
     EmployeeMyISAM getEmployeeById(@Param("employee_id") int employee_id);
+
+    @Query(value = "SELECT (e.id, e.name, e.surname, e.email) FROM EmployeeMyISAM AS e", nativeQuery = true)
+    List<EmployeeMyISAM> getAllEmployees();
 }

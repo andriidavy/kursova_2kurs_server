@@ -9,27 +9,39 @@ import java.util.ArrayList;
 import java.util.List;
 
     @Entity
-    @Table(catalog = "warehouse_database_innodb")
+    @Table(catalog = "warehouse_database_innodb", name = "customer")
     public class Customer {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int id;
+        @Column(name = "name")
         private String name;
+        @Column(name = "surname")
         private String surname;
+        @Column(name = "email")
         private String email;
+        @Column(name = "password")
         private String password;
 
         //One-to-One relation with Cart
-        @OneToOne(cascade = CascadeType.ALL, mappedBy = "customer")
+        @OneToOne(mappedBy = "customer")
         @JsonIgnore
         private Cart cart;
 
         //One-to-Many relation with Custom
-        @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+        @OneToMany(mappedBy = "customer")
         @JsonIgnore
         private List<Custom> customList = new ArrayList<>();
 
         public Customer() {
+        }
+
+        public Customer(int id, String name, String surname, String email, String password) {
+            this.id = id;
+            this.name = name;
+            this.surname = surname;
+            this.email = email;
+            this.password = password;
         }
 
         public Customer(String name, String surname, String email, String password) {

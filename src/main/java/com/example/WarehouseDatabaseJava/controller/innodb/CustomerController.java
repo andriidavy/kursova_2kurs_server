@@ -29,12 +29,6 @@ public class CustomerController {
     @Autowired
     private DepartmentService departmentService;
 
-    //отримати список всіх покупців TESTED
-    @GetMapping("/customer/get-all")
-    public List<Customer> getAllCustomers() {
-        return customerService.getAllCustomers();
-    }
-
     //метод для логіну
     @PostMapping("/customer/login")
     public Customer loginCustomer(@RequestParam String email, @RequestParam String password) {
@@ -47,22 +41,22 @@ public class CustomerController {
         return customerService.getCustomerProfile(customerId);
     }
 
-    //зберегти покупця TESTED
-    @PostMapping("/customer/save")
-    public Customer save(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
-        return customerService.save(name, surname, email, password);
+    //зберегти покупця
+    @PostMapping("/customer/insert")
+    public Customer insertCustomer(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
+        return customerService.insertCustomer(name, surname, email, password);
     }
 
-    // додати продукт до корзини конкретним покупцем TESTED
+    // додати продукт до корзини конкретним покупцем
     @PostMapping("/customer/cart/add-product-to-cart")
     public void addProductToCart(@RequestParam int customerId, @RequestParam int productId, @RequestParam int quantity) {
         cartService.addProductToCart(customerId, productId, quantity);
     }
 
-    //видалити продукт з корзини для конкретного покупця TESTED
+    //видалити продукт з корзини для конкретного покупця
     @DeleteMapping("/customer/cart/remove-product-by-id")
-    public void removeProductFromCart(@RequestParam int customerId, @RequestParam int productId) {
-        cartService.removeProductFromCart(customerId, productId);
+    public void deleteProductFromCart(@RequestParam int customerId, @RequestParam int productId) {
+        cartService.deleteProductFromCart(customerId, productId);
     }
 
     //очистити корзину для конкретного покупця
@@ -71,37 +65,31 @@ public class CustomerController {
         cartService.clearCart(customerId);
     }
 
-    //створення замовлення конкретним покупцем TESTED
+    //створення замовлення конкретним покупцем
     @PostMapping("/customer/create-custom")
-    public int createCustom(@RequestParam int customerId) {
-        return customService.createCustom(customerId);
+    public int createCustom(@RequestParam int customerId, @RequestParam int departmentId) {
+        return customService.createCustom(customerId, departmentId);
     }
 
-    //отримати список всіх замовлень для конкретного покупця TESTED
+    //отримати список всіх замовлень для конкретного покупця
     @GetMapping("/customer/get-customs")
     public List<CustomDTO> getCustomsForCustomer(@RequestParam int customerId) {
         return customService.getCustomsForCustomer(customerId);
     }
 
-    //отримати список товарів в корзині для конкретного покупця TESTED
+    //отримати список товарів в корзині для конкретного покупця
     @GetMapping("/customer/get-cart")
     public List<CartProductDTO> getCartProductsByCustomerId(@RequestParam int customerId) {
         return cartService.getCartProductsByCustomerId(customerId);
     }
 
-    //отримати список всіх продуктів TESTED
+    //отримати список всіх продуктів
     @GetMapping("/customer/product/get-all")
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 
-    //призначити конкретний відділ для конкретного замовлення TESTED
-    @PostMapping("/customer/custom/assign-department")
-    public void assignDepartmentToCustom(@RequestParam int customId, @RequestParam int departmentId) {
-        departmentService.assignDepartmentToCustom(customId, departmentId);
-    }
-
-    //отримати список всіх відділів TESTED
+    //отримати список всіх відділів
     @GetMapping("/customer/department/get-all")
     public List<DepartmentDTO> getAllDepartments() {
         return departmentService.getAllDepartments();

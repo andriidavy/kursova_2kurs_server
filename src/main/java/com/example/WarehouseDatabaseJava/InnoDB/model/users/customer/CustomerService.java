@@ -1,70 +1,52 @@
 package com.example.WarehouseDatabaseJava.InnoDB.model.users.customer;
 
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.cart.Cart;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.cart.CartRepository;
 import com.example.WarehouseDatabaseJava.dto.users.CustomerProfileDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CustomerService {
+    private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
     @Autowired
     private CustomerRepository customerRepository;
-    @Autowired
-    private CartRepository cartRepository;
 
-    //додавання нового покупця та його корзини TESTED
-
-    public Customer save(String name, String surname, String email, String password) {
-        Customer existingCustomer = customerRepository.findByEmail(email);
-        if (existingCustomer != null) {
-            throw new IllegalArgumentException("Customer with the same email already exists");
+    @Transactional
+    public Customer insertCustomer(String name, String surname, String email, String password) {
+        try {
+            customerRepository.insertCustomer(name, surname, email, password);
+            return customerRepository.getLastInsertedCustomer(email);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
         }
-
-        Customer customer = new Customer(name, surname, email, password);
-        customerRepository.save(customer);
-
-        Cart cart = new Cart();
-        cart.setCustomer(customer);
-        cartRepository.save(cart);
-
-        return customer;
-    }
-
-    public void delete(Customer customer) {
-        customerRepository.delete(customer);
-    }
-
-    public void deleteById(Integer id) {
-        customerRepository.deleteById(id);
-    }
-
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
     }
 
     public Customer loginCustomer(String email, String password) {
-        List<Customer> customers = customerRepository.findAll();
-        for (Customer customer : customers) {
-            if (customer.getEmail().equals(email) && customer.getPassword().equals(password)) {
-                return customer;
-            }
+        try {
+            return customerRepository.loginCustomer(email, password);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
         }
-        throw new RuntimeException("Invalid email or password");
     }
 
     public CustomerProfileDTO getCustomerProfile(int customerId) {
-        Customer customer = customerRepository.getReferenceById(customerId);
-        if (customer == null) {
-            throw new RuntimeException("Customer not found with id: " + customerId);
-        }
-        int id = customer.getId();
-        String name = customer.getName();
-        String surname = customer.getSurname();
-        String email = customer.getEmail();
+        try {
+            Customer customer = customerRepository.getCustomerById(customerId);
 
-        return new CustomerProfileDTO(id, name, surname, email);
+            int id = customer.getId();
+            String name = customer.getName();
+            String surname = customer.getSurname();
+            String email = customer.getEmail();
+
+            return new CustomerProfileDTO(id, name, surname, email);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 }

@@ -3,6 +3,8 @@ package com.example.WarehouseDatabaseJava.MyISAM.model.order;
 import com.example.WarehouseDatabaseJava.InnoDB.model.order.Custom;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(catalog = "warehouse_database_myisam", name = "custom_myisam")
 public class CustomMyISAM {
@@ -31,7 +33,7 @@ public class CustomMyISAM {
     @Column(name = "status")
     private Custom.Status status;
     @Column(name = "price")
-    private int price;
+    private double price;
     @Column(name = "customer_id")
     private int customerId;
     @Column(name = "department_id")
@@ -55,11 +57,11 @@ public class CustomMyISAM {
         this.status = status;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

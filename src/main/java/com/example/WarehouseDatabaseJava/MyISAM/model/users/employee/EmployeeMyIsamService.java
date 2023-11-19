@@ -8,6 +8,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class EmployeeMyIsamService {
     private static final Logger logger = LoggerFactory.getLogger(EmployeeMyIsamService.class);
@@ -54,6 +57,17 @@ public class EmployeeMyIsamService {
             String email = employee.getEmail();
 
             return new EmployeeProfileDTO(id, name, surname, email);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public List<EmployeeProfileDTO> getAllEmployees() {
+        try {
+            return employeeMyIsamRepository.getAllEmployees().stream()
+                    .map(employee -> new EmployeeProfileDTO(employee.getId(), employee.getName(), employee.getSurname(), employee.getEmail()))
+                    .collect(Collectors.toList());
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;

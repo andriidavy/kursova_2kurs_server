@@ -11,7 +11,7 @@ public class CustomProductMyISAM {
     @Column(name = "quantity")
     private int quantity;
     @Column(name = "price")
-    private int price;
+    private double price;
     @Column(name = "custom_id")
     private int customId;
     @Column(name = "product_id")
@@ -47,5 +47,13 @@ public class CustomProductMyISAM {
 
     public void setProductId(int productId) {
         this.productId = productId;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }
