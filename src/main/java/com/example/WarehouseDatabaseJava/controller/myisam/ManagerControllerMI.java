@@ -106,7 +106,7 @@ public class ManagerControllerMI {
     }
 
     //отримати список всіх профілів робітників
-    @GetMapping("/manager/employee/profile/get-all")
+    @GetMapping("/mi/manager/employee/profile/get-all")
     public List<EmployeeProfileDTO> getAllEmployeesProfileDTO() {
         return employeeMyIsamService.getAllEmployees();
     }
@@ -148,7 +148,7 @@ public class ManagerControllerMI {
     }
 
     //отримати список профілів всіх менеджерів
-    @GetMapping("/manager/profile/get-all")
+    @GetMapping("/mi/manager/profile/get-all")
     public List<ManagerProfileDTO> getAllManagersProfileDTO() {
         return managerMyIsamService.getAllManagers();
     }

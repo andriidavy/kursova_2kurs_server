@@ -31,6 +31,6 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
     @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
     void clearCart(@Param("customer_id") int customerId);
 
-    @Query(value = "SELECT new com.example.WarehouseDatabaseJava.dto.cart.CartProductDTO (p.id, p.name, cp.quantity) FROM CartProduct cp JOIN Cart c ON cp.cartId = c.id JOIN Product AS p ON cp.productId = p.id WHERE c.customerId = :customer_id")
+    @Query(value = "SELECT new com.example.WarehouseDatabaseJava.dto.cart.CartProductDTO (p.id, p.name, cp.quantity) FROM CartProduct cp JOIN Cart c ON cp.cart.id = c.id JOIN Product AS p ON cp.product.id = p.id WHERE c.customer.id = :customer_id")
     List<CartProductDTO> getCartProductByCustomerId(@Param("customer_id") int customerId);
 }

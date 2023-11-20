@@ -80,7 +80,7 @@ public class ManagerController {
     }
 
     //отримати список замовлень без призначеного робітника для конкретного менеджера
-    @GetMapping("/mi/manager/get-customs-without-employee")
+    @GetMapping("/manager/get-customs-without-employee")
     public List<CustomDTO> getCustomsWithoutAssignEmployee(@RequestParam int managerId) {
         return customService.getAllCustomsWithoutAssignEmployee(managerId);
     }

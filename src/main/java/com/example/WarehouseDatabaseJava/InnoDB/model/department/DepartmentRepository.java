@@ -28,9 +28,9 @@ public interface DepartmentRepository extends JpaRepository<Department, Integer>
     @Query(value = "SELECT new com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO (d.id, d.departmentName) FROM Department d")
     List<DepartmentDTO> getAllDepartments();
 
-    @Query(value = "SELECT new com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO (d.id, d.departmentName) FROM Department d JOIN ManagerDepartment md ON d.id = md.departmentId WHERE md.managerId = :manager_id")
+    @Query(value = "SELECT new com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO (d.id, d.departmentName) FROM Department d JOIN ManagerDepartment md ON d.id = md.department.id WHERE md.manager.id = :manager_id")
     List<DepartmentDTO> getAllDepartmentsForManager(@Param("manager_id") int managerId);
 
-    @Query(value = "SELECT new com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO (d.id, d.departmentName) FROM Department d LEFT JOIN ManagerDepartment md ON d.id = md.departmentId WHERE md.managerId != :manager_id OR md.managerId IS NULL")
+    @Query(value = "SELECT new com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO (d.id, d.departmentName) FROM Department d LEFT JOIN ManagerDepartment md ON d.id = md.department.id WHERE md.manager.id != :manager_id OR md.manager.id IS NULL")
     List<DepartmentDTO> getAllDepartmentsWithoutManager(@Param("manager_id") int managerId);
 }
