@@ -58,18 +58,9 @@ public class ManagerService {
             String name = manager.getName();
             String surname = manager.getSurname();
             String email = manager.getEmail();
-
             List<String> departmentsName = departmentRepository.findAllDepartmentsNameByManagerId(managerId);
 
-            StringBuilder departmentsString = new StringBuilder();
-            for (int i = 0; i < departmentsName.size(); i++) {
-                String departmentName = departmentsName.get(i);
-                departmentsString.append(departmentName);
-                if (i < departmentsName.size() - 1) {
-                    departmentsString.append(", ");
-                }
-            }
-            return new ManagerProfileDTO(id, name, surname, email, departmentsString.toString());
+            return new ManagerProfileDTO(id, name, surname, email, departmentsToString(departmentsName));
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;
@@ -79,12 +70,29 @@ public class ManagerService {
     public List<ManagerProfileDTO> getAllManagers() {
         try {
             return managerRepository.getAllManagers().stream()
-                    .map(manager -> new ManagerProfileDTO(manager.getId(), manager.getName(), manager.getSurname(), manager.getEmail()))
+                    .map(manager -> new ManagerProfileDTO(
+                            manager.getId(),
+                            manager.getName(),
+                            manager.getSurname(),
+                            manager.getEmail(),
+                            departmentsToString(departmentRepository.findAllDepartmentsNameByManagerId(manager.getId()))))
                     .collect(Collectors.toList());
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;
         }
+    }
+
+    private String departmentsToString(List<String> departmentsName){
+        StringBuilder departmentsString = new StringBuilder();
+        for (int i = 0; i < departmentsName.size(); i++) {
+            String departmentName = departmentsName.get(i);
+            departmentsString.append(departmentName);
+            if (i < departmentsName.size() - 1) {
+                departmentsString.append(", ");
+            }
+        }
+        return departmentsString.toString();
     }
 }
 

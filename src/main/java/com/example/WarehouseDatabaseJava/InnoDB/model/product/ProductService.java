@@ -17,14 +17,14 @@ public class ProductService {
     private ProductRepository productRepository;
 
     @Transactional
-    public int provideProduct(String productName, int quantity) {
+    public int provideProduct(String productName, int quantity, double price, String description) {
         try {
             int productId;
 
             if (productRepository.isProductExistByName(productName)) {
                 productId = productRepository.addProductQuantity(productName, quantity);
             } else {
-                productId = productRepository.insertProduct(productName, quantity);
+                productId = productRepository.insertProduct(productName, quantity, price, description);
             }
 
             return productId;

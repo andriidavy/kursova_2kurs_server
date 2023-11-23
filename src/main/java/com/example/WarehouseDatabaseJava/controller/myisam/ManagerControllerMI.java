@@ -55,8 +55,8 @@ public class ManagerControllerMI {
 
     // додати/оновити продукт (вертає id доданого/оновленого продукту) TESTED
     @PostMapping("/mi/manager/provide-product")
-    public int provideProduct(@RequestParam String productName, @RequestParam int quantity) {
-        return productMyIsamService.provideProduct(productName, quantity);
+    public int provideProduct(@RequestParam String productName, @RequestParam int quantity, @RequestParam double price, @RequestParam String description) {
+        return productMyIsamService.provideProduct(productName, quantity, price, description);
     }
 
     //зберегти опис для продукту TESTED
@@ -147,7 +147,7 @@ public class ManagerControllerMI {
         managerMyIsamService.deleteManagerById(managerId);
     }
 
-    //отримати список профілів всіх менеджерів
+    //отримати список профілів всіх менеджерів TESTED
     @GetMapping("/mi/manager/profile/get-all")
     public List<ManagerProfileDTO> getAllManagersProfileDTO() {
         return managerMyIsamService.getAllManagers();
@@ -173,7 +173,7 @@ public class ManagerControllerMI {
         managerDepartmentMyIsamService.removeDepartmentForManager(managerId, departmentId);
     }
 
-    //отримати список всіх відділів
+    //отримати список всіх відділів TESTED
     @GetMapping("/mi/manager/department/get-all")
     public List<DepartmentDTO> getAllDepartments() {
         return departmentMyIsamService.getAllDepartments();

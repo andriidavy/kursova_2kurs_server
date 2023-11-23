@@ -37,6 +37,6 @@ public interface ManagerRepository extends JpaRepository<Manager, Integer> {
     @Query(value = "SELECT * FROM manager AS m WHERE m.id = :manager_id", nativeQuery = true)
     Manager getManagerById(@Param("manager_id") int managerId);
 
-    @Query(value = "SELECT (m.id, m.name, m.surname, m.email) FROM Manager AS m", nativeQuery = true)
+    @Query(value = "SELECT * FROM manager", nativeQuery = true)
     List<Manager> getAllManagers();
 }

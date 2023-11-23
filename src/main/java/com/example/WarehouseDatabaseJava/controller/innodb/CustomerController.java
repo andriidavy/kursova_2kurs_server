@@ -29,67 +29,67 @@ public class CustomerController {
     @Autowired
     private DepartmentService departmentService;
 
-    //метод для логіну
-    @PostMapping("/customer/login")
+    //метод для логіну TESTED
+    @GetMapping("/customer/login")
     public Customer loginCustomer(@RequestParam String email, @RequestParam String password) {
         return customerService.loginCustomer(email, password);
     }
 
-    //отримати покупця по його id
+    //отримати покупця по його id TESTED
     @GetMapping("/customer/get-customer-by-id")
     public CustomerProfileDTO getCustomerProfile(@RequestParam int customerId) {
         return customerService.getCustomerProfile(customerId);
     }
 
-    //зберегти покупця
+    //зберегти покупця TESTED
     @PostMapping("/customer/insert")
     public Customer insertCustomer(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
         return customerService.insertCustomer(name, surname, email, password);
     }
 
-    // додати продукт до корзини конкретним покупцем
+    // додати продукт до корзини конкретним покупцем TESTED
     @PostMapping("/customer/cart/add-product-to-cart")
     public void addProductToCart(@RequestParam int customerId, @RequestParam int productId, @RequestParam int quantity) {
         cartService.addProductToCart(customerId, productId, quantity);
     }
 
-    //видалити продукт з корзини для конкретного покупця
+    //видалити продукт з корзини для конкретного покупця TESTED
     @DeleteMapping("/customer/cart/remove-product-by-id")
     public void deleteProductFromCart(@RequestParam int customerId, @RequestParam int productId) {
         cartService.deleteProductFromCart(customerId, productId);
     }
 
-    //очистити корзину для конкретного покупця
-    @PostMapping("/customer/cart/clear")
+    //очистити корзину для конкретного покупця TESTED
+    @DeleteMapping("/customer/cart/clear")
     public void clearCart(@RequestParam int customerId) {
         cartService.clearCart(customerId);
     }
 
-    //створення замовлення конкретним покупцем
+    //створення замовлення конкретним покупцем TESTED
     @PostMapping("/customer/create-custom")
     public int createCustom(@RequestParam int customerId, @RequestParam int departmentId) {
         return customService.createCustom(customerId, departmentId);
     }
 
-    //отримати список всіх замовлень для конкретного покупця
+    //отримати список всіх замовлень для конкретного покупця TESTED
     @GetMapping("/customer/get-customs")
     public List<CustomDTO> getCustomsForCustomer(@RequestParam int customerId) {
         return customService.getCustomsForCustomer(customerId);
     }
 
-    //отримати список товарів в корзині для конкретного покупця
+    //отримати список товарів в корзині для конкретного покупця TESTED
     @GetMapping("/customer/get-cart")
     public List<CartProductDTO> getCartProductsByCustomerId(@RequestParam int customerId) {
         return cartService.getCartProductsByCustomerId(customerId);
     }
 
-    //отримати список всіх продуктів
+    //отримати список всіх продуктів TESTED
     @GetMapping("/customer/product/get-all")
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 
-    //отримати список всіх відділів
+    //отримати список всіх відділів TESTED
     @GetMapping("/customer/department/get-all")
     public List<DepartmentDTO> getAllDepartments() {
         return departmentService.getAllDepartments();

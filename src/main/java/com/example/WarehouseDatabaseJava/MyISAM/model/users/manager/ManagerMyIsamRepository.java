@@ -36,6 +36,6 @@ public interface ManagerMyIsamRepository extends JpaRepository<ManagerMyISAM, In
     @Query(value = "SELECT * FROM manager_myisam AS m WHERE m.id = :manager_id", nativeQuery = true)
     ManagerMyISAM getManagerById(@Param("manager_id") int managerId);
 
-    @Query(value = "SELECT (m.id, m.name, m.surname, m.email) FROM ManagerMyISAM AS m", nativeQuery = true)
+    @Query(value = "SELECT * FROM manager_myisam", nativeQuery = true)
     List<ManagerMyISAM> getAllManagers();
 }

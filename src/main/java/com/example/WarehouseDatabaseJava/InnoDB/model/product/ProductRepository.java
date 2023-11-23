@@ -20,7 +20,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Procedure("_insert_product")
     @Modifying
     @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
-    int insertProduct(@Param("product_name") String productName, @Param("quantity") int quantity);
+    int insertProduct(@Param("new_name") String productName, @Param("new_quantity") int quantity, @Param("new_price") double price, @Param("new_description") String description);
 
     @Procedure("_add_product_quantity")
     @Modifying

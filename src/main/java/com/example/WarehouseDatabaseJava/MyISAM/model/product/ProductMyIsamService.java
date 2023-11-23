@@ -16,14 +16,14 @@ public class ProductMyIsamService {
     ProductMyIsamRepository productMyIsamRepository;
 
     @Transactional(value = "db2TransactionManager")
-    public int provideProduct(String productName, int quantity) {
+    public int provideProduct(String productName, int quantity, double price, String description) {
         try {
             int productId;
 
             if (productMyIsamRepository.isProductExistByName(productName)) {
                 productId = productMyIsamRepository.addProductQuantity(productName, quantity);
             } else {
-                productId = productMyIsamRepository.insertProduct(productName, quantity);
+                productId = productMyIsamRepository.insertProduct(productName, quantity, price, description);
             }
 
             return productId;

@@ -28,7 +28,7 @@ public class Report {
 
     //enumerated вказує на те як буде відображатися значення статусу, в данному випадку це буде рядкове значення
     @Enumerated(EnumType.STRING)
-    @Column(name = "report")
+    @Column(name = "status")
     private Report.Status status;
 
     //One-to-One relation with Custom

@@ -93,9 +93,9 @@ public class CustomService {
     }
 
     @Transactional
-    public void assignEmployeeToCustom(int employeeId, int customId) {
+    public void assignEmployeeToCustom(int customId, int employeeId) {
         try {
-            customRepository.assignEmployeeToCustom(employeeId, customId);
+            customRepository.assignEmployeeToCustom(customId, employeeId);
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;

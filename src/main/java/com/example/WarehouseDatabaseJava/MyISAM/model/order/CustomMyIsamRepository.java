@@ -29,10 +29,10 @@ public interface CustomMyIsamRepository extends JpaRepository <CustomMyISAM, Int
     @Query(value = "SELECT * FROM custom_myisam AS c WHERE c.customer_id = :customer_id", nativeQuery = true)
     List<CustomMyISAM> getCustomsForCustomer(@Param("customer_id") int customerId);
 
-    @Query(value = "SELECT c.id, c.status, c.customer_id, c.department_id, c.employee_id FROM custom_myisam AS c JOIN manager_department_myisam AS md ON c.department_id = md.department_id WHERE c.employee_id IS NULL AND md.manager_id = :manager_id AND c.status = 'CREATED' OR c.status = 'IN_PROCESSING' OR c.status = 'PROCESSED' ORDER BY c.status DESC", nativeQuery = true)
+    @Query(value = "SELECT c.id, c.status, c.customer_id, c.department_id, c.employee_id FROM custom_myisam AS c JOIN manager_department_myisam AS md ON c.department_id = md.department_id WHERE c.employee_id IS NULL AND md.manager_id = :manager_id AND (c.status = 'CREATED' OR c.status = 'IN_PROCESSING' OR c.status = 'PROCESSED') ORDER BY c.status DESC", nativeQuery = true)
     List<CustomMyISAM> getAllCustomsWithoutAssignEmployee(@Param("manager_id") int managerId);
 
-    @Query(value = "SELECT * FROM custom_myisam AS c WHERE c.employee_id = :employee_id AND c.status = 'IN_PROCESSING' OR c.status = 'WAITING_RESPONSE' ORDER BY c.status ASC", nativeQuery = true)
+    @Query(value = "SELECT * FROM custom_myisam AS c WHERE c.employee_id = :employee_id AND (c.status = 'IN_PROCESSING' OR c.status = 'WAITING_RESPONSE') ORDER BY c.status ASC", nativeQuery = true)
     List<CustomMyISAM> getProcessingCustomsForEmployee(@Param("employee_id") int employeeId);
 
     @Query(value = "SELECT * FROM custom_myisam AS c WHERE c.employee_id = :employee_id AND c.status = 'PROCESSED'", nativeQuery = true)

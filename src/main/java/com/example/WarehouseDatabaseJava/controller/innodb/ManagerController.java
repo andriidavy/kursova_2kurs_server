@@ -39,13 +39,13 @@ public class ManagerController {
 
     // MANAGER SIDE
 
-    //метод для логіну
-    @PostMapping("/manager/login")
+    //метод для логіну TESTED
+    @GetMapping("/manager/login")
     public Manager loginManager(String email, String password) {
         return managerService.loginManager(email, password);
     }
 
-    //отримати профіль менеджера по його id
+    //отримати профіль менеджера по його id TESTED
     @GetMapping("/manager/get-manager-by-id")
     public ManagerProfileDTO getManagerProfile(@RequestParam int managerId) {
         return managerService.getManagerProfile(managerId);
@@ -53,19 +53,19 @@ public class ManagerController {
 
     // PRODUCT SIDE
 
-    // додати/оновити продукт (вертає id доданого/оновленого продукту)
+    // додати/оновити продукт (вертає id доданого/оновленого продукту) TESTED
     @PostMapping("/manager/provide-product")
-    public int provideProduct(@RequestParam String productName, @RequestParam int quantity) {
-        return productService.provideProduct(productName, quantity);
+    public int provideProduct(@RequestParam String productName, @RequestParam int quantity, @RequestParam double price, @RequestParam String description) {
+        return productService.provideProduct(productName, quantity, price, description);
     }
 
-    //зберегти опис для продукту
+    //зберегти опис для продукту NOT USING
     @PostMapping("/manager/save-desc-for-product")
     public void saveDescriptionForProduct(@RequestParam int productId, @RequestParam String description) {
         productService.saveDescriptionToProduct(productId, description);
     }
 
-    //отримати список всіх продуктів
+    //отримати список всіх продуктів TESTED
     @GetMapping("/manager/product/get-all")
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
@@ -73,13 +73,13 @@ public class ManagerController {
 
     //CUSTOM SIDE
 
-    //отримати список всіх замовлень
+    //отримати список всіх замовлень TESTED
     @GetMapping("/manager/custom/get-all")
     public List<CustomDTO> getAllCustoms() {
         return customService.getAllCustoms();
     }
 
-    //отримати список замовлень без призначеного робітника для конкретного менеджера
+    //отримати список замовлень без призначеного робітника для конкретного менеджера TESTED
     @GetMapping("/manager/get-customs-without-employee")
     public List<CustomDTO> getCustomsWithoutAssignEmployee(@RequestParam int managerId) {
         return customService.getAllCustomsWithoutAssignEmployee(managerId);
@@ -87,25 +87,25 @@ public class ManagerController {
 
     //EMPLOYEE SIDE
 
-    //додати нового робітника
+    //додати нового робітника TESTED
     @PostMapping("/manager/employee/insert")
     public Employee saveEmployee(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
         return employeeService.insertEmployee(name, surname, email, password);
     }
 
-    //видалення робітника по id
+    //видалення робітника по id TESTED
     @DeleteMapping("/manager/employee/delete-employee-by-id")
     public void deleteEmployeeById(@RequestParam int employeeId) {
         employeeService.deleteEmployeeById(employeeId);
     }
 
-    //призначити конкретного робітника на виконання конкретного замовлення
+    //призначити конкретного робітника на виконання конкретного замовлення TESTED
     @PostMapping("/manager/custom/assign-employee")
     public void assignEmployeeToCustom(@RequestParam int customId, @RequestParam int employeeId) {
         customService.assignEmployeeToCustom(customId, employeeId);
     }
 
-    //отримати список всіх профілів робітників
+    //отримати список всіх профілів робітників TESTED
     @GetMapping("/manager/employee/profile/get-all")
     public List<EmployeeProfileDTO> getAllEmployeesProfileDTO() {
         return employeeService.getAllEmployees();
@@ -113,43 +113,41 @@ public class ManagerController {
 
     //REPORT SIDE
 
-    //прийняти звіт
+    //прийняти звіт TESTED
     @PostMapping("/manager/custom/report/accept")
     public void setReportAccepted(@RequestParam int reportId) {
         reportService.setReportAccepted(reportId);
     }
 
-    //відхилити звіт
+    //відхилити звіт TESTED
     @PostMapping("/manager/custom/report/reject")
     public void setReportRejected(@RequestParam int reportId) {
         reportService.setReportRejected(reportId);
     }
 
-    //отримати список усіх звітів, які чекають на відповідь менеджера
+    //отримати список усіх звітів, які чекають на відповідь менеджера TESTED
     @GetMapping("/manager/custom/report/get-waiting")
     public List<ReportDTO> getAllWaitingForManager(@RequestParam int managerId) {
         return reportService.getAllWaitingReportsForManager(managerId);
     }
 
-
-
     //----------------------------------------admin--function------------------------------------------------------//
 
     //MANAGER SIDE
 
-    //зберегти нового менеджера
-    @PostMapping("/manager/save")
-    public Manager saveManager(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
+    //зберегти нового менеджера TESTED
+    @PostMapping("/manager/insert")
+    public Manager insertManager(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
         return managerService.insertManager(name, surname, email, password);
     }
 
-    //видалення певного менеджера по його id
+    //видалення певного менеджера по його id TESTED
     @DeleteMapping("/manager/delete-manager-by-id")
     public void deleteManagerById(@RequestParam int managerId) {
         managerService.deleteManagerById(managerId);
     }
 
-    //отримати список профілів всіх менеджерів
+    //отримати список профілів всіх менеджерів TESTED
     @GetMapping("/manager/profile/get-all")
     public List<ManagerProfileDTO> getAllManagersProfileDTO() {
         return managerService.getAllManagers();
@@ -157,37 +155,37 @@ public class ManagerController {
 
     //DEPARTMENT SIDE
 
-    //зберегти відділ
+    //зберегти відділ TESTED
     @PostMapping("/manager/department/save")
     public void saveDepartment(@RequestParam String departmentName) {
         departmentService.insertDepartment(departmentName);
     }
 
-    //призначити відділ на менеджера
+    //призначити відділ на менеджера TESTED
     @PostMapping("/manager/department/assign-department-to-manager")
     public void assignDepartmentToManager(@RequestParam int managerId, @RequestParam int departmentId) {
         managerDepartmentService.assignManagerToDepartment(managerId, departmentId);
     }
 
-    //прибрати призначений відділ у менеджера
-    @PostMapping("/manager/department/remove-department-from-manager")
+    //прибрати призначений відділ у менеджера TESTED
+    @DeleteMapping("/manager/department/remove-department-from-manager")
     public void removeDepartmentFromManager(@RequestParam int managerId, @RequestParam int departmentId) {
         managerDepartmentService.removeDepartmentForManager(managerId, departmentId);
     }
 
-    //отримати список всіх відділів
+    //отримати список всіх відділів TESTED
     @GetMapping("/manager/department/get-all")
     public List<DepartmentDTO> getAllDepartments() {
         return departmentService.getAllDepartments();
     }
 
-    //метод отримання всіх етапів, на які призначений певний менеджер
+    //метод отримання всіх етапів, на які призначений певний менеджер TESTED
     @GetMapping("/manager/department/get-departments-for-manager")
     public List<DepartmentDTO> getAllDepartmentsForManager(@RequestParam int managerId) {
         return departmentService.getAllDepartmentsForManager(managerId);
     }
 
-    //метод отримання всіх етапів, на які певний менеджер НЕ призначений
+    //метод отримання всіх етапів, на які певний менеджер НЕ призначений TESTED
     @GetMapping("/manager/department/get-departments-non-for-manager")
     public List<DepartmentDTO> getDepartmentsWithoutManager(@RequestParam int managerId) {
         return departmentService.getAllDepartmentsWithoutManager(managerId);
