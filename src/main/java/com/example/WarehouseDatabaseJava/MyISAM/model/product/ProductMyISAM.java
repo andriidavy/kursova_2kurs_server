@@ -15,7 +15,7 @@ public class ProductMyISAM {
     @Column(name = "quantity")
     private int quantity;
     @Column(name = "price")
-    private int price;
+    private double price;
 
     public ProductMyISAM() {
     }
@@ -63,11 +63,11 @@ public class ProductMyISAM {
         this.quantity = quantity;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 }

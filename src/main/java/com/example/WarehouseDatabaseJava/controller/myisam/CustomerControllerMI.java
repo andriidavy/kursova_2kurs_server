@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.controller.myisam;
 
+import com.example.WarehouseDatabaseJava.InnoDB.model.product.Product;
 import com.example.WarehouseDatabaseJava.MyISAM.model.department.DepartmentMyIsamService;
 import com.example.WarehouseDatabaseJava.MyISAM.model.order.CustomMyIsamService;
 import com.example.WarehouseDatabaseJava.MyISAM.model.product.ProductMyISAM;
@@ -45,8 +46,8 @@ public class CustomerControllerMI {
 
     //зберегти покупця TESTED
     @PostMapping("/mi/customer/insert")
-    public CustomerMyISAM insertCustomer(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
-        return customerMyIsamService.insertCustomer(name, surname, email, password);
+    public int insertCustomer(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password, @RequestParam String repPassword) {
+        return customerMyIsamService.insertCustomer(name, surname, email, password, repPassword);
     }
 
     //CART SIDE
@@ -93,6 +94,30 @@ public class CustomerControllerMI {
     @GetMapping("/mi/customer/product/get-all")
     public List<ProductMyISAM> getAllProducts() {
         return productMyIsamService.getAllProducts();
+    }
+
+    //Шукати продукт TESTED
+    @GetMapping("/mi/customer/product/search")
+    public List<ProductMyISAM> searchProduct(@RequestParam String searchStr, @RequestParam int chooseType) {
+        return productMyIsamService.searchProduct(searchStr, chooseType);
+    }
+
+    //шукати продукти за назвою та ціновим діапазоном TESTED
+    @GetMapping("/mi/customer/product/search-with-price-range")
+    public List<ProductMyISAM> searchProductWithPriceRange(@RequestParam String searchStr, @RequestParam int chooseType, @RequestParam Double minPrice, @RequestParam Double maxPrice) {
+        return productMyIsamService.searchProductWithPriceRange(searchStr, chooseType, minPrice, maxPrice);
+    }
+
+    //отримати мінімальну ціну на продукт TESTED
+    @GetMapping("/mi/customer/product/get-min-price")
+    public double getMinProductPrice(){
+        return productMyIsamService.getMinProductPrice();
+    }
+
+    //отримати максимальну ціну на продукт TESTED
+    @GetMapping("/mi/customer/product/get-max-price")
+    public double getMaxProductPrice(){
+        return productMyIsamService.getMaxProductPrice();
     }
 
     //отримати список всіх відділів TESTED

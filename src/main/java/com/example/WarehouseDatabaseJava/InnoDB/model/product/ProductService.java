@@ -1,6 +1,5 @@
 package com.example.WarehouseDatabaseJava.InnoDB.model.product;
 
-import com.example.WarehouseDatabaseJava.MyISAM.model.product.ProductMyIsamService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @Service
 public class ProductService {
-    private static final Logger logger = LoggerFactory.getLogger(ProductMyIsamService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
     @Autowired
     private ProductRepository productRepository;
 
@@ -41,5 +40,99 @@ public class ProductService {
 
     public List<Product> getAllProducts() {
         return productRepository.getAllProductsList();
+    }
+
+    public List<Product> searchProduct(String searchStr, int chooseQueryType) {
+
+        switch (chooseQueryType) {
+            case 0 -> {
+                //натуральний запит (шукає по словах з пріорітетністю на найрелевантнішу схожість)
+                try {
+                    return productRepository.searchProductNatural(searchStr);
+                } catch (DataAccessException e) {
+                    logger.error("An exception occurred: {}", e.getMessage(), e);
+                    throw e;
+                }
+            }
+            case 1 -> {
+                //булевий запит (знаходить всі входження)
+                String modifyBolStr = '*' + searchStr + '*';
+                try {
+                    return productRepository.searchProductBool(modifyBolStr);
+                } catch (DataAccessException e) {
+                    logger.error("An exception occurred: {}", e.getMessage(), e);
+                    throw e;
+                }
+            }
+            case 2 -> {
+                //розширений запит
+                try {
+                    return productRepository.searchProductExp(searchStr);
+                } catch (DataAccessException e) {
+                    logger.error("An exception occurred: {}", e.getMessage(), e);
+                    throw e;
+                }
+            }
+            default -> {
+                System.out.println("Invalid chooseQueryType");
+                return null;
+            }
+        }
+    }
+
+    public List<Product> searchProductWithPriceRange(String searchStr, int chooseQueryType, Double minPrice, Double maxPrice) {
+
+        switch (chooseQueryType) {
+            case 0 -> {
+                //натуральний запит (шукає по словах з пріорітетністю на найрелевантнішу схожість)
+                try {
+                    return productRepository.searchProductNaturalWithPriceRange(searchStr, minPrice, maxPrice);
+                } catch (DataAccessException e) {
+                    logger.error("An exception occurred: {}", e.getMessage(), e);
+                    throw e;
+                }
+            }
+            case 1 -> {
+                //булевий запит (знаходить всі входження)
+                String modifyBolStr = '*' + searchStr + '*';
+                try {
+                    return productRepository.searchProductBoolWithPriceRange(modifyBolStr, minPrice, maxPrice);
+                } catch (DataAccessException e) {
+                    logger.error("An exception occurred: {}", e.getMessage(), e);
+                    throw e;
+                }
+            }
+            case 2 -> {
+                //розширений запит
+                try {
+                    return productRepository.searchProductExpWithPriceRange(searchStr, minPrice, maxPrice);
+                } catch (DataAccessException e) {
+                    logger.error("An exception occurred: {}", e.getMessage(), e);
+                    throw e;
+                }
+            }
+            default -> {
+                System.out.println("Invalid chooseQueryType");
+                return null;
+            }
+        }
+    }
+
+    public double getMinProductPrice() {
+        try {
+            return productRepository.findMinPriceValue();
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public double getMaxProductPrice() {
+        try {
+            return productRepository.findMaxPriceValue();
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 }

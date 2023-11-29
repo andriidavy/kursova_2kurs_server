@@ -11,7 +11,7 @@ public class CartMyISAM {
     @Column(name = "customer_id")
     private int customerId;
     @Column(name = "price")
-    private int price;
+    private double price;
 
     public int getId() {
         return id;
@@ -29,11 +29,11 @@ public class CartMyISAM {
         this.customerId = customerId;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 }

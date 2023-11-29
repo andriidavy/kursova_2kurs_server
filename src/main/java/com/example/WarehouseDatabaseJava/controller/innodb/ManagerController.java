@@ -15,6 +15,7 @@ import com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO;
 import com.example.WarehouseDatabaseJava.dto.report.ReportDTO;
 import com.example.WarehouseDatabaseJava.dto.users.EmployeeProfileDTO;
 import com.example.WarehouseDatabaseJava.dto.users.ManagerProfileDTO;
+import com.example.WarehouseDatabaseJava.dto.users.staff.StaffDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -89,8 +90,8 @@ public class ManagerController {
 
     //додати нового робітника TESTED
     @PostMapping("/manager/employee/insert")
-    public Employee saveEmployee(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
-        return employeeService.insertEmployee(name, surname, email, password);
+    public int insertEmployee(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password, @RequestParam String repPassword) {
+        return employeeService.insertEmployee(name, surname, email, password, repPassword);
     }
 
     //видалення робітника по id TESTED
@@ -109,6 +110,12 @@ public class ManagerController {
     @GetMapping("/manager/employee/profile/get-all")
     public List<EmployeeProfileDTO> getAllEmployeesProfileDTO() {
         return employeeService.getAllEmployees();
+    }
+
+    //отримати весь список персоналу
+    @GetMapping("/manager/get-staff")
+    public List<StaffDTO> getStaff() {
+        return managerService.getStaffDTO();
     }
 
     //REPORT SIDE
@@ -137,8 +144,8 @@ public class ManagerController {
 
     //зберегти нового менеджера TESTED
     @PostMapping("/manager/insert")
-    public Manager insertManager(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
-        return managerService.insertManager(name, surname, email, password);
+    public int insertManager(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password, @RequestParam String repPassword) {
+        return managerService.insertManager(name, surname, email, password, repPassword);
     }
 
     //видалення певного менеджера по його id TESTED

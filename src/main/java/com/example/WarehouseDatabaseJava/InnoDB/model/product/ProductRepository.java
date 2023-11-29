@@ -34,4 +34,28 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Modifying
     @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
     void saveDescriptionForProduct(@Param("product_id") int productId, @Param("desc") String description);
+
+    @Query (value = "SELECT * FROM product WHERE MATCH(name, description) AGAINST (:search_str IN NATURAL LANGUAGE MODE)", nativeQuery = true)
+    List<Product> searchProductNatural(@Param("search_str") String searchStr);
+
+    @Query (value = "SELECT * FROM product WHERE MATCH(name, description) AGAINST (:search_str IN NATURAL LANGUAGE MODE) AND (price >= :min_val AND price <= :max_val)", nativeQuery = true)
+    List<Product> searchProductNaturalWithPriceRange(@Param("search_str") String searchStr, @Param("min_val") Double minRangePrice, @Param("max_val") Double maxRangePrice);
+
+    @Query (value = "SELECT * FROM product WHERE MATCH(name, description) AGAINST (:search_str IN BOOLEAN MODE)", nativeQuery = true)
+    List<Product> searchProductBool(@Param("search_str") String searchStr);
+
+    @Query (value = "SELECT * FROM product WHERE MATCH(name, description) AGAINST (:search_str IN BOOLEAN MODE) AND (price >= :min_val AND price <= :max_val)", nativeQuery = true)
+    List<Product> searchProductBoolWithPriceRange(@Param("search_str") String searchStr, @Param("min_val") Double minRangePrice, @Param("max_val") Double maxRangePrice);
+
+    @Query (value = "SELECT * FROM product WHERE MATCH(name, description) AGAINST (:search_str WITH QUERY EXPANSION)", nativeQuery = true)
+    List<Product> searchProductExp(@Param("search_str") String searchStr);
+
+    @Query (value = "SELECT * FROM product WHERE MATCH(name, description) AGAINST (:search_str WITH QUERY EXPANSION) AND (price >= :min_val AND price <= :max_val)", nativeQuery = true)
+    List<Product> searchProductExpWithPriceRange(@Param("search_str") String searchStr, @Param("min_val") Double minRangePrice, @Param("max_val") Double maxRangePrice);
+
+    @Query(value = "SELECT MIN(price) FROM product", nativeQuery = true)
+    double findMinPriceValue();
+
+    @Query(value = "SELECT MAX(price) FROM product", nativeQuery = true)
+    double findMaxPriceValue();
 }

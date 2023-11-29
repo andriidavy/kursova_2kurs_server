@@ -15,6 +15,7 @@ import com.example.WarehouseDatabaseJava.MyISAM.model.product.ProductMyISAM;
 import com.example.WarehouseDatabaseJava.MyISAM.model.product.ProductMyIsamService;
 import com.example.WarehouseDatabaseJava.MyISAM.model.users.manager.ManagerMyISAM;
 import com.example.WarehouseDatabaseJava.MyISAM.model.users.manager.ManagerMyIsamService;
+import com.example.WarehouseDatabaseJava.dto.users.staff.StaffDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -89,8 +90,8 @@ public class ManagerControllerMI {
 
     //зберегти робітника TESTED
     @PostMapping("/mi/manager/employee/insert")
-    public EmployeeMyISAM insertEmployee(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
-        return employeeMyIsamService.insertEmployee(name, surname, email, password);
+    public int insertEmployee(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password, @RequestParam String repPassword) {
+        return employeeMyIsamService.insertEmployee(name, surname, email, password, repPassword);
     }
 
     //видалити робітника за його id TESTED
@@ -109,6 +110,12 @@ public class ManagerControllerMI {
     @GetMapping("/mi/manager/employee/profile/get-all")
     public List<EmployeeProfileDTO> getAllEmployeesProfileDTO() {
         return employeeMyIsamService.getAllEmployees();
+    }
+
+    //отримати весь список персоналу
+    @GetMapping("/mi/manager/get-staff")
+    public List<StaffDTO> getStaff() {
+        return managerMyIsamService.getStaffDTO();
     }
 
     //REPORT SIDE
@@ -137,8 +144,8 @@ public class ManagerControllerMI {
 
     //зберегти менеджера TESTED
     @PostMapping("/mi/manager/insert")
-    public ManagerMyISAM insertManager(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
-        return managerMyIsamService.insertManager(name, surname, email, password);
+    public int insertManager(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password, @RequestParam String repPassword) {
+        return managerMyIsamService.insertManager(name, surname, email, password, repPassword);
     }
 
     //видалити менеджера за його id TESTED
@@ -152,7 +159,7 @@ public class ManagerControllerMI {
     public List<ManagerProfileDTO> getAllManagersProfileDTO() {
         return managerMyIsamService.getAllManagers();
     }
-
+    
     //DEPARTMENT SIDE
 
     //додати відділ доставки TESTED

@@ -12,7 +12,7 @@ public class CartProduct {
     @Column(name = "quantity")
     private int quantity;
     @Column(name = "price")
-    private int price;
+    private double price;
 
     //Many-to-One relation with Cart
     @ManyToOne
@@ -57,11 +57,11 @@ public class CartProduct {
         this.product = product;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 }

@@ -43,8 +43,8 @@ public class CustomerController {
 
     //зберегти покупця TESTED
     @PostMapping("/customer/insert")
-    public Customer insertCustomer(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password) {
-        return customerService.insertCustomer(name, surname, email, password);
+    public int insertCustomer(@RequestParam String name, @RequestParam String surname, @RequestParam String email, @RequestParam String password, @RequestParam String repPassword) {
+        return customerService.insertCustomer(name, surname, email, password, repPassword);
     }
 
     // додати продукт до корзини конкретним покупцем TESTED
@@ -87,6 +87,30 @@ public class CustomerController {
     @GetMapping("/customer/product/get-all")
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
+    }
+
+    //шукати продукт за назвою TESTED
+    @GetMapping("/customer/product/search")
+    public List<Product> searchProduct(@RequestParam String searchStr, @RequestParam int chooseType) {
+        return productService.searchProduct(searchStr, chooseType);
+    }
+
+    //шукати продукти за назвою та ціновим діапазоном TESTED
+    @GetMapping("/customer/product/search-with-price-range")
+    public List<Product> searchProductWithPriceRange(@RequestParam String searchStr, @RequestParam int chooseType, @RequestParam Double minPrice, @RequestParam Double maxPrice) {
+        return productService.searchProductWithPriceRange(searchStr, chooseType, minPrice, maxPrice);
+    }
+
+    //отримати мінімальну ціну на продукт TESTED
+    @GetMapping("/customer/product/get-min-price")
+    public double getMinProductPrice(){
+        return productService.getMinProductPrice();
+    }
+
+    //отримати максимальну ціну на продукт TESTED
+    @GetMapping("/customer/product/get-max-price")
+    public double getMaxProductPrice(){
+        return productService.getMaxProductPrice();
     }
 
     //отримати список всіх відділів TESTED

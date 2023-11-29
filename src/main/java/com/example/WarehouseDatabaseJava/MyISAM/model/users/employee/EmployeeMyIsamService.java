@@ -17,11 +17,9 @@ public class EmployeeMyIsamService {
     @Autowired
     EmployeeMyIsamRepository employeeMyIsamRepository;
 
-    @Transactional(value = "db2TransactionManager")
-    public EmployeeMyISAM insertEmployee(String name, String surname, String email, String password) {
+    public int insertEmployee(String name, String surname, String email, String password, String repPassword) {
         try {
-            employeeMyIsamRepository.insertEmployee(name, surname, email, password);
-            return employeeMyIsamRepository.getLastInsertedEmployee(email);
+           return employeeMyIsamRepository.insertEmployee(name, surname, email, password, repPassword);
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;

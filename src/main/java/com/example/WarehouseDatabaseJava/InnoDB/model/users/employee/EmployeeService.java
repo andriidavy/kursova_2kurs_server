@@ -17,11 +17,9 @@ public class EmployeeService {
     @Autowired
     EmployeeRepository employeeRepository;
 
-    @Transactional
-    public Employee insertEmployee(String name, String surname, String email, String password) {
+    public int insertEmployee(String name, String surname, String email, String password, String repPassword) {
         try {
-            employeeRepository.insertEmployee(name, surname, email, password);
-            return employeeRepository.getLastInsertedEmployee(email);
+            return employeeRepository.insertEmployee(name, surname, email, password, repPassword);
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;

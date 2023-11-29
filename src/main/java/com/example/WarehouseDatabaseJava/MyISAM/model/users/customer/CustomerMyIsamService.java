@@ -14,11 +14,9 @@ public class CustomerMyIsamService {
     @Autowired
     CustomerMyIsamRepository customerMyIsamRepository;
 
-    @Transactional(value = "db2TransactionManager")
-    public CustomerMyISAM insertCustomer(String name, String surname, String email, String password) {
+    public int insertCustomer(String name, String surname, String email, String password, String repPassword) {
         try {
-            customerMyIsamRepository.insertCustomer(name, surname, email, password);
-            return customerMyIsamRepository.getLastInsertedCustomer(email);
+            return customerMyIsamRepository.insertCustomer(name, surname, email, password, repPassword);
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;

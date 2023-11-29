@@ -14,11 +14,9 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @Transactional
-    public Customer insertCustomer(String name, String surname, String email, String password) {
+    public int insertCustomer(String name, String surname, String email, String password, String repPassword) {
         try {
-            customerRepository.insertCustomer(name, surname, email, password);
-            return customerRepository.getLastInsertedCustomer(email);
+            return customerRepository.insertCustomer(name, surname, email, password, repPassword);
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;

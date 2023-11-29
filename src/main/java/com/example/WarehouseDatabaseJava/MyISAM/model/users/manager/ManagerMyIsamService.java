@@ -2,6 +2,9 @@ package com.example.WarehouseDatabaseJava.MyISAM.model.users.manager;
 
 import com.example.WarehouseDatabaseJava.dto.users.ManagerProfileDTO;
 import com.example.WarehouseDatabaseJava.MyISAM.model.department.DepartmentMyIsamRepository;
+import com.example.WarehouseDatabaseJava.dto.users.staff.StaffDTO;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +22,12 @@ public class ManagerMyIsamService {
     ManagerMyIsamRepository managerMyIsamRepository;
     @Autowired
     DepartmentMyIsamRepository departmentMyIsamRepository;
+    @PersistenceContext(unitName = "db2EntityManager")
+    private EntityManager entityManager;
 
-    @Transactional(value = "db2TransactionManager")
-    public ManagerMyISAM insertManager(String name, String surname, String email, String password) {
+    public int insertManager(String name, String surname, String email, String password, String repPassword) {
         try {
-            managerMyIsamRepository.insertManager(name, surname, email, password);
-            return managerMyIsamRepository.getLastInsertedManager(email);
+            return managerMyIsamRepository.insertManager(name, surname, email, password, repPassword);
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;
@@ -83,7 +86,28 @@ public class ManagerMyIsamService {
         }
     }
 
-    private String departmentsToString(List<String> departmentsName){
+    @Transactional(value = "db2TransactionManager", readOnly = true)
+    public List<StaffDTO> getStaffDTO() {
+        try {
+            String nativeQuery = "SELECT 'Employee' AS Type, id, name, surname, email FROM employee_myisam " +
+                    "UNION SELECT 'Manager', id, name, surname, email FROM manager_myisam";
+
+            List<Object[]> resultList = entityManager.createNativeQuery(nativeQuery).getResultList();
+
+            return resultList.stream().map(result -> new StaffDTO(
+                            (int) result[1],
+                            (String) result[0],
+                            (String) result[2],
+                            (String) result[3],
+                            (String) result[4]))
+                    .collect(Collectors.toList());
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    private String departmentsToString(List<String> departmentsName) {
         StringBuilder departmentsString = new StringBuilder();
         for (int i = 0; i < departmentsName.size(); i++) {
             String departmentName = departmentsName.get(i);

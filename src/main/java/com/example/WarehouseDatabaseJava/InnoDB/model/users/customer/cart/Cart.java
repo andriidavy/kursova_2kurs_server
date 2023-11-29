@@ -19,7 +19,7 @@ public class Cart {
     private Customer customer;
 
     @Column(name = "price")
-    private int price;
+    private double price;
 
     //One-to-Many relation with CartProduct
     @OneToMany(mappedBy = "cart")
@@ -41,11 +41,11 @@ public class Cart {
         this.id = id;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
