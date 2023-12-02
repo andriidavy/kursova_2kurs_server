@@ -5,14 +5,16 @@ public class CustomProductDTO {
     private int productId;
     private String productName;
     private int quantity;
+    private double price;
 
     public CustomProductDTO() {
     }
 
-    public CustomProductDTO(int productId, String productName, int quantity) {
+    public CustomProductDTO(int productId, String productName, int quantity, double price) {
         this.productId = productId;
         this.productName = productName;
         this.quantity = quantity;
+        this.price = price;
     }
 
     public int getProductId() {
@@ -39,4 +41,11 @@ public class CustomProductDTO {
         this.quantity = quantity;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 }

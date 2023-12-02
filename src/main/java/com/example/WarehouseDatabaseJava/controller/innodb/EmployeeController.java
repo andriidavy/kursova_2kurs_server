@@ -1,14 +1,16 @@
 package com.example.WarehouseDatabaseJava.controller.innodb;
 
-import com.example.WarehouseDatabaseJava.dto.custom.CustomDTO;
 import com.example.WarehouseDatabaseJava.InnoDB.model.order.CustomService;
-import com.example.WarehouseDatabaseJava.dto.report.ReportDTO;
 import com.example.WarehouseDatabaseJava.InnoDB.model.order.report.ReportService;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.employee.Employee;
-import com.example.WarehouseDatabaseJava.dto.users.EmployeeProfileDTO;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.employee.EmployeeService;
+import com.example.WarehouseDatabaseJava.dto.custom.CustomDTO;
+import com.example.WarehouseDatabaseJava.dto.report.ReportDTO;
+import com.example.WarehouseDatabaseJava.dto.users.EmployeeProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -23,7 +25,7 @@ public class EmployeeController {
 
     //метод для логіну TESTED
     @GetMapping("/employee/login")
-    public Employee loginEmployee(String email, String password){
+    public int loginEmployee(String email, String password){
         return employeeService.loginEmployee(email, password);
     }
 

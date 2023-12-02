@@ -27,8 +27,8 @@ public interface ManagerRepository extends JpaRepository<Manager, Integer> {
     @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
     void deleteManagerById(@Param("manager_id") int managerId);
 
-    @Query(value = "SELECT * FROM manager AS m WHERE m.email = :email AND m.password = :password", nativeQuery = true)
-    Manager loginManager(@Param("email") String email, @Param("password") String password);
+    @Query(value = "SELECT m.id FROM manager AS m WHERE m.email = :email AND m.password = :password", nativeQuery = true)
+    int loginManager(@Param("email") String email, @Param("password") String password);
 
     @Query(value = "SELECT * FROM manager AS m WHERE m.id = :manager_id", nativeQuery = true)
     Manager getManagerById(@Param("manager_id") int managerId);

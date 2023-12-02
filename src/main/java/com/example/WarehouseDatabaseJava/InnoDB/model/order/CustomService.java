@@ -132,6 +132,7 @@ public class CustomService {
             }
 
             customDTO.setStatus(custom.getStatus().toString());
+            customDTO.setPrice(custom.getPrice());
             customDTO.setDepartment(departmentRepository.getDepartmentNameById(custom.getDepartment().getId()));
             customDTO.setCustomProductDTOList(customProductRepository.getCustomProductDTOListByCustomId(custom.getId()));
 

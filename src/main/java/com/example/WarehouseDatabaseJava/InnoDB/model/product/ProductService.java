@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.InnoDB.model.product;
 
+import com.example.WarehouseDatabaseJava.dto.product.ProductDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -33,22 +35,31 @@ public class ProductService {
         }
     }
 
+    public Boolean isProductExistByName(String productName) {
+        try {
+            return productRepository.isProductExistByName(productName);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     @Transactional
     public void saveDescriptionToProduct(int productId, String description) {
         productRepository.saveDescriptionForProduct(productId, description);
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.getAllProductsList();
+    public List<ProductDTO> getAllProducts() {
+        return convertProductListToDTO(productRepository.getAllProductsList());
     }
 
-    public List<Product> searchProduct(String searchStr, int chooseQueryType) {
+    public List<ProductDTO> searchProduct(String searchStr, int chooseQueryType) {
 
         switch (chooseQueryType) {
             case 0 -> {
                 //натуральний запит (шукає по словах з пріорітетністю на найрелевантнішу схожість)
                 try {
-                    return productRepository.searchProductNatural(searchStr);
+                    return convertProductListToDTO(productRepository.searchProductNatural(searchStr));
                 } catch (DataAccessException e) {
                     logger.error("An exception occurred: {}", e.getMessage(), e);
                     throw e;
@@ -58,7 +69,7 @@ public class ProductService {
                 //булевий запит (знаходить всі входження)
                 String modifyBolStr = '*' + searchStr + '*';
                 try {
-                    return productRepository.searchProductBool(modifyBolStr);
+                    return convertProductListToDTO(productRepository.searchProductBool(modifyBolStr));
                 } catch (DataAccessException e) {
                     logger.error("An exception occurred: {}", e.getMessage(), e);
                     throw e;
@@ -67,7 +78,7 @@ public class ProductService {
             case 2 -> {
                 //розширений запит
                 try {
-                    return productRepository.searchProductExp(searchStr);
+                    return convertProductListToDTO(productRepository.searchProductExp(searchStr));
                 } catch (DataAccessException e) {
                     logger.error("An exception occurred: {}", e.getMessage(), e);
                     throw e;
@@ -80,13 +91,13 @@ public class ProductService {
         }
     }
 
-    public List<Product> searchProductWithPriceRange(String searchStr, int chooseQueryType, Double minPrice, Double maxPrice) {
+    public List<ProductDTO> searchProductWithPriceRange(String searchStr, int chooseQueryType, Double minPrice, Double maxPrice) {
 
         switch (chooseQueryType) {
             case 0 -> {
                 //натуральний запит (шукає по словах з пріорітетністю на найрелевантнішу схожість)
                 try {
-                    return productRepository.searchProductNaturalWithPriceRange(searchStr, minPrice, maxPrice);
+                    return convertProductListToDTO(productRepository.searchProductNaturalWithPriceRange(searchStr, minPrice, maxPrice));
                 } catch (DataAccessException e) {
                     logger.error("An exception occurred: {}", e.getMessage(), e);
                     throw e;
@@ -96,7 +107,7 @@ public class ProductService {
                 //булевий запит (знаходить всі входження)
                 String modifyBolStr = '*' + searchStr + '*';
                 try {
-                    return productRepository.searchProductBoolWithPriceRange(modifyBolStr, minPrice, maxPrice);
+                    return convertProductListToDTO(productRepository.searchProductBoolWithPriceRange(modifyBolStr, minPrice, maxPrice));
                 } catch (DataAccessException e) {
                     logger.error("An exception occurred: {}", e.getMessage(), e);
                     throw e;
@@ -105,7 +116,7 @@ public class ProductService {
             case 2 -> {
                 //розширений запит
                 try {
-                    return productRepository.searchProductExpWithPriceRange(searchStr, minPrice, maxPrice);
+                    return convertProductListToDTO(productRepository.searchProductExpWithPriceRange(searchStr, minPrice, maxPrice));
                 } catch (DataAccessException e) {
                     logger.error("An exception occurred: {}", e.getMessage(), e);
                     throw e;
@@ -134,5 +145,11 @@ public class ProductService {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;
         }
+    }
+
+    private List<ProductDTO> convertProductListToDTO(List<Product> productList) {
+        return productList.stream().map(
+                product -> new ProductDTO(product.getId(), product.getName(), product.getDescription(), product.getQuantity(), product.getPrice())
+        ).collect(Collectors.toList());
     }
 }

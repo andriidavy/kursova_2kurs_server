@@ -5,6 +5,7 @@ import com.example.WarehouseDatabaseJava.InnoDB.model.order.CustomService;
 import com.example.WarehouseDatabaseJava.InnoDB.model.product.Product;
 import com.example.WarehouseDatabaseJava.InnoDB.model.product.ProductService;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.Customer;
+import com.example.WarehouseDatabaseJava.dto.product.ProductDTO;
 import com.example.WarehouseDatabaseJava.dto.users.CustomerProfileDTO;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.CustomerService;
 import com.example.WarehouseDatabaseJava.dto.cart.CartProductDTO;
@@ -31,7 +32,7 @@ public class CustomerController {
 
     //метод для логіну TESTED
     @GetMapping("/customer/login")
-    public Customer loginCustomer(@RequestParam String email, @RequestParam String password) {
+    public int loginCustomer(@RequestParam String email, @RequestParam String password) {
         return customerService.loginCustomer(email, password);
     }
 
@@ -85,19 +86,19 @@ public class CustomerController {
 
     //отримати список всіх продуктів TESTED
     @GetMapping("/customer/product/get-all")
-    public List<Product> getAllProducts() {
+    public List<ProductDTO> getAllProducts() {
         return productService.getAllProducts();
     }
 
     //шукати продукт за назвою TESTED
     @GetMapping("/customer/product/search")
-    public List<Product> searchProduct(@RequestParam String searchStr, @RequestParam int chooseType) {
+    public List<ProductDTO> searchProduct(@RequestParam String searchStr, @RequestParam int chooseType) {
         return productService.searchProduct(searchStr, chooseType);
     }
 
     //шукати продукти за назвою та ціновим діапазоном TESTED
     @GetMapping("/customer/product/search-with-price-range")
-    public List<Product> searchProductWithPriceRange(@RequestParam String searchStr, @RequestParam int chooseType, @RequestParam Double minPrice, @RequestParam Double maxPrice) {
+    public List<ProductDTO> searchProductWithPriceRange(@RequestParam String searchStr, @RequestParam int chooseType, @RequestParam Double minPrice, @RequestParam Double maxPrice) {
         return productService.searchProductWithPriceRange(searchStr, chooseType, minPrice, maxPrice);
     }
 

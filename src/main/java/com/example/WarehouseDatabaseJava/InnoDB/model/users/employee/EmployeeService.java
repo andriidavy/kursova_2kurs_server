@@ -36,7 +36,7 @@ public class EmployeeService {
         }
     }
 
-    public Employee loginEmployee(String email, String password) {
+    public int loginEmployee(String email, String password) {
         try {
             return employeeRepository.loginEmployee(email, password);
         } catch (DataAccessException e) {

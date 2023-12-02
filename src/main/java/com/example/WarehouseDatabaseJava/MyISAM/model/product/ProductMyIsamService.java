@@ -33,6 +33,15 @@ public class ProductMyIsamService {
         }
     }
 
+    public Boolean isProductExistByName(String productName) {
+        try {
+            return productMyIsamRepository.isProductExistByName(productName);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     @Transactional(value = "db2TransactionManager")
     public void saveDescriptionToProduct(int productId, String description) {
         try {

@@ -60,6 +60,12 @@ public class ManagerControllerMI {
         return productMyIsamService.provideProduct(productName, quantity, price, description);
     }
 
+    //перевірити на наявність продукту з таким же найменуванням TESTED
+    @GetMapping("/mi/manager/is-product-exist")
+    public Boolean isProductExists(@RequestParam String productName) {
+        return productMyIsamService.isProductExistByName(productName);
+    }
+
     //зберегти опис для продукту TESTED
     @PostMapping("/mi/manager/save-desc-for-product")
     public void saveDescriptionForProduct(@RequestParam int productId, @RequestParam String description) {

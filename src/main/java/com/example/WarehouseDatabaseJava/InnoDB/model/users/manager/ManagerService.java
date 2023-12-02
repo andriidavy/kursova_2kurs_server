@@ -44,7 +44,7 @@ public class ManagerService {
         }
     }
 
-    public Manager loginManager(String email, String password) {
+    public int loginManager(String email, String password) {
         try {
             return managerRepository.loginManager(email, password);
         } catch (DataAccessException e) {

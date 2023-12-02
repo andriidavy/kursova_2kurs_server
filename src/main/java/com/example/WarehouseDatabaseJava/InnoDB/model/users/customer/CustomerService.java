@@ -23,7 +23,7 @@ public class CustomerService {
         }
     }
 
-    public Customer loginCustomer(String email, String password) {
+    public int loginCustomer(String email, String password) {
         try {
             return customerRepository.loginCustomer(email, password);
         } catch (DataAccessException e) {

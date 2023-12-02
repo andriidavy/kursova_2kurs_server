@@ -12,6 +12,7 @@ public class CustomDTO {
     private String employeeSurname;
     private String status;
     private String department;
+    private double price;
     private List<CustomProductDTO> customProductDTOList;
 
     public int getCustomId() {
@@ -92,5 +93,13 @@ public class CustomDTO {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

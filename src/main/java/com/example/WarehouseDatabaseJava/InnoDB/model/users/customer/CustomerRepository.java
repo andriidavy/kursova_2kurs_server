@@ -18,8 +18,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
                        @Param("password") String password,
                        @Param("rep_password") String repPassword);
 
-    @Query(value = "SELECT * FROM customer AS c WHERE c.email = :email AND c.password = :password", nativeQuery = true)
-    Customer loginCustomer(@Param("email") String email, @Param("password") String password);
+    @Query(value = "SELECT c.id FROM customer AS c WHERE c.email = :email AND c.password = :password", nativeQuery = true)
+    int loginCustomer(@Param("email") String email, @Param("password") String password);
 
     @Query(value = "SELECT * FROM customer AS c WHERE c.id = :customer_id", nativeQuery = true)
     Customer getCustomerById(@Param("customer_id") int customer_id);

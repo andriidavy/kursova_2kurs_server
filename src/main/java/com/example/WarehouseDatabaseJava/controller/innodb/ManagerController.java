@@ -12,6 +12,7 @@ import com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.Manager;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.ManagerService;
 import com.example.WarehouseDatabaseJava.dto.custom.CustomDTO;
 import com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO;
+import com.example.WarehouseDatabaseJava.dto.product.ProductDTO;
 import com.example.WarehouseDatabaseJava.dto.report.ReportDTO;
 import com.example.WarehouseDatabaseJava.dto.users.EmployeeProfileDTO;
 import com.example.WarehouseDatabaseJava.dto.users.ManagerProfileDTO;
@@ -42,7 +43,7 @@ public class ManagerController {
 
     //метод для логіну TESTED
     @GetMapping("/manager/login")
-    public Manager loginManager(String email, String password) {
+    public int loginManager(String email, String password) {
         return managerService.loginManager(email, password);
     }
 
@@ -60,6 +61,12 @@ public class ManagerController {
         return productService.provideProduct(productName, quantity, price, description);
     }
 
+    //перевірити на наявність продукту з таким же найменуванням TESTED
+    @GetMapping("/manager/is-product-exist")
+    public Boolean isProductExists(@RequestParam String productName) {
+        return productService.isProductExistByName(productName);
+    }
+
     //зберегти опис для продукту NOT USING
     @PostMapping("/manager/save-desc-for-product")
     public void saveDescriptionForProduct(@RequestParam int productId, @RequestParam String description) {
@@ -68,7 +75,7 @@ public class ManagerController {
 
     //отримати список всіх продуктів TESTED
     @GetMapping("/manager/product/get-all")
-    public List<Product> getAllProducts() {
+    public List<ProductDTO> getAllProducts() {
         return productService.getAllProducts();
     }
 

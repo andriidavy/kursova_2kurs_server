@@ -27,11 +27,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
     void deleteEmployeeById(@Param("employee_id") int employeeId);
 
-    @Query(value = "SELECT * FROM employee AS e WHERE e.id = LAST_INSERT_ID() AND e.email = :email", nativeQuery = true)
-    Employee getLastInsertedEmployee(@Param("email") String email);
-
-    @Query(value = "SELECT * FROM employee AS e WHERE e.email = :email AND e.password = :password", nativeQuery = true)
-    Employee loginEmployee(@Param("email") String email, @Param("password") String password);
+    @Query(value = "SELECT e.id FROM employee AS e WHERE e.email = :email AND e.password = :password", nativeQuery = true)
+    int loginEmployee(@Param("email") String email, @Param("password") String password);
 
     @Query(value = "SELECT * FROM employee AS e WHERE e.id = :employee_id", nativeQuery = true)
     Employee getEmployeeById(@Param("employee_id") int employee_id);
