@@ -1,6 +1,5 @@
 package com.example.WarehouseDatabaseJava.InnoDB.model.department;
 
-import com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO;
 import jakarta.persistence.QueryHint;
 import org.hibernate.jpa.AvailableHints;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,12 +24,12 @@ public interface DepartmentRepository extends JpaRepository<Department, Integer>
     @Query(value = "SELECT department_name FROM department AS d WHERE d.id = :department_id", nativeQuery = true)
     String getDepartmentNameById(@Param("department_id") int departmentId);
 
-    @Query(value = "SELECT new com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO (d.id, d.departmentName) FROM Department d")
-    List<DepartmentDTO> getAllDepartments();
+    @Query(value = "SELECT * FROM department", nativeQuery = true)
+    List<Department> getAllDepartments();
 
-    @Query(value = "SELECT new com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO (d.id, d.departmentName) FROM Department d JOIN ManagerDepartment md ON d.id = md.department.id WHERE md.manager.id = :manager_id")
-    List<DepartmentDTO> getAllDepartmentsForManager(@Param("manager_id") int managerId);
+    @Query(value = "SELECT d.id, d.department_name FROM department AS d JOIN manager_department AS md ON d.id = md.department_id WHERE md.manager_id = :manager_id", nativeQuery = true)
+    List<Department> getAllDepartmentsForManager(@Param("manager_id") int managerId);
 
-    @Query(value = "SELECT new com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO (d.id, d.departmentName) FROM Department d LEFT JOIN ManagerDepartment md ON d.id = md.department.id WHERE md.manager.id != :manager_id OR md.manager.id IS NULL")
-    List<DepartmentDTO> getAllDepartmentsWithoutManager(@Param("manager_id") int managerId);
+    @Query(value = "SELECT d.id, d.department_name FROM department AS d WHERE d.id NOT IN (SELECT md.department_id FROM manager_department AS md WHERE md.manager_id = :manager_id) ORDER BY d.id", nativeQuery = true)
+    List<Department> getAllDepartmentsWithoutManager(@Param("manager_id") int managerId);
 }

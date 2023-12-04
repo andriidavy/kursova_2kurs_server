@@ -129,6 +129,16 @@ public class ProductService {
         }
     }
 
+    public ProductDTO searchProductById(int productId) {
+        try {
+            Product product = productRepository.searchProductById(productId);
+            return new ProductDTO(product.getId(), product.getName(), product.getDescription(), product.getQuantity(), product.getPrice());
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     public double getMinProductPrice() {
         try {
             return productRepository.findMinPriceValue();

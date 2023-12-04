@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DepartmentService {
@@ -28,7 +29,7 @@ public class DepartmentService {
 
     public List<DepartmentDTO> getAllDepartments() {
         try {
-            return departmentRepository.getAllDepartments();
+            return convertDepartmentToDTO(departmentRepository.getAllDepartments());
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;
@@ -37,7 +38,7 @@ public class DepartmentService {
 
     public List<DepartmentDTO> getAllDepartmentsForManager(int managerId) {
         try {
-            return departmentRepository.getAllDepartmentsForManager(managerId);
+            return convertDepartmentToDTO(departmentRepository.getAllDepartmentsForManager(managerId));
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;
@@ -46,10 +47,16 @@ public class DepartmentService {
 
     public List<DepartmentDTO> getAllDepartmentsWithoutManager(int managerId) {
         try {
-            return departmentRepository.getAllDepartmentsWithoutManager(managerId);
+            return convertDepartmentToDTO(departmentRepository.getAllDepartmentsWithoutManager(managerId));
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;
         }
+    }
+
+    public List<DepartmentDTO> convertDepartmentToDTO(List<Department> departmentList) {
+        return departmentList.stream().map(
+                department -> new DepartmentDTO(department.getId(), department.getDepartmentName())
+        ).collect(Collectors.toList());
     }
 }

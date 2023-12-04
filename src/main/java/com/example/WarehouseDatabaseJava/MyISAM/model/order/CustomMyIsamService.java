@@ -1,11 +1,17 @@
 package com.example.WarehouseDatabaseJava.MyISAM.model.order;
 
+import com.example.WarehouseDatabaseJava.InnoDB.model.order.Custom;
+import com.example.WarehouseDatabaseJava.InnoDB.model.users.customer.Customer;
+import com.example.WarehouseDatabaseJava.InnoDB.model.users.employee.Employee;
 import com.example.WarehouseDatabaseJava.MyISAM.model.department.DepartmentMyIsamRepository;
 import com.example.WarehouseDatabaseJava.MyISAM.model.users.customer.CustomerMyISAM;
 import com.example.WarehouseDatabaseJava.MyISAM.model.users.customer.CustomerMyIsamRepository;
 import com.example.WarehouseDatabaseJava.MyISAM.model.users.employee.EmployeeMyISAM;
 import com.example.WarehouseDatabaseJava.MyISAM.model.users.employee.EmployeeMyIsamRepository;
 import com.example.WarehouseDatabaseJava.dto.custom.CustomDTO;
+import com.example.WarehouseDatabaseJava.dto.custom.CustomProductDTO;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +19,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomMyIsamService {
@@ -22,13 +30,13 @@ public class CustomMyIsamService {
     @Autowired
     CustomMyIsamRepository customMyIsamRepository;
     @Autowired
-    CustomProductMyIsamRepository customProductMyIsamRepository;
-    @Autowired
     CustomerMyIsamRepository customerMyIsamRepository;
     @Autowired
     EmployeeMyIsamRepository employeeMyIsamRepository;
     @Autowired
     DepartmentMyIsamRepository departmentMyIsamRepository;
+    @PersistenceContext(unitName = "db2EntityManager")
+    private EntityManager entityManager;
 
     //for customer
     public List<CustomDTO> getCustomsForCustomer(int customerId) {
@@ -56,6 +64,35 @@ public class CustomMyIsamService {
         try {
             List<CustomMyISAM> customs = customMyIsamRepository.getAllCustomsWithoutAssignEmployee(managerId);
             return convertCustomToDTO(customs, true);
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public CustomDTO searchCustomById(int customId) {
+        try {
+            CustomMyISAM custom = customMyIsamRepository.searchCustomById(customId);
+            CustomDTO customDTO = new CustomDTO();
+            customDTO.setCustomId(custom.getId());
+
+            CustomerMyISAM customer = customerMyIsamRepository.getCustomerById(custom.getCustomerId());
+            customDTO.setCustomerId(customer.getId());
+            customDTO.setCustomerName(customer.getName());
+            customDTO.setCustomerSurname(customer.getSurname());
+
+            if (custom.getEmployeeId() != null) {
+                EmployeeMyISAM employee = employeeMyIsamRepository.getEmployeeById(custom.getEmployeeId());
+                customDTO.setEmployeeId(employee.getId());
+                customDTO.setEmployeeName(employee.getName());
+                customDTO.setEmployeeSurname(employee.getSurname());
+            }
+
+            customDTO.setStatus(custom.getStatus().toString());
+            customDTO.setPrice(custom.getPrice());
+            customDTO.setDepartment(departmentMyIsamRepository.getDepartmentNameById(custom.getDepartmentId()));
+            customDTO.setCustomProductDTOList(getCustomProductDTO(custom.getId()));
+            return customDTO;
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);
             throw e;
@@ -133,10 +170,29 @@ public class CustomMyIsamService {
 
             customDTO.setStatus(custom.getStatus().toString());
             customDTO.setDepartment(departmentMyIsamRepository.getDepartmentNameById(custom.getDepartmentId()));
-            customDTO.setCustomProductDTOList(customProductMyIsamRepository.getCustomProductDTOListByCustomId(custom.getId()));
+            customDTO.setCustomProductDTOList(getCustomProductDTO(custom.getId()));
 
             customDTOList.add(customDTO);
         }
         return customDTOList;
+    }
+
+    @Transactional(readOnly = true)
+    public List<CustomProductDTO> getCustomProductDTO(int customId) {
+        try {
+            String nativeQuery = "SELECT cp.product_id, p.name, cp.quantity, cp.price FROM custom_product_myisam cp JOIN product_myisam p ON cp.product_id = p.id WHERE cp.custom_id = :custom_id";
+
+            List<Object[]> resultList = entityManager.createNativeQuery(nativeQuery).setParameter("custom_id", customId).getResultList();
+
+            return resultList.stream().map(result -> new CustomProductDTO(
+                            (int) result[0],
+                            (String) result[1],
+                            (int) result[2],
+                            ((BigDecimal) result[3]).doubleValue()))
+                    .collect(Collectors.toList());
+        } catch (DataAccessException e) {
+            logger.error("An exception occurred: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 }

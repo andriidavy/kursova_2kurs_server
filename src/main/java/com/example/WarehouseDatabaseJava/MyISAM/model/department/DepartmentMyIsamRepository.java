@@ -25,12 +25,12 @@ public interface DepartmentMyIsamRepository extends JpaRepository<DepartmentMyIS
     @Query(value = "SELECT department_name FROM department_myisam AS d WHERE d.id = :department_id", nativeQuery = true)
     String getDepartmentNameById(@Param("department_id") int departmentId);
 
-    @Query(value = "SELECT new com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO (d.id, d.departmentName) FROM DepartmentMyISAM d")
+    @Query(value = "SELECT * FROM department_myisam", nativeQuery = true)
     List<DepartmentDTO> getAllDepartments();
 
-    @Query(value = "SELECT new com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO (d.id, d.departmentName) FROM DepartmentMyISAM d JOIN ManagerDepartmentMyISAM md ON d.id = md.departmentId WHERE md.managerId = :manager_id")
+    @Query(value = "SELECT d.id, d.department_name FROM department_myisam AS d JOIN manager_department_myisam md ON d.id = md.department_id WHERE md.manager_id = :manager_id", nativeQuery = true)
     List<DepartmentDTO> getAllDepartmentsForManager(@Param("manager_id") int managerId);
 
-    @Query(value = "SELECT new com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO (d.id, d.departmentName) FROM DepartmentMyISAM d LEFT JOIN ManagerDepartmentMyISAM md ON d.id = md.departmentId WHERE md.managerId != :manager_id OR md.managerId IS NULL")
+    @Query(value = "SELECT d.id, d.department_name FROM department_myisam AS d WHERE d.id NOT IN (SELECT md.department_id FROM manager_department_myisam AS md WHERE md.manager_id = :manager_id) ORDER BY d.id", nativeQuery = true)
     List<DepartmentDTO> getAllDepartmentsWithoutManager(@Param("manager_id") int managerId);
 }

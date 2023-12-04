@@ -4,11 +4,8 @@ import com.example.WarehouseDatabaseJava.InnoDB.model.department.DepartmentServi
 import com.example.WarehouseDatabaseJava.InnoDB.model.department.ManagerDepartmentService;
 import com.example.WarehouseDatabaseJava.InnoDB.model.order.CustomService;
 import com.example.WarehouseDatabaseJava.InnoDB.model.order.report.ReportService;
-import com.example.WarehouseDatabaseJava.InnoDB.model.product.Product;
 import com.example.WarehouseDatabaseJava.InnoDB.model.product.ProductService;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.employee.Employee;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.employee.EmployeeService;
-import com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.Manager;
 import com.example.WarehouseDatabaseJava.InnoDB.model.users.manager.ManagerService;
 import com.example.WarehouseDatabaseJava.dto.custom.CustomDTO;
 import com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO;
@@ -79,6 +76,12 @@ public class ManagerController {
         return productService.getAllProducts();
     }
 
+    //отримати продукт по його ID TESTED
+    @GetMapping("/manager/search-product-by-id")
+    public ProductDTO searchProductById(@RequestParam int productId) {
+        return productService.searchProductById(productId);
+    }
+
     //CUSTOM SIDE
 
     //отримати список всіх замовлень TESTED
@@ -91,6 +94,12 @@ public class ManagerController {
     @GetMapping("/manager/get-customs-without-employee")
     public List<CustomDTO> getCustomsWithoutAssignEmployee(@RequestParam int managerId) {
         return customService.getAllCustomsWithoutAssignEmployee(managerId);
+    }
+
+    //отримати замовлення по його ID TESTED
+    @GetMapping("/manager/search-custom-by-id")
+    public CustomDTO searchCustomById(@RequestParam int customId) {
+        return customService.searchCustomById(customId);
     }
 
     //EMPLOYEE SIDE
