@@ -54,6 +54,9 @@ public interface ProductMyIsamRepository extends JpaRepository <ProductMyISAM, I
     @Query (value = "SELECT * FROM product_myisam WHERE MATCH(name, description) AGAINST (:search_str WITH QUERY EXPANSION) AND (price >= :min_val AND price <= :max_val)", nativeQuery = true)
     List<ProductMyISAM> searchProductExpWithPriceRange(@Param("search_str") String searchStr, @Param("min_val") Double minRangePrice, @Param("max_val") Double maxRangePrice);
 
+    @Query(value = "SELECT * FROM product_myisam AS p WHERE p.id = :product_id", nativeQuery = true)
+    ProductMyISAM searchProductById(@Param("product_id") int productId);
+
     @Query(value = "SELECT MIN(price) FROM product_myisam", nativeQuery = true)
     double findMinPriceValue();
 

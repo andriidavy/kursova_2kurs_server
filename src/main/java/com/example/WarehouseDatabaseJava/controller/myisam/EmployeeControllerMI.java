@@ -28,7 +28,7 @@ public class EmployeeControllerMI {
 
     //метод для логіну TESTED
     @GetMapping("/mi/employee/login")
-    public EmployeeMyISAM loginEmployee(@RequestParam String email, @RequestParam String password) {
+    public int loginEmployee(@RequestParam String email, @RequestParam String password) {
         return employeeMyIsamService.loginEmployee(email, password);
     }
 

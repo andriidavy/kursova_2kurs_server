@@ -2,19 +2,17 @@ package com.example.WarehouseDatabaseJava.controller.myisam;
 
 import com.example.WarehouseDatabaseJava.MyISAM.model.department.DepartmentMyIsamService;
 import com.example.WarehouseDatabaseJava.MyISAM.model.department.ManagerDepartmentMyIsamService;
+import com.example.WarehouseDatabaseJava.MyISAM.model.order.CustomMyIsamService;
 import com.example.WarehouseDatabaseJava.MyISAM.model.order.report.ReportMyIsamService;
-import com.example.WarehouseDatabaseJava.MyISAM.model.users.employee.EmployeeMyISAM;
+import com.example.WarehouseDatabaseJava.MyISAM.model.product.ProductMyIsamService;
 import com.example.WarehouseDatabaseJava.MyISAM.model.users.employee.EmployeeMyIsamService;
+import com.example.WarehouseDatabaseJava.MyISAM.model.users.manager.ManagerMyIsamService;
 import com.example.WarehouseDatabaseJava.dto.custom.CustomDTO;
 import com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO;
+import com.example.WarehouseDatabaseJava.dto.product.ProductDTO;
 import com.example.WarehouseDatabaseJava.dto.report.ReportDTO;
 import com.example.WarehouseDatabaseJava.dto.users.EmployeeProfileDTO;
 import com.example.WarehouseDatabaseJava.dto.users.ManagerProfileDTO;
-import com.example.WarehouseDatabaseJava.MyISAM.model.order.CustomMyIsamService;
-import com.example.WarehouseDatabaseJava.MyISAM.model.product.ProductMyISAM;
-import com.example.WarehouseDatabaseJava.MyISAM.model.product.ProductMyIsamService;
-import com.example.WarehouseDatabaseJava.MyISAM.model.users.manager.ManagerMyISAM;
-import com.example.WarehouseDatabaseJava.MyISAM.model.users.manager.ManagerMyIsamService;
 import com.example.WarehouseDatabaseJava.dto.users.staff.StaffDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +40,7 @@ public class ManagerControllerMI {
 
     //метод для логіну TESTED
     @GetMapping("/mi/manager/login")
-    public ManagerMyISAM loginManager(@RequestParam String email, @RequestParam String password) {
+    public int loginManager(@RequestParam String email, @RequestParam String password) {
         return managerMyIsamService.loginManager(email, password);
     }
 
@@ -74,8 +72,14 @@ public class ManagerControllerMI {
 
     //отримати список продуктів TESTED
     @GetMapping("/mi/manager/get-all-product")
-    public List<ProductMyISAM> getAllProducts() {
+    public List<ProductDTO> getAllProducts() {
         return productMyIsamService.getAllProducts();
+    }
+
+    //отримати продукт по його ID TESTED
+    @GetMapping("/mi/manager/search-product-by-id")
+    public ProductDTO searchProductById(@RequestParam int productId) {
+        return productMyIsamService.searchProductById(productId);
     }
 
     //CUSTOM SIDE

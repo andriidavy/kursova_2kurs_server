@@ -27,8 +27,8 @@ public interface EmployeeMyIsamRepository extends JpaRepository<EmployeeMyISAM, 
     @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
     void deleteEmployeeById(@Param("employee_id") int employeeId);
 
-    @Query(value = "SELECT * FROM employee_myisam AS e WHERE e.email = :email AND e.password = :password", nativeQuery = true)
-    EmployeeMyISAM loginEmployee(@Param("email") String email, @Param("password") String password);
+    @Query(value = "SELECT e.id FROM employee_myisam AS e WHERE e.email = :email AND e.password = :password", nativeQuery = true)
+    int loginEmployee(@Param("email") String email, @Param("password") String password);
 
     @Query(value = "SELECT * FROM employee_myisam AS e WHERE e.id = :employee_id", nativeQuery = true)
     EmployeeMyISAM getEmployeeById(@Param("employee_id") int employee_id);

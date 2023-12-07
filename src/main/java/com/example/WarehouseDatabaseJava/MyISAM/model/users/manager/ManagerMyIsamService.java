@@ -44,7 +44,7 @@ public class ManagerMyIsamService {
         }
     }
 
-    public ManagerMyISAM loginManager(String email, String password) {
+    public int loginManager(String email, String password) {
         try {
             return managerMyIsamRepository.loginManager(email, password);
         } catch (DataAccessException e) {

@@ -1,16 +1,14 @@
 package com.example.WarehouseDatabaseJava.controller.myisam;
 
-import com.example.WarehouseDatabaseJava.InnoDB.model.product.Product;
 import com.example.WarehouseDatabaseJava.MyISAM.model.department.DepartmentMyIsamService;
 import com.example.WarehouseDatabaseJava.MyISAM.model.order.CustomMyIsamService;
-import com.example.WarehouseDatabaseJava.MyISAM.model.product.ProductMyISAM;
 import com.example.WarehouseDatabaseJava.MyISAM.model.product.ProductMyIsamService;
-import com.example.WarehouseDatabaseJava.MyISAM.model.users.customer.CustomerMyISAM;
 import com.example.WarehouseDatabaseJava.MyISAM.model.users.customer.CustomerMyIsamService;
 import com.example.WarehouseDatabaseJava.MyISAM.model.users.customer.cart.CartMyIsamService;
 import com.example.WarehouseDatabaseJava.dto.cart.CartProductDTO;
 import com.example.WarehouseDatabaseJava.dto.custom.CustomDTO;
 import com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO;
+import com.example.WarehouseDatabaseJava.dto.product.ProductDTO;
 import com.example.WarehouseDatabaseJava.dto.users.CustomerProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +32,7 @@ public class CustomerControllerMI {
 
     //метод для логіну TESTED
     @GetMapping("/mi/customer/login")
-    public CustomerMyISAM loginCustomer(@RequestParam String email, @RequestParam String password) {
+    public int loginCustomer(@RequestParam String email, @RequestParam String password) {
         return customerMyIsamService.loginCustomer(email, password);
     }
 
@@ -65,7 +63,7 @@ public class CustomerControllerMI {
     }
 
     //очистити корзину для конкретного покупця TESTED
-        @DeleteMapping("/mi/customer/cart/clear")
+    @DeleteMapping("/mi/customer/cart/clear")
     public void clearCart(@RequestParam int customerId) {
         cartMyIsamService.clearCart(customerId);
     }
@@ -92,19 +90,19 @@ public class CustomerControllerMI {
 
     //отримати список всіх продуктів TESTED
     @GetMapping("/mi/customer/product/get-all")
-    public List<ProductMyISAM> getAllProducts() {
+    public List<ProductDTO> getAllProducts() {
         return productMyIsamService.getAllProducts();
     }
 
     //Шукати продукт TESTED
     @GetMapping("/mi/customer/product/search")
-    public List<ProductMyISAM> searchProduct(@RequestParam String searchStr, @RequestParam int chooseType) {
+    public List<ProductDTO> searchProduct(@RequestParam String searchStr, @RequestParam int chooseType) {
         return productMyIsamService.searchProduct(searchStr, chooseType);
     }
 
     //шукати продукти за назвою та ціновим діапазоном TESTED
     @GetMapping("/mi/customer/product/search-with-price-range")
-    public List<ProductMyISAM> searchProductWithPriceRange(@RequestParam String searchStr, @RequestParam int chooseType, @RequestParam Double minPrice, @RequestParam Double maxPrice) {
+    public List<ProductDTO> searchProductWithPriceRange(@RequestParam String searchStr, @RequestParam int chooseType, @RequestParam Double minPrice, @RequestParam Double maxPrice) {
         return productMyIsamService.searchProductWithPriceRange(searchStr, chooseType, minPrice, maxPrice);
     }
 

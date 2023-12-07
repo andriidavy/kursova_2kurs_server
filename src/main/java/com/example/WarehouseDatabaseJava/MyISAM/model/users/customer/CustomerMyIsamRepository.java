@@ -17,8 +17,8 @@ public interface CustomerMyIsamRepository extends JpaRepository<CustomerMyISAM, 
                        @Param("password") String password,
                        @Param("repPassword") String repPassword);
 
-    @Query(value = "SELECT * FROM customer_myisam AS c WHERE c.email = :email AND c.password = :password", nativeQuery = true)
-    CustomerMyISAM loginCustomer(@Param("email") String email, @Param("password") String password);
+    @Query(value = "SELECT c.id FROM customer_myisam AS c WHERE c.email = :email AND c.password = :password", nativeQuery = true)
+    int loginCustomer(@Param("email") String email, @Param("password") String password);
 
     @Query(value = "SELECT * FROM customer_myisam AS c WHERE c.id = :customer_id", nativeQuery = true)
     CustomerMyISAM getCustomerById(@Param("customer_id") int customer_id);

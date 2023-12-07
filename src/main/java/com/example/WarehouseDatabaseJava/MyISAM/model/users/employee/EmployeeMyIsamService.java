@@ -36,7 +36,7 @@ public class EmployeeMyIsamService {
         }
     }
 
-    public EmployeeMyISAM loginEmployee(String email, String password) {
+    public int loginEmployee(String email, String password) {
         try {
             return employeeMyIsamRepository.loginEmployee(email, password);
         } catch (DataAccessException e) {

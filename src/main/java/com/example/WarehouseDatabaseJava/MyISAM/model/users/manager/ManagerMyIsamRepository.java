@@ -27,8 +27,8 @@ public interface ManagerMyIsamRepository extends JpaRepository<ManagerMyISAM, In
     @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
     void deleteManagerById(@Param("manager_id") int managerId);
 
-    @Query(value = "SELECT * FROM manager_myisam AS m WHERE m.email = :email AND m.password = :password", nativeQuery = true)
-    ManagerMyISAM loginManager(@Param("email") String email, @Param("password") String password);
+    @Query(value = "SELECT m.id FROM manager_myisam AS m WHERE m.email = :email AND m.password = :password", nativeQuery = true)
+    int loginManager(@Param("email") String email, @Param("password") String password);
 
     @Query(value = "SELECT * FROM manager_myisam AS m WHERE m.id = :manager_id", nativeQuery = true)
     ManagerMyISAM getManagerById(@Param("manager_id") int managerId);

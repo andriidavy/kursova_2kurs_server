@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.MyISAM.model.department;
 
+import com.example.WarehouseDatabaseJava.InnoDB.model.department.Department;
 import com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO;
 import jakarta.persistence.QueryHint;
 import org.hibernate.jpa.AvailableHints;
@@ -26,11 +27,11 @@ public interface DepartmentMyIsamRepository extends JpaRepository<DepartmentMyIS
     String getDepartmentNameById(@Param("department_id") int departmentId);
 
     @Query(value = "SELECT * FROM department_myisam", nativeQuery = true)
-    List<DepartmentDTO> getAllDepartments();
+    List<DepartmentMyISAM> getAllDepartments();
 
     @Query(value = "SELECT d.id, d.department_name FROM department_myisam AS d JOIN manager_department_myisam md ON d.id = md.department_id WHERE md.manager_id = :manager_id", nativeQuery = true)
-    List<DepartmentDTO> getAllDepartmentsForManager(@Param("manager_id") int managerId);
+    List<DepartmentMyISAM> getAllDepartmentsForManager(@Param("manager_id") int managerId);
 
     @Query(value = "SELECT d.id, d.department_name FROM department_myisam AS d WHERE d.id NOT IN (SELECT md.department_id FROM manager_department_myisam AS md WHERE md.manager_id = :manager_id) ORDER BY d.id", nativeQuery = true)
-    List<DepartmentDTO> getAllDepartmentsWithoutManager(@Param("manager_id") int managerId);
+    List<DepartmentMyISAM> getAllDepartmentsWithoutManager(@Param("manager_id") int managerId);
 }

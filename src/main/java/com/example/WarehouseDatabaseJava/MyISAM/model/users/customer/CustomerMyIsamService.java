@@ -23,7 +23,7 @@ public class CustomerMyIsamService {
         }
     }
 
-    public CustomerMyISAM loginCustomer(String email, String password) {
+    public int loginCustomer(String email, String password) {
         try {
             return customerMyIsamRepository.loginCustomer(email, password);
         } catch (DataAccessException e) {
