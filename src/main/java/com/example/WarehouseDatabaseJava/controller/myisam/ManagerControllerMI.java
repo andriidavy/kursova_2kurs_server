@@ -96,6 +96,12 @@ public class ManagerControllerMI {
         return customMyIsamService.getAllCustomsWithoutAssignEmployee(managerId);
     }
 
+    //отримати замовлення по його ID TESTED
+    @GetMapping("/mi/manager/search-custom-by-id")
+    public CustomDTO searchCustomById(@RequestParam int customId) {
+        return customMyIsamService.searchCustomById(customId);
+    }
+
     //EMPLOYEE SIDE
 
     //зберегти робітника TESTED
@@ -174,8 +180,8 @@ public class ManagerControllerMI {
 
     //додати відділ доставки TESTED
     @PostMapping("/mi/manager/insert-department")
-    public void insertDepartment(@RequestParam String departName) {
-        departmentMyIsamService.insertDepartment(departName);
+    public void insertDepartment(@RequestParam String departmentName) {
+        departmentMyIsamService.insertDepartment(departmentName);
     }
 
     //призначити менеджера на відділ TESTED

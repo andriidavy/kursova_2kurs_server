@@ -33,6 +33,6 @@ public interface EmployeeMyIsamRepository extends JpaRepository<EmployeeMyISAM, 
     @Query(value = "SELECT * FROM employee_myisam AS e WHERE e.id = :employee_id", nativeQuery = true)
     EmployeeMyISAM getEmployeeById(@Param("employee_id") int employee_id);
 
-    @Query(value = "SELECT (e.id, e.name, e.surname, e.email) FROM EmployeeMyISAM AS e", nativeQuery = true)
+    @Query(value = "SELECT * FROM employee_myisam", nativeQuery = true)
     List<EmployeeMyISAM> getAllEmployees();
 }
