@@ -81,7 +81,7 @@ public class ReportService {
 
     public List<ReportDTO> convertReportToDTO(List<Report> reports) {
         return reports.stream()
-                .map(report -> new ReportDTO(report.getId(), report.getCustom().getId(), report.getReportText(), report.getStatus().toString()))
+                .map(report -> new ReportDTO(report.getId(), report.getCustom().getId(), report.getReportText(), report.getStatus().toString(), report.getUpdateDate().toString()))
                 .collect(Collectors.toList());
     }
 }

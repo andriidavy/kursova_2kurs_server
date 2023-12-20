@@ -13,6 +13,7 @@ public class CustomDTO {
     private String status;
     private String department;
     private double price;
+    private String creationDate;
     private List<CustomProductDTO> customProductDTOList;
 
     public int getCustomId() {
@@ -101,5 +102,13 @@ public class CustomDTO {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
     }
 }

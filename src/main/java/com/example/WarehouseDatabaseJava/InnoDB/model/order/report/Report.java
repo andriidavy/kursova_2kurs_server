@@ -3,6 +3,8 @@ package com.example.WarehouseDatabaseJava.InnoDB.model.order.report;
 import com.example.WarehouseDatabaseJava.InnoDB.model.order.Custom;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(catalog = "warehouse_database_innodb", name = "report")
 public class Report {
@@ -11,6 +13,9 @@ public class Report {
     private int id;
     @Column(name = "report_text")
     private String reportText;
+
+    @Column(name = "update_date")
+    private LocalDate updateDate;
 
     public enum Status{
         WAITING(1),
@@ -66,5 +71,13 @@ public class Report {
 
     public void setCustom(Custom custom) {
         this.custom = custom;
+    }
+
+    public LocalDate getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(LocalDate updateDate) {
+        this.updateDate = updateDate;
     }
 }

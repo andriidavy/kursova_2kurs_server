@@ -168,6 +168,7 @@ public class CustomService {
             customDTO.setStatus(custom.getStatus().toString());
             customDTO.setPrice(custom.getPrice());
             customDTO.setDepartment(departmentRepository.getDepartmentNameById(custom.getDepartment().getId()));
+            customDTO.setCreationDate(custom.getCreationDate().toString());
             customDTO.setCustomProductDTOList(getCustomProductDTO(custom.getId()));
 
             customDTOList.add(customDTO);

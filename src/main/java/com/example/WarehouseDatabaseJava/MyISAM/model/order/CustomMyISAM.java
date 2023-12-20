@@ -4,6 +4,7 @@ import com.example.WarehouseDatabaseJava.InnoDB.model.order.Custom;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(catalog = "warehouse_database_myisam", name = "custom_myisam")
@@ -40,6 +41,8 @@ public class CustomMyISAM {
     private int departmentId;
     @Column(name = "employee_id")
     private Integer employeeId;
+    @Column(name = "creation_date")
+    private LocalDate creationDate;
 
     public int getId() {
         return id;
@@ -87,5 +90,13 @@ public class CustomMyISAM {
 
     public void setEmployeeId(Integer employeeId) {
         this.employeeId = employeeId;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
     }
 }

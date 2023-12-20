@@ -1,21 +1,21 @@
 package com.example.WarehouseDatabaseJava.dto.report;
 
-import com.example.WarehouseDatabaseJava.MyISAM.model.order.report.ReportMyISAM;
-
 public class ReportDTO {
     private int reportId;
     private int customId;
     private String reportText;
     private String status;
+    private String updateDate;
 
     public ReportDTO() {
     }
 
-    public ReportDTO(int reportId, int customId, String reportText, String status) {
+    public ReportDTO(int reportId, int customId, String reportText, String status, String updateDate) {
         this.reportId = reportId;
         this.customId = customId;
         this.reportText = reportText;
         this.status = status;
+        this.updateDate = updateDate;
     }
 
     public int getReportId() {
@@ -48,5 +48,13 @@ public class ReportDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(String updateDate) {
+        this.updateDate = updateDate;
     }
 }

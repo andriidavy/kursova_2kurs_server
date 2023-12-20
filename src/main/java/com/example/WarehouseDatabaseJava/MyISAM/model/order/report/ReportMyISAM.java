@@ -2,6 +2,8 @@ package com.example.WarehouseDatabaseJava.MyISAM.model.order.report;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(catalog = "warehouse_database_myisam", name = "report_myisam")
 public class ReportMyISAM {
@@ -10,6 +12,9 @@ public class ReportMyISAM {
     private int id;
     @Column(name = "report_text")
     private String reportText;
+
+    @Column(name = "update_date")
+    private LocalDate updateDate;
 
     public enum Status{
         WAITING(1),
@@ -62,5 +67,13 @@ public class ReportMyISAM {
 
     public void setCustomId(int customId) {
         this.customId = customId;
+    }
+
+    public LocalDate getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(LocalDate updateDate) {
+        this.updateDate = updateDate;
     }
 }

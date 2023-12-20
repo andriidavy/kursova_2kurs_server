@@ -171,6 +171,7 @@ public class CustomMyIsamService {
             customDTO.setStatus(custom.getStatus().toString());
             customDTO.setPrice(custom.getPrice());
             customDTO.setDepartment(departmentMyIsamRepository.getDepartmentNameById(custom.getDepartmentId()));
+            customDTO.setCreationDate(custom.getCreationDate().toString());
             customDTO.setCustomProductDTOList(getCustomProductDTO(custom.getId()));
 
             customDTOList.add(customDTO);

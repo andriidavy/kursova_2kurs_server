@@ -81,7 +81,7 @@ public class ReportMyIsamService {
 
     public List<ReportDTO> convertReportToDTO(List<ReportMyISAM> reports) {
         return reports.stream()
-                .map(report -> new ReportDTO(report.getId(), report.getCustomId(), report.getReportText(), report.getStatus().toString()))
+                .map(report -> new ReportDTO(report.getId(), report.getCustomId(), report.getReportText(), report.getStatus().toString(), report.getUpdateDate().toString()))
                 .collect(Collectors.toList());
     }
 }

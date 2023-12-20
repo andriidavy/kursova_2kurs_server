@@ -7,6 +7,7 @@ import com.example.WarehouseDatabaseJava.InnoDB.model.department.Department;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,9 @@ public class Custom {
 
     @Column(name = "price")
     private double price;
+
+    @Column(name = "creation_date")
+    private LocalDate creationDate;
 
     // One-to-Many relation with CustomProduct
     @OneToMany(mappedBy = "custom")
@@ -128,5 +132,13 @@ public class Custom {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
     }
 }
