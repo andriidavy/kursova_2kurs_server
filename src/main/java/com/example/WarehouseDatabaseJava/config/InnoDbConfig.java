@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 
 @Configuration
-@EnableJpaRepositories(basePackages = {"com.example.WarehouseDatabaseJava.InnoDB.model"},
+@EnableJpaRepositories(basePackages = {"com.example.WarehouseDatabaseJava.model"},
         entityManagerFactoryRef = "db1EntityManager",
         transactionManagerRef = "db1TransactionManager")
 public class InnoDbConfig {
@@ -27,7 +27,7 @@ public class InnoDbConfig {
     public LocalContainerEntityManagerFactoryBean db1EntityManager() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(db1Datasource());
-        em.setPackagesToScan("com.example.WarehouseDatabaseJava.InnoDB.model");
+        em.setPackagesToScan("com.example.WarehouseDatabaseJava.model");
         em.setPersistenceUnitName("db1EntityManager");
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
