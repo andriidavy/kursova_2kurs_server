@@ -11,6 +11,7 @@ import com.example.WarehouseDatabaseJava.model.users.customer.cart.CartService;
 import com.example.WarehouseDatabaseJava.dto.department.DepartmentDTO;
 import com.example.WarehouseDatabaseJava.model.department.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -88,6 +89,13 @@ public class CustomerController {
         return productService.getAllProducts();
     }
 
+
+    //отримати список всіх продуктів (пагінація)
+    @GetMapping("/customer/product/get-page")
+    public Page<ProductDTO> getAllProductsPage(@RequestParam int page, @RequestParam int size) {
+        return productService.getAllProductsPage(page, size);
+    }
+
     //шукати продукт за назвою TESTED
     @GetMapping("/customer/product/search")
     public List<ProductDTO> searchProduct(@RequestParam String searchStr, @RequestParam int chooseType) {
@@ -102,13 +110,13 @@ public class CustomerController {
 
     //отримати мінімальну ціну на продукт TESTED
     @GetMapping("/customer/product/get-min-price")
-    public double getMinProductPrice(){
+    public double getMinProductPrice() {
         return productService.getMinProductPrice();
     }
 
     //отримати максимальну ціну на продукт TESTED
     @GetMapping("/customer/product/get-max-price")
-    public double getMaxProductPrice(){
+    public double getMaxProductPrice() {
         return productService.getMaxProductPrice();
     }
 

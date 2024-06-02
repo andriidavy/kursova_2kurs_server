@@ -5,6 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +54,11 @@ public class ProductService {
 
     public List<ProductDTO> getAllProducts() {
         return convertProductListToDTO(productRepository.getAllProductsList());
+    }
+
+    public Page<ProductDTO> getAllProductsPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return convertProductPageToDTO(productRepository.getAllProductsPage(pageable));
     }
 
     public List<ProductDTO> searchProduct(String searchStr, int chooseQueryType) {
@@ -161,5 +169,11 @@ public class ProductService {
         return productList.stream().map(
                 product -> new ProductDTO(product.getId(), product.getName(), product.getDescription(), product.getQuantity(), product.getPrice())
         ).collect(Collectors.toList());
+    }
+
+    private Page<ProductDTO> convertProductPageToDTO(Page<Product> productPage) {
+        return productPage.map(
+                product -> new ProductDTO(product.getId(), product.getName(), product.getDescription(), product.getQuantity(), product.getPrice())
+        );
     }
 }

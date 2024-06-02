@@ -2,6 +2,8 @@ package com.example.WarehouseDatabaseJava.model.product;
 
 import jakarta.persistence.QueryHint;
 import org.hibernate.jpa.AvailableHints;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,6 +31,10 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query(value = "SELECT * FROM product", nativeQuery = true)
     List<Product> getAllProductsList();
+
+    //with pagination
+    @Query(value = "SELECT * FROM product", nativeQuery = true)
+    Page<Product> getAllProductsPage(Pageable pageable);
 
     @Query(value = "UPDATE product AS p SET p.description = :desc WHERE p.id = :product_id", nativeQuery = true)
     @Modifying
