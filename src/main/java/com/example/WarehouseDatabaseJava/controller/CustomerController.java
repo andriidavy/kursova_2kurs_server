@@ -92,7 +92,7 @@ public class CustomerController {
 
     //отримати список всіх продуктів (пагінація)
     @GetMapping("/customer/product/get-page")
-    public Page<ProductDTO> getAllProductsPage(@RequestParam int page, @RequestParam int size) {
+    public List<ProductDTO> getAllProductsPage(@RequestParam int page, @RequestParam int size) {
         return productService.getAllProductsPage(page, size);
     }
 

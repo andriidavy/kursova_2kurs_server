@@ -56,9 +56,9 @@ public class ProductService {
         return convertProductListToDTO(productRepository.getAllProductsList());
     }
 
-    public Page<ProductDTO> getAllProductsPage(int page, int size) {
+    public List<ProductDTO> getAllProductsPage(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return convertProductPageToDTO(productRepository.getAllProductsPage(pageable));
+        return convertProductListToDTO(productRepository.getAllProductsPage(pageable));
     }
 
     public List<ProductDTO> searchProduct(String searchStr, int chooseQueryType) {

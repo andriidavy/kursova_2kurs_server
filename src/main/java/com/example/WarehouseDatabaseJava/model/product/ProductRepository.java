@@ -34,7 +34,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     //with pagination
     @Query(value = "SELECT * FROM product", nativeQuery = true)
-    Page<Product> getAllProductsPage(Pageable pageable);
+    List<Product> getAllProductsPage(Pageable pageable);
 
     @Query(value = "UPDATE product AS p SET p.description = :desc WHERE p.id = :product_id", nativeQuery = true)
     @Modifying
