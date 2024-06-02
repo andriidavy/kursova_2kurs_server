@@ -42,22 +42,22 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     void saveDescriptionForProduct(@Param("product_id") int productId, @Param("desc") String description);
 
     @Query(value = "SELECT * FROM product WHERE MATCH(name, description) AGAINST (:search_str IN NATURAL LANGUAGE MODE)", nativeQuery = true)
-    List<Product> searchProductNatural(@Param("search_str") String searchStr);
+    List<Product> searchProductNatural(@Param("search_str") String searchStr, Pageable pageable);
 
     @Query(value = "SELECT * FROM product WHERE MATCH(name, description) AGAINST (:search_str IN NATURAL LANGUAGE MODE) AND (price >= :min_val AND price <= :max_val)", nativeQuery = true)
-    List<Product> searchProductNaturalWithPriceRange(@Param("search_str") String searchStr, @Param("min_val") Double minRangePrice, @Param("max_val") Double maxRangePrice);
+    List<Product> searchProductNaturalWithPriceRange(@Param("search_str") String searchStr, @Param("min_val") Double minRangePrice, @Param("max_val") Double maxRangePrice, Pageable pageable);
 
     @Query(value = "SELECT * FROM product WHERE MATCH(name, description) AGAINST (:search_str IN BOOLEAN MODE)", nativeQuery = true)
-    List<Product> searchProductBool(@Param("search_str") String searchStr);
+    List<Product> searchProductBool(@Param("search_str") String searchStr, Pageable pageable);
 
     @Query(value = "SELECT * FROM product WHERE MATCH(name, description) AGAINST (:search_str IN BOOLEAN MODE) AND (price >= :min_val AND price <= :max_val)", nativeQuery = true)
-    List<Product> searchProductBoolWithPriceRange(@Param("search_str") String searchStr, @Param("min_val") Double minRangePrice, @Param("max_val") Double maxRangePrice);
+    List<Product> searchProductBoolWithPriceRange(@Param("search_str") String searchStr, @Param("min_val") Double minRangePrice, @Param("max_val") Double maxRangePrice, Pageable pageable);
 
     @Query(value = "SELECT * FROM product WHERE MATCH(name, description) AGAINST (:search_str WITH QUERY EXPANSION)", nativeQuery = true)
-    List<Product> searchProductExp(@Param("search_str") String searchStr);
+    List<Product> searchProductExp(@Param("search_str") String searchStr, Pageable pageable);
 
     @Query(value = "SELECT * FROM product WHERE MATCH(name, description) AGAINST (:search_str WITH QUERY EXPANSION) AND (price >= :min_val AND price <= :max_val)", nativeQuery = true)
-    List<Product> searchProductExpWithPriceRange(@Param("search_str") String searchStr, @Param("min_val") Double minRangePrice, @Param("max_val") Double maxRangePrice);
+    List<Product> searchProductExpWithPriceRange(@Param("search_str") String searchStr, @Param("min_val") Double minRangePrice, @Param("max_val") Double maxRangePrice, Pageable pageable);
 
     @Query(value = "SELECT * FROM product AS p WHERE p.id = :product_id", nativeQuery = true)
     Product searchProductById(@Param("product_id") int productId);

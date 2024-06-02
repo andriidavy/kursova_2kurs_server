@@ -61,13 +61,13 @@ public class ProductService {
         return convertProductListToDTO(productRepository.getAllProductsPage(pageable));
     }
 
-    public List<ProductDTO> searchProduct(String searchStr, int chooseQueryType) {
-
+    public List<ProductDTO> searchProduct(String searchStr, int chooseQueryType, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         switch (chooseQueryType) {
             case 0 -> {
                 //натуральний запит (шукає по словах з пріорітетністю на найрелевантнішу схожість)
                 try {
-                    return convertProductListToDTO(productRepository.searchProductNatural(searchStr));
+                    return convertProductListToDTO(productRepository.searchProductNatural(searchStr, pageable));
                 } catch (DataAccessException e) {
                     logger.error("An exception occurred: {}", e.getMessage(), e);
                     throw e;
@@ -77,7 +77,7 @@ public class ProductService {
                 //булевий запит (знаходить всі входження)
                 String modifyBolStr = '*' + searchStr + '*';
                 try {
-                    return convertProductListToDTO(productRepository.searchProductBool(modifyBolStr));
+                    return convertProductListToDTO(productRepository.searchProductBool(modifyBolStr, pageable));
                 } catch (DataAccessException e) {
                     logger.error("An exception occurred: {}", e.getMessage(), e);
                     throw e;
@@ -86,7 +86,7 @@ public class ProductService {
             case 2 -> {
                 //розширений запит
                 try {
-                    return convertProductListToDTO(productRepository.searchProductExp(searchStr));
+                    return convertProductListToDTO(productRepository.searchProductExp(searchStr, pageable));
                 } catch (DataAccessException e) {
                     logger.error("An exception occurred: {}", e.getMessage(), e);
                     throw e;
@@ -99,13 +99,13 @@ public class ProductService {
         }
     }
 
-    public List<ProductDTO> searchProductWithPriceRange(String searchStr, int chooseQueryType, Double minPrice, Double maxPrice) {
-
+    public List<ProductDTO> searchProductWithPriceRange(String searchStr, int chooseQueryType, Double minPrice, Double maxPrice, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         switch (chooseQueryType) {
             case 0 -> {
                 //натуральний запит (шукає по словах з пріорітетністю на найрелевантнішу схожість)
                 try {
-                    return convertProductListToDTO(productRepository.searchProductNaturalWithPriceRange(searchStr, minPrice, maxPrice));
+                    return convertProductListToDTO(productRepository.searchProductNaturalWithPriceRange(searchStr, minPrice, maxPrice, pageable));
                 } catch (DataAccessException e) {
                     logger.error("An exception occurred: {}", e.getMessage(), e);
                     throw e;
@@ -115,7 +115,7 @@ public class ProductService {
                 //булевий запит (знаходить всі входження)
                 String modifyBolStr = '*' + searchStr + '*';
                 try {
-                    return convertProductListToDTO(productRepository.searchProductBoolWithPriceRange(modifyBolStr, minPrice, maxPrice));
+                    return convertProductListToDTO(productRepository.searchProductBoolWithPriceRange(modifyBolStr, minPrice, maxPrice, pageable));
                 } catch (DataAccessException e) {
                     logger.error("An exception occurred: {}", e.getMessage(), e);
                     throw e;
@@ -124,7 +124,7 @@ public class ProductService {
             case 2 -> {
                 //розширений запит
                 try {
-                    return convertProductListToDTO(productRepository.searchProductExpWithPriceRange(searchStr, minPrice, maxPrice));
+                    return convertProductListToDTO(productRepository.searchProductExpWithPriceRange(searchStr, minPrice, maxPrice, pageable));
                 } catch (DataAccessException e) {
                     logger.error("An exception occurred: {}", e.getMessage(), e);
                     throw e;

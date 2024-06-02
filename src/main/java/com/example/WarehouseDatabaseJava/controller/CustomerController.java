@@ -98,14 +98,14 @@ public class CustomerController {
 
     //шукати продукт за назвою TESTED
     @GetMapping("/customer/product/search")
-    public List<ProductDTO> searchProduct(@RequestParam String searchStr, @RequestParam int chooseType) {
-        return productService.searchProduct(searchStr, chooseType);
+    public List<ProductDTO> searchProduct(@RequestParam String searchStr, @RequestParam int chooseType, @RequestParam int page, @RequestParam int size) {
+        return productService.searchProduct(searchStr, chooseType, page, size);
     }
 
     //шукати продукти за назвою та ціновим діапазоном TESTED
     @GetMapping("/customer/product/search-with-price-range")
-    public List<ProductDTO> searchProductWithPriceRange(@RequestParam String searchStr, @RequestParam int chooseType, @RequestParam Double minPrice, @RequestParam Double maxPrice) {
-        return productService.searchProductWithPriceRange(searchStr, chooseType, minPrice, maxPrice);
+    public List<ProductDTO> searchProductWithPriceRange(@RequestParam String searchStr, @RequestParam int chooseType, @RequestParam Double minPrice, @RequestParam Double maxPrice, @RequestParam int page, @RequestParam int size) {
+        return productService.searchProductWithPriceRange(searchStr, chooseType, minPrice, maxPrice, page, size);
     }
 
     //отримати мінімальну ціну на продукт TESTED
