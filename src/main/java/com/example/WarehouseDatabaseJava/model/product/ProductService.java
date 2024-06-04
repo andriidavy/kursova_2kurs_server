@@ -73,17 +73,17 @@ public class ProductService {
                     throw e;
                 }
             }
+//            case 1 -> {
+//                //булевий запит (знаходить всі входження)
+//                String modifyBolStr = '*' + searchStr + '*';
+//                try {
+//                    return convertProductListToDTO(productRepository.searchProductBool(modifyBolStr, pageable));
+//                } catch (DataAccessException e) {
+//                    logger.error("An exception occurred: {}", e.getMessage(), e);
+//                    throw e;
+//                }
+//            }
             case 1 -> {
-                //булевий запит (знаходить всі входження)
-                String modifyBolStr = '*' + searchStr + '*';
-                try {
-                    return convertProductListToDTO(productRepository.searchProductBool(modifyBolStr, pageable));
-                } catch (DataAccessException e) {
-                    logger.error("An exception occurred: {}", e.getMessage(), e);
-                    throw e;
-                }
-            }
-            case 2 -> {
                 //розширений запит
                 try {
                     return convertProductListToDTO(productRepository.searchProductExp(searchStr, pageable));
