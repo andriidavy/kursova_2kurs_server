@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,9 +49,10 @@ public class CustomService {
     }
 
     //for manager
-    public List<CustomDTO> getAllCustoms() {
+    public List<CustomDTO> getAllCustomsPage(int page, int size) {
         try {
-            List<Custom> allCustoms = customRepository.getAllCustoms();
+            Pageable pageable = PageRequest.of(page, size);
+            List<Custom> allCustoms = customRepository.getAllCustomsPage(pageable);
             return convertCustomToDTO(allCustoms, true);
         } catch (DataAccessException e) {
             logger.error("An exception occurred: {}", e.getMessage(), e);

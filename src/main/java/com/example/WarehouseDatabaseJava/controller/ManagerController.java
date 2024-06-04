@@ -72,8 +72,8 @@ public class ManagerController {
 
     //отримати список всіх продуктів TESTED
     @GetMapping("/manager/product/get-all")
-    public List<ProductDTO> getAllProducts() {
-        return productService.getAllProducts();
+    public List<ProductDTO> getAllProductsPage(@RequestParam int page, @RequestParam int size) {
+        return productService.getAllProductsPage(page, size);
     }
 
     //отримати продукт по його ID TESTED
@@ -86,8 +86,8 @@ public class ManagerController {
 
     //отримати список всіх замовлень TESTED
     @GetMapping("/manager/custom/get-all")
-    public List<CustomDTO> getAllCustoms() {
-        return customService.getAllCustoms();
+    public List<CustomDTO> getAllCustoms(@RequestParam int page, @RequestParam int size) {
+        return customService.getAllCustomsPage(page, size);
     }
 
     //отримати список замовлень без призначеного робітника для конкретного менеджера TESTED

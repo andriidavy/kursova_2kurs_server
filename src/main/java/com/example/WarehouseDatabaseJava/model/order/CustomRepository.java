@@ -1,5 +1,6 @@
 package com.example.WarehouseDatabaseJava.model.order;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,6 +26,9 @@ public interface CustomRepository extends JpaRepository<Custom, Integer> {
 
     @Query(value = "SELECT * FROM custom", nativeQuery = true)
     List<Custom> getAllCustoms();
+
+    @Query(value = "SELECT * FROM custom", nativeQuery = true)
+    List<Custom> getAllCustomsPage(Pageable pageable);
 
     @Query(value = "SELECT * FROM custom AS c WHERE c.customer_id = :customer_id", nativeQuery = true)
     List<Custom> getCustomsForCustomer(@Param("customer_id") int customerId);
