@@ -61,6 +61,11 @@ public class ProductService {
         return convertProductListToDTO(productRepository.getAllProductsPage(pageable));
     }
 
+    @Transactional
+    public void updateProduct(int id, String name, String description, int quantity, double price) {
+        productRepository.updateProduct(id, name, description, quantity, price);
+    }
+
     public List<ProductDTO> searchProduct(String searchStr, int chooseQueryType, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         switch (chooseQueryType) {

@@ -58,6 +58,11 @@ public class ManagerController {
         return productService.provideProduct(productName, quantity, price, description);
     }
 
+    @PostMapping("/manager/update-product")
+    public void updateProduct(@RequestParam int productId, @RequestParam String productName, @RequestParam String description, @RequestParam int quantity, @RequestParam double price) {
+        productService.updateProduct(productId, productName, description, quantity, price);
+    }
+
     //перевірити на наявність продукту з таким же найменуванням TESTED
     @GetMapping("/manager/is-product-exist")
     public Boolean isProductExists(@RequestParam String productName) {

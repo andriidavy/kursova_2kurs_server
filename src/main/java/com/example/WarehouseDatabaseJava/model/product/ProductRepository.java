@@ -29,6 +29,11 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
     int addProductQuantity(@Param("new_product_name") String productName, @Param("new_quantity") int quantity);
 
+    @Query(value = "UPDATE product AS p SET p.name = :prName, p.description = :prDesc, p.quantity = :prQuantity, p.price = :prPrice WHERE p.id = :product_id", nativeQuery = true)
+    @Modifying
+    @QueryHints(value = @QueryHint(name = AvailableHints.HINT_FLUSH_MODE, value = "COMMIT"))
+    void updateProduct(@Param("product_id") int productId, @Param("prName") String prName, @Param("prDesc") String prDesc, @Param("prQuantity") int prQuantity, @Param("prPrice") double price);
+
     @Query(value = "SELECT * FROM product", nativeQuery = true)
     List<Product> getAllProductsList();
 
