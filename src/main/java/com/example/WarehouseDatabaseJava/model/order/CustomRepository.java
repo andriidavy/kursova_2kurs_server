@@ -33,7 +33,7 @@ public interface CustomRepository extends JpaRepository<Custom, Integer> {
     @Query(value = "SELECT * FROM custom AS c WHERE c.customer_id = :customer_id", nativeQuery = true)
     List<Custom> getCustomsForCustomer(@Param("customer_id") int customerId);
 
-    @Query(value = "SELECT c.id, c.status, c.customer_id, c.department_id, c.employee_id, c.price, c.creation_date FROM custom AS c JOIN manager_department AS md ON c.department_id = md.department_id WHERE c.employee_id IS NULL AND md.manager_id = :manager_id AND (c.status = 'CREATED' OR c.status = 'IN_PROCESSING' OR c.status = 'PROCESSED') ORDER BY c.creation_date ASC", nativeQuery = true)
+    @Query(value = "SELECT c.id, c.status, c.customer_id, c.department_id, c.employee_id, c.price, c.creation_date FROM custom AS c JOIN manager_department AS md ON c.department_id = md.department_id WHERE c.employee_id IS NULL AND md.manager_id = :manager_id AND (c.status = 'CREATED') ORDER BY c.creation_date ASC", nativeQuery = true)
     List<Custom> getAllCustomsWithoutAssignEmployee(@Param("manager_id") int managerId);
 
     @Query(value = "SELECT * FROM custom AS c WHERE c.id = :custom_id", nativeQuery = true)
